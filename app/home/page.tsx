@@ -8,9 +8,7 @@ export default function Home() {
             <section className='flex flex-row mx-8 space-x-8 items-center'>
                 <Image className='' src="/images/yazilim.png" alt="IYTE Logo" width={200} height={200} />
                 <p>Software for everyone.</p>
-
             </section>
-
         </div>
     )
 }
