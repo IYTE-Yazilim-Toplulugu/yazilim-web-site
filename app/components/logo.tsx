@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import Model from "./Iss";
+import Model from "./iss";
 
 
 const LogoCanvas = () => {
