@@ -168,11 +168,6 @@ export default function ResponsiveHeader() {
                                     </div>
                                 </motion.div>
                             ))}
-                            <div className="pt-2 border-t border-border">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm text-muted-foreground">Theme settings</span>
-                                </div>
-                            </div>
                         </div>
                     </motion.div>
                 )}

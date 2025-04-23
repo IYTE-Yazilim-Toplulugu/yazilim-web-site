@@ -27,3 +27,12 @@ TODO:
 - Fix the auto swiper to work with the new structure.
 - Add seperator to header.
 - Fix tailwind color variables.
+- Is there any requirement for system theme and color selections?
+- Will we use a header for every page?
+- Home page container queue
+- We are using a template but its include a lot of deprecated dependencies and leak of optimization for new features.
+- Template especially uses clsx library for classnames but its so old.(i will use just tailwindcss)
+
+- Fix performance issues on mobile side
+- Use Frame Motion lib for all animations
+- Add other page routes to header

@@ -5,6 +5,9 @@ import ResponsiveHeader from "@/components/responsive-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import ClientDiagnosticWrapper from "@/components/client-diagnostic-wrapper";
+import ScrollProgress from "@/components/scroll-progress";
+import FloatingNav from "@/components/floating-nav";
+import { FloatingThemeSwitcher } from "@/components/floating-theme-switcher";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -44,8 +47,12 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <ThemeProvider>
+                <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
                     <ResponsiveHeader />
+                    <ScrollProgress />
+                    <FloatingNav />
+                    <FloatingThemeSwitcher />
+
                     {children}
 
                     {/* For Test */}

@@ -11,7 +11,8 @@ import Link from "next/link";
 
 
 // This component will be responsive
-export default function AutoSwiper({ spaceBetween = 20, slidesToShow = 1, roundedImage = "rounded-2xl", delayTime = 3000, height = "h-64" }: { spaceBetween?: number, slidesToShow?: number, roundedImage?: string, delayTime?: number, height?: string }) {
+export default function AutoSwiper({ spaceBetween = 20, slidesToShow = 1, roundedImage = "rounded-2xl", delayTime = 3000, height = "h-32" }: { spaceBetween?: number, slidesToShow?: number, roundedImage?: string, delayTime?: number, height?: string }) {
+
     const [imageData, setImageData] = useState([
         {
             "image": "/images/yazilim.png",
@@ -81,7 +82,7 @@ export default function AutoSwiper({ spaceBetween = 20, slidesToShow = 1, rounde
     });
 
     return (
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center w-screen">
             <Swiper
                 modules={[Autoplay, Pagination, Navigation]}
                 spaceBetween={spaceBetween}
@@ -93,12 +94,12 @@ export default function AutoSwiper({ spaceBetween = 20, slidesToShow = 1, rounde
                 // pagination={{ clickable: true }}
                 // navigation={true}
 
-                className="w-full"
+                className="w-screen"
 
             >
                 {imageData.map((item, index) => (
                     <SwiperSlide key={index} className="flex justify-center items-center">
-                        <Link href={item.href} className={`relative w-full ${height} overflow-hidden flex justify-center`}>
+                        <Link href={item.href} className={`relative w-screen ${height} overflow-hidden flex justify-center`}>
                             <Image
                                 src={item.image}
                                 alt={`Slide ${index + 1}`}
