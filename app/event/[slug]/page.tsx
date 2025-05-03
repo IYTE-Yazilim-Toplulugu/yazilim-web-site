@@ -4,7 +4,9 @@ import Header from '@/components/header';
 import { useParams, useRouter } from 'next/navigation';
 import { Calendar, UsersRound } from 'lucide-react';
 import dynamic from "next/dynamic";
-
+import { useEffect, useState } from 'react';
+import haversine from 'haversine-distance';
+import { argv0 } from 'process';
 // Dynamically import the Map component with SSR disabled
 const Map = dynamic(() => import("../../../components/map-component"), { ssr: false });
 const events: Event[] = [
@@ -71,6 +73,11 @@ type Event = {
 };
 
 const PostPage = () => {
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+
   const params = useParams(); // `useParams` hook'u ile slug'ı alıyoruz
   const router = useRouter()
   const slug = params.slug;   // Slug'ı params üzerinden alıyoruz
@@ -79,6 +86,26 @@ const PostPage = () => {
     router.push("/")
     return null;
   }
+  useEffect(() => {
+    const getUserLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ latitude, longitude });
+
+          },
+          (error) => {
+            console.error("Error get user location: ", error);
+          }
+        );
+      } else {
+        console.log("Your browser is not supported geolocation. Please try to update or change your browser.");
+      }
+    };
+
+    getUserLocation(); // Bunu çağırmayı unutma!
+  }, [])
   return (
     <div>
       <Header />
@@ -93,6 +120,27 @@ const PostPage = () => {
         <div className='w-1/4 p-10 border-orange-400 shadow rounded-xl border-2'>
           <p className='text-xl'>Konum</p>
           <Map location={thisEvent.location} />
+          {userLocation && thisEvent.location ? (
+            <p className='text-center'>
+              {(
+                haversine(
+                  {
+                    lat: thisEvent.location[0],
+                    lon: thisEvent.location[1],
+                  },
+                  {
+                    lat: userLocation.latitude,
+                    lon: userLocation.longitude,
+                  }
+                )
+                / 1000
+              ).toFixed(2)}
+              {" "} km ötede
+            </p>
+          ) : (
+            <p>Location not available </p>
+          )}
+
         </div>
       </div>
     </div>
