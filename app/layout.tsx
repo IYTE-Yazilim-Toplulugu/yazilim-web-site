@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import ResponsiveHeader from "@/components/responsive-header";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -7,16 +7,12 @@ import { Toaster } from "@/components/ui/toaster";
 import ClientDiagnosticWrapper from "@/components/client-diagnostic-wrapper";
 import ScrollProgress from "@/components/scroll-progress";
 import FloatingNav from "@/components/floating-nav";
-import { FloatingThemeSwitcher } from "@/components/floating-theme-switcher";
+// import { FloatingThemeSwitcher } from "@/components/floating-theme-switcher";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
+const poppins = Poppins({
     subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+    weight: ["300", "400", "600", "700"],
+    variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
@@ -45,13 +41,14 @@ export default function RootLayout({
                 <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
             </head>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${poppins.variable} antialiased`}
             >
-                <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+                {/* defaultTheme enableSystem */}
+                <ThemeProvider attribute="class" >
                     <ResponsiveHeader />
                     <ScrollProgress />
                     <FloatingNav />
-                    <FloatingThemeSwitcher />
+                    {/* <FloatingThemeSwitcher /> */}
 
                     {children}
 
