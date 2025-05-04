@@ -14,25 +14,19 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+```
+### Please do not commit directly to main branch.
+$ git checkout -b {myBranch}
+## For merge your branch
+$ gh pr create --base main --head {myBranch} --title "Your pr title." --body "Your pr body."
+```
 -------------------------------------------------------------------------------
-New Components:
-- Free Swiper
-- Auto Swiper
 
 Changes:
 - Optimized responsive-header for all pages.
-- Changed file structure for better organization.
+- Fix tailwind color variables.
 
 TODO:
-- Fix the auto swiper to work with the new structure.
-- Add seperator to header.
-- Fix tailwind color variables.
-- Is there any requirement for system theme and color selections?
-- Will we use a header for every page?
-- Home page container queue
-- We are using a template but its include a lot of deprecated dependencies and leak of optimization for new features.
-- Template especially uses clsx library for classnames but its so old.(i will use just tailwindcss)
 
-- Fix performance issues on mobile side
-- Use Frame Motion lib for all animations
-- Add other page routes to header
+
+- Is there any requirement for system theme and color selections?
