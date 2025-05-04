@@ -1,27 +1,196 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --font-poppins: 'Poppins', sans-serif;
+    --background: #ffffff;
+    --foreground: #0a0a0a;
+    --card: #ffffff;
+    --card-foreground: #0a0a0a;
+    --popover: #ffffff;
+    --popover-foreground: #0a0a0a;
+    --primary: #181818;
+    --primary-foreground: #fafafa;
+    --secondary: #f5f5f5;
+    --secondary-foreground: #181818;
+    --muted: #f5f5f5;
+    --muted-foreground: #737373;
+    --accent: #f5f5f5;
+    --accent-foreground: #181818;
+    --destructive: #e5484d;
+    --destructive-foreground: #fafafa;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #0a0a0a;
+    --chart-1: #f4a261;
+    --chart-2: #399c8d;
+    --chart-3: #3b4e63;
+    --chart-4: #f4b942;
+    --chart-5: #f7893b;
+    --radius: 0.5rem;
+    --sidebar-background: #fafafa;
+    --sidebar-foreground: #424242;
+    --sidebar-primary: #1a1a1a;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #f4f4f4;
+    --sidebar-accent-foreground: #1a1a1a;
+    --sidebar-border: #e5e7eb;
+    --sidebar-ring: #3b82f6;
+    --happy_hearts: #d6665d;
+    --bite_tongue: #dd796b;
+    --copper_coin: #dd845b;
+    --golden_nugget: #db8b40;
+    --packing_paper: #b99b61;
+    --succulent: #8fa781;
+    --estragon: #a7ad77;
+    --motherland: #beb26c;
+    --luxurious: #d4b35f;
+
+    --font-poppins: 'Poppins', sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-radius: var(--radius);
+    --color-sidebar-background: var(--sidebar-background);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-happy_hearts: var(--happy_hearts);
+    --color-bite_tongue: var(--bite_tongue);
+    --color-copper_coin: var(--copper_coin);
+    --color-golden_nugget: var(--golden_nugget);
+    --color-packing_paper: var(--packing_paper);
+    --color-succulent: var(--succulent);
+    --color-estragon: var(--estragon);
+    --color-motherland: var(--motherland);
+    --color-luxurious: var(--luxurious);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a0a;
+        --foreground: #fafafa;
+        --card: #0a0a0a;
+        --card-foreground: #fafafa;
+        --popover: #0a0a0a;
+        --popover-foreground: #fafafa;
+        --primary: #fafafa;
+        --primary-foreground: #1a1a1a;
+        --secondary: #262626;
+        --secondary-foreground: #fafafa;
+        --muted: #262626;
+        --muted-foreground: #a2a2a2;
+        --accent: #262626;
+        --accent-foreground: #fafafa;
+        --destructive: #803030;
+        --destructive-foreground: #fafafa;
+        --border: #262626;
+        --input: #262626;
+        --ring: #d4d4d4;
+        --chart-1: #3b82f6;
+        --chart-2: #30caa0;
+        --chart-3: #f4a261;
+        --chart-4: #b266e0;
+        --chart-5: #e03b67;
+        --sidebar-background: #1a1a1a;
+        --sidebar-foreground: #f4f4f4;
+        --sidebar-primary: #3765f0;
+        --sidebar-primary-foreground: #ffffff;
+        --sidebar-accent: #292929;
+        --sidebar-accent-foreground: #f4f4f4;
+        --sidebar-border: #292929;
+        --sidebar-ring: #3b82f6;
+    }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--primary);
+    font-family: 'Poppins', sans-serif;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.animate-slideUp {
+    animation: slideUp 0.3s ease-in-out forwards;
+}
+
+.animate-slideDown {
+    animation: slideDown 0.2s ease-in-out forwards;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+.animate-fadeOut {
+    animation: fadeOut 0.3s ease-in-out forwards;
 }

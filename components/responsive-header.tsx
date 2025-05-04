@@ -57,7 +57,7 @@ export default function ResponsiveHeader() {
     if (!isMounted) {
         return (
             <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-                <div className="container flex h-16 items-center justify-between">
+                <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="font-bold text-xl">YS</div>
                         <div className="hidden md:block">
@@ -75,15 +75,15 @@ export default function ResponsiveHeader() {
                         </div>
                     </div>
                 </div>
-            </header>
+            </header >
         )
     }
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/80 backdrop-blur-md border-b border-border" : "bg-transparent"}`}
+            className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${isScrolled ? "border-b border-border" : "bg-transparent"}`}
         >
-            <div className="container flex h-16 items-center justify-between px-4">
+            <div className="flex h-16 items-center justify-between px-4">
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -91,15 +91,15 @@ export default function ResponsiveHeader() {
                     className="flex items-center gap-2"
                 >
                     <div className="flex items-center gap-2">
-                        <Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text" src="/images/yazilim.png" alt="yazilim" width={20} height={20} />
+                        <Image className="font-bold text-xl bg-gradient-to-r from-happy_hearts to-golden_nugget text-transparent bg-clip-text" src="/images/yazilim.png" alt="yazilim" width={20} height={20} />
                         <div className="hidden md:block">
-                            <div className="font-bold">IYTE Yazilim Society</div>
+                            <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy_hearts to-golden_nugget">IYTE Yazilim Society</div>
                             <div className="text-xs text-muted-foreground">Software for Everyone</div>
                         </div>
                     </div>
                 </motion.div>
 
-                <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm">
+                <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-4 lg:gap-6 text-sm">
                     {navItems.map((item, index) => (
                         <motion.div
                             key={item.name}
@@ -124,7 +124,20 @@ export default function ResponsiveHeader() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.3, delay: 0.7 }}
+                        className="flex items-center space-x-3"
                     >
+                        <Link href="/login" >
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                className="p-4 w-fit"
+                                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                            >
+                                Login
+                            </Button>
+
+                        </Link>
+
                         <ThemeSwitcher />
                     </motion.div>
 
@@ -148,7 +161,7 @@ export default function ResponsiveHeader() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="md:hidden border-t overflow-hidden bg-background/95 backdrop-blur-md"
+                        className="md:hidden border-t overflow-hidden backdrop-blur-md"
                     >
                         <div className="flex flex-col space-y-3 p-4">
                             {navItems.map((item, index) => (
