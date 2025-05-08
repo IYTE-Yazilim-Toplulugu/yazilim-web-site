@@ -26,7 +26,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <head>
                 {/* Preload critical resources */}
                 <link rel="preload" href="/placeholder.svg?height=400&width=400" as="image" />
