@@ -98,10 +98,10 @@ export default function FloatingNav() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block"
+                        className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 hidden md:block"
                     >
-                        <div className="backdrop-blur-md bg-background/80 rounded-full border shadow-lg p-1.5">
-                            <nav className="flex items-center gap-1">
+                        <div className="backdrop-blur-md bg-background/80 rounded-full border shadow-lg p-1.5 dark:border-2">
+                            <nav className="flex text-nowrap items-center gap-1">
                                 {navItems.map((item) => (
                                     <Link
                                         key={item.name}

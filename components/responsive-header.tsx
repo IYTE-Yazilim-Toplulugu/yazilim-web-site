@@ -1,28 +1,28 @@
 "use client"
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ThemeSwitcher } from "@/components/theme-switcher"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { Circle, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname } from 'next/navigation';
+import ThemeChanger from "@/components/themeChanger"
 
 export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
 
-    const NavItem = ({ href, pathname, children }: { href: string; pathname: string; children: React.ReactNode }) => {
+    const NavItem = ({ href, pathname, children, className }: { href: string; pathname: string; children: React.ReactNode, className?: string }) => {
         const isActive = pathname === href;
 
         return (
             <Link
                 href={href}
                 className={`p-1 rounded-2xl flex items-center transition-all ${isActive ? "border-[#f2f2f2]" : ""
-                    }`}
+                    } ${className} ${isActive && "after:w-full"}`}
             >
-                <span className={`${isActive ? "border-b border-white" : ""}`}>
+                <span>
                     {children}
                 </span>
 
@@ -37,7 +37,7 @@ export default function ResponsiveHeader() {
         setIsMounted(true)
 
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 10)
+            setIsScrolled(window.scrollY > 300)
         }
 
         // Only add event listener client-side
@@ -48,8 +48,11 @@ export default function ResponsiveHeader() {
     const navItems = [
         { name: "Home", href: "/home" },
         { name: "About Us", href: "/home#about" },
-        { name: "Announcements", href: "/announcement" },
-        { name: "Blog", href: "/blog" },
+        { name: "Events", href: "/home#events" },
+        { name: "Blogs", href: "/blogs" },
+        { name: "Surveys", href: "/surveys" },
+        { name: "Announcements", href: "/announcements" },
+        { name: "Gallery", href: "/gallery" },
         { name: "Contact", href: "/contact" },
     ]
 
@@ -58,10 +61,10 @@ export default function ResponsiveHeader() {
         return (
             <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
                 <div className="flex h-16 items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="font-bold text-xl">YS</div>
+                    <div className="flex items-center gap-4">
+                        <div className="font-bold text-xl m-4">YS</div>
                         <div className="hidden md:block">
-                            <div className="font-bold">IYTE Yazilim Society</div>
+                            <div className="font-bold text-destructive">IYTE Yazilim Society</div>
                             <div className="text-xs text-muted-foreground">Software for Everyone</div>
                         </div>
                     </div>
@@ -84,20 +87,24 @@ export default function ResponsiveHeader() {
             className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${isScrolled ? "border-b border-border" : "bg-transparent"}`}
         >
             <div className="flex h-16 items-center justify-between px-4">
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="flex items-center gap-2"
-                >
-                    <div className="flex items-center gap-2">
-                        <Image className="font-bold text-xl bg-gradient-to-r from-happy_hearts to-golden_nugget text-transparent bg-clip-text" src="/images/yazilim.png" alt="yazilim" width={20} height={20} />
-                        <div className="hidden md:block">
-                            <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy_hearts to-golden_nugget">IYTE Yazilim Society</div>
-                            <div className="text-xs text-muted-foreground">Software for Everyone</div>
+                <Link href="/">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex items-center gap-2"
+                    >
+                        <div className="relative flex items-center gap-4 z-50">
+                            <div className="absolute -top-1 -left-2 bg-destructive rounded-full h-14 w-14" />
+                            <Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={40} height={40} />
+                            <div className="hidden md:block">
+                                <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">IYTE Yazilim Society</div>
+                                <div className="text-xs text-muted-foreground">Software for Everyone</div>
+                            </div>
                         </div>
-                    </div>
-                </motion.div>
+                        <div className='absolute inset-0 -top-8 w-64 bg-background blur-xl rounded-md z-0'></div>
+                    </motion.div>
+                </Link>
 
                 <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-4 lg:gap-6 text-sm">
                     {navItems.map((item, index) => (
@@ -107,14 +114,11 @@ export default function ResponsiveHeader() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3, delay: index * 0.1 }}
                         >
-                            <div className="
-                                relative transition-colors hover:text-primary,
-                                after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                            >
-                                <NavItem href={item.href} pathname={pathname}>
-                                    {item.name}
-                                </NavItem>
-                            </div>
+                            <NavItem href={item.href} pathname={pathname} className={` 
+                                relative transition-colors text-nowrap hover:text-primary
+                                after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full ${isScrolled ? "animate-fadeOut" : ""}`}>
+                                {item.name}
+                            </NavItem>
                         </motion.div>
                     ))}
                 </nav>
@@ -138,7 +142,7 @@ export default function ResponsiveHeader() {
 
                         </Link>
 
-                        <ThemeSwitcher />
+                        <ThemeChanger />
                     </motion.div>
 
                     <div className="md:hidden">
@@ -171,14 +175,12 @@ export default function ResponsiveHeader() {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.05 }}
                                 >
-                                    <div className="
-                                        relative transition-colors hover:text-primary,
+                                    <NavItem href={item.href} pathname={pathname} className="
+                                        relative transition-colors hover:text-primary w-fit 
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
                                     >
-                                        <NavItem href={item.href} pathname={pathname}>
-                                            {item.name}
-                                        </NavItem>
-                                    </div>
+                                        {item.name}
+                                    </NavItem>
                                 </motion.div>
                             ))}
                         </div>

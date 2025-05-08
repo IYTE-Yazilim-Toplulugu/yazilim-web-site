@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import ResponsiveHeader from "@/components/responsive-header";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import ClientDiagnosticWrapper from "@/components/client-diagnostic-wrapper";
 import ScrollProgress from "@/components/scroll-progress";
@@ -44,7 +44,7 @@ export default function RootLayout({
                 className={`${poppins.variable} antialiased`}
             >
                 {/* defaultTheme enableSystem */}
-                <ThemeProvider attribute="class" >
+                <ThemeProvider defaultTheme="system" enableSystem={true}>
                     <ResponsiveHeader />
                     <ScrollProgress />
                     <FloatingNav />
