@@ -12,10 +12,10 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [https://localhost:3000](https://localhost:3000) with your browser to see the result.
 
 ```
-### Please do not commit directly to main branch.
+### Please do not commit directly to main branch. Don't forget to pull main branch.
 $ git checkout -b {myBranch}
 ## For merge your branch
 $ gh pr create --base main --head {myBranch} --title "Your pr title." --body "Your pr body."
@@ -27,6 +27,4 @@ Changes:
 - Fix tailwind color variables.
 
 TODO:
-
-
-- Is there any requirement for system theme and color selections?
+- Add theme changer.
