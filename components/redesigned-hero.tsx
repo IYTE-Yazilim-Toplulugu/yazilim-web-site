@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CustomGradientBackground } from "@/components/custom-gradient-background"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
-import { Github, Linkedin, Mail, ArrowDown, ExternalLink } from "lucide-react"
+import { Github, Linkedin, Mail, ArrowDown, ExternalLink, Instagram } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { useIsClient } from "@/hooks/use-is-client"
+import Link from "next/link"
 
 export default function RedesignedHero() {
     const { toast } = useToast()
@@ -42,9 +43,13 @@ export default function RedesignedHero() {
     const handleContactClick = () => {
         toast({
             title: "Contact Info",
-            description: "Email: shaq.williams.ai@gmail.com | Phone: (917) 831-2482",
+            description: "Email: iyte-yazilim@iyte.edu.tr | Phone: 555 555 5555",
             duration: 5000,
         })
+    }
+
+    const scrollToEvents = () => {
+        document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })
     }
 
     const scrollToProjects = () => {
@@ -54,7 +59,7 @@ export default function RedesignedHero() {
     // Typing effect for the subtitle
     const [displayedText, setDisplayedText] = useState("")
     const fullText =
-        "Senior Software Engineer, AI Specialist, and Community Organizer specializing in machine learning, generative AI, cybersecurity, and STEM education."
+        "Loorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 
     useEffect(() => {
         if (!isClient) return
@@ -74,7 +79,7 @@ export default function RedesignedHero() {
 
     // Function to highlight specific terms in the text
     const highlightText = (text: string) => {
-        const termsToHighlight = ["AI", "machine learning", "generative AI", "cybersecurity", "STEM"]
+        const termsToHighlight = ["AI", "machine learning", "Web Development", "Software Solutions", ""]
         let highlightedText = text
 
         termsToHighlight.forEach((term) => {
@@ -101,15 +106,15 @@ export default function RedesignedHero() {
                 {/* Left column - Text content */}
                 <div className="order-2 md:order-1 text-center md:text-left">
                     <ScrollReveal>
-                        <Badge className="mb-4 px-3 py-1.5 text-sm bg-primary/20 border-primary/30 text-primary">
-                            Senior Software Engineer
+                        <Badge variant={"destructive"} className="mb-4 px-3 py-1.5 text-sm bg-primary/5 border-primary/30 text-primary">
+                            Software for everyone
                         </Badge>
                     </ScrollReveal>
 
                     <ScrollReveal delay={0.1}>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 tracking-tight">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-happy_hearts to-golden_nugget">
-                                Shaquille Williams
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">
+                                IYTE Yazilim Society
                             </span>
                         </h1>
                     </ScrollReveal>
@@ -131,52 +136,63 @@ export default function RedesignedHero() {
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6 md:mb-8">
                             <Badge
                                 variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-estragon/10 transition-colors"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-happy-hearts/30 transition-colors"
                             >
                                 Machine Learning
                             </Badge>
                             <Badge
                                 variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-estragon/10 transition-colors"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-[#0A66C2]/30 transition-colors"
                             >
                                 Generative AI
                             </Badge>
                             <Badge
                                 variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-white/20 hover:bg-white/10 transition-colors"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-[#c13584]/30 transition-colors"
                             >
-                                Computer Vision
+                                Web Development
                             </Badge>
                             <Badge
                                 variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-white/20 hover:bg-white/10 transition-colors"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-green-700/30 transition-colors"
                             >
-                                NLP
+                                Software Solutions
+                            </Badge>
+                            <Badge
+                                variant="outline"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-purple-500/30 transition-colors"
+                            >
+                                Data Science
                             </Badge>
                         </div>
                     </ScrollReveal>
 
                     <ScrollReveal delay={0.4}>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-6 md:mb-8">
-                            <Button
-                                size="lg"
-                                onClick={scrollToProjects}
-                                className="group relative overflow-hidden shadow-lg hover:shadow-happy_hearts/20 transition-all duration-300 bg-happy-hearts hover:bg-happy-hearts/90 text-white"
-                            >
-                                <span className="relative z-10">View Projects</span>
-                                <span className="absolute inset-0 bg-gradient-to-r from-happy_hearts to-bite-tongue opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
-                            </Button>
+                            <Link href="/events">
+                                <Button
+                                    variant="outline"
+                                    size="lg"
+                                    onClick={scrollToEvents}
+                                    className="group relative overflow-hidden shadow-lg border-border  transition-all duration-300 bg-transparent hover:bg-happy-hearts/90 hover:shadow-happy-hearts/20 dark:bg-happy-hearts"
+                                >
+                                    <span className="relative z-10">View Events</span>
+                                    <span className="absolute inset-0 bg-gradient-to-r from-bite-tongue to-destructive opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
+                                </Button>
+                            </Link>
 
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                onClick={handleContactClick}
-                                className="group relative overflow-hidden border-copper-coin/50 hover:border-copper-coin transition-colors duration-300"
-                            >
-                                <span className="relative z-10">Contact Me</span>
-                                <span className="absolute inset-0 bg-gradient-to-r from-copper-coin/10 to-golden_nugget/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </Button>
+                            <Link href="/contact">
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    onClick={handleContactClick}
+                                    className="group relative overflow-hidden bg-background border-copper-coin/50 hover:border-copper-coin transition-colors duration-300"
+                                >
+                                    <span className="relative z-10">Contact Us</span>
+                                    <span className="absolute inset-0 bg-gradient-to-r from-copper-coin/30 to-golden-nugget/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                </Button>
+                            </Link>
                         </div>
                     </ScrollReveal>
 
@@ -186,10 +202,10 @@ export default function RedesignedHero() {
                                 variant="ghost"
                                 size="icon"
                                 asChild
-                                className="rounded-full hover:bg-succulent/10 transition-all duration-300 hover:scale-110"
+                                className="rounded-full hover:bg-succulent/30 transition-all duration-300 hover:scale-110"
                             >
                                 <a
-                                    href="https://github.com/swilliams9772"
+                                    href="https://github.com/IYTE-Yazilim-Toplulugu/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="GitHub"
@@ -197,14 +213,31 @@ export default function RedesignedHero() {
                                     <Github className="h-5 w-5" />
                                 </a>
                             </Button>
+
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 asChild
-                                className="rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-110"
+                                className="rounded-full hover:bg-[#c13584]/30 transition-all duration-300 hover:scale-110"
                             >
                                 <a
-                                    href="https://www.linkedin.com/in/shaquille-williams-957970129"
+                                    href="https://www.instagram.com/iyte_yazilim/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Instagram"
+                                >
+                                    <Instagram className="h-5 w-5" />
+                                </a>
+                            </Button>
+
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                asChild
+                                className="rounded-full hover:bg-[#0A66C2]/30 transition-all duration-300 hover:scale-110"
+                            >
+                                <a
+                                    href="https://www.linkedin.com/company/iyteyazilim/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="LinkedIn"
@@ -216,14 +249,14 @@ export default function RedesignedHero() {
                                 variant="ghost"
                                 size="icon"
                                 asChild
-                                className="rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-110"
+                                className="rounded-full hover:bg-[#15a5ee]/30 transition-all duration-300 hover:scale-110"
                             >
-                                <a href="mailto:shaq.williams.ai@gmail.com" aria-label="Email">
+                                <a href="mailto:iyteyazilim@iyte.edu.tr" aria-label="Email">
                                     <Mail className="h-5 w-5" />
                                 </a>
                             </Button>
                         </div>
-                    </ScrollReveal>
+                    </ScrollReveal >
                 </div>
 
                 {/* Right column - Image */}
@@ -243,8 +276,8 @@ export default function RedesignedHero() {
                             whileHover={{ scale: 1.05 }}
                         >
                             <Image
-                                src="/placeholder.svg?height=400&width=400"
-                                alt="Shaquille Williams"
+                                src="/images/yazilim.png"
+                                alt="Yazilim Society"
                                 fill
                                 className="object-cover"
                                 priority
@@ -283,8 +316,8 @@ export default function RedesignedHero() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-full border border-white/20 backdrop-blur-sm hover:bg-white/10 transition-colors"
-                                onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+                                className="rounded-full border border-primary/20 backdrop-blur-sm hover:bg-white/10 transition-colors"
+                                onClick={() => document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })}
                             >
                                 <ArrowDown className="h-4 w-4" />
                             </Button>

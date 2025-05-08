@@ -12,6 +12,7 @@ import Link from "next/link";
 
 // This component will be responsive
 export default function AutoSwiper({ spaceBetween = 20, slidesToShow = 1, roundedImage = "rounded-2xl", delayTime = 3000, height = "h-32" }: { spaceBetween?: number, slidesToShow?: number, roundedImage?: string, delayTime?: number, height?: string }) {
+    const api = process.env.API
 
     const [imageData, setImageData] = useState([
         {
@@ -70,7 +71,7 @@ export default function AutoSwiper({ spaceBetween = 20, slidesToShow = 1, rounde
 
         const fetchData = async () => {
             try {
-                const response = await axios.get("/api/announcements");
+                const response = await axios.get(api + "/api/announcements");
                 setImageData(response.data);
 
             } catch (error) {

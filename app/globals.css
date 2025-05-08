@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 :root {
     --background: #ffffff;
     --foreground: #0a0a0a;
@@ -34,17 +36,52 @@
     --sidebar-accent-foreground: #1a1a1a;
     --sidebar-border: #e5e7eb;
     --sidebar-ring: #3b82f6;
-    --happy_hearts: #d6665d;
-    --bite_tongue: #dd796b;
-    --copper_coin: #dd845b;
-    --golden_nugget: #db8b40;
-    --packing_paper: #b99b61;
+    --happy-hearts: #d6665d;
+    --bite-tongue: #dd796b;
+    --copper-coin: #dd845b;
+    --golden-nugget: #db8b40;
+    --packing-paper: #b99b61;
     --succulent: #8fa781;
     --estragon: #a7ad77;
     --motherland: #beb26c;
     --luxurious: #d4b35f;
 
     --font-poppins: 'Poppins', sans-serif;
+}
+
+[data-theme='dark'] {
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+    --card: #0a0a0a;
+    --card-foreground: #fafafa;
+    --popover: #0a0a0a;
+    --popover-foreground: #fafafa;
+    --primary: #fafafa;
+    --primary-foreground: #1a1a1a;
+    --secondary: #262626;
+    --secondary-foreground: #fafafa;
+    --muted: #262626;
+    --muted-foreground: #a2a2a2;
+    --accent: #262626;
+    --accent-foreground: #fafafa;
+    --destructive: #803030;
+    --destructive-foreground: #fafafa;
+    --border: #262626;
+    --input: #262626;
+    --ring: #d4d4d4;
+    --chart-1: #3b82f6;
+    --chart-2: #30caa0;
+    --chart-3: #f4a261;
+    --chart-4: #b266e0;
+    --chart-5: #e03b67;
+    --sidebar-background: #1a1a1a;
+    --sidebar-foreground: #f4f4f4;
+    --sidebar-primary: #3765f0;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #292929;
+    --sidebar-accent-foreground: #f4f4f4;
+    --sidebar-border: #292929;
+    --sidebar-ring: #3b82f6;
 }
 
 @theme inline {
@@ -81,53 +118,18 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
-    --color-happy_hearts: var(--happy_hearts);
-    --color-bite_tongue: var(--bite_tongue);
-    --color-copper_coin: var(--copper_coin);
-    --color-golden_nugget: var(--golden_nugget);
-    --color-packing_paper: var(--packing_paper);
+    --color-happy-hearts: var(--happy-hearts);
+    --color-bite-tongue: var(--bite-tongue);
+    --color-copper-coin: var(--copper-coin);
+    --color-golden-nugget: var(--golden-nugget);
+    --color-packing-paper: var(--packing-paper);
     --color-succulent: var(--succulent);
     --color-estragon: var(--estragon);
     --color-motherland: var(--motherland);
     --color-luxurious: var(--luxurious);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #fafafa;
-        --card: #0a0a0a;
-        --card-foreground: #fafafa;
-        --popover: #0a0a0a;
-        --popover-foreground: #fafafa;
-        --primary: #fafafa;
-        --primary-foreground: #1a1a1a;
-        --secondary: #262626;
-        --secondary-foreground: #fafafa;
-        --muted: #262626;
-        --muted-foreground: #a2a2a2;
-        --accent: #262626;
-        --accent-foreground: #fafafa;
-        --destructive: #803030;
-        --destructive-foreground: #fafafa;
-        --border: #262626;
-        --input: #262626;
-        --ring: #d4d4d4;
-        --chart-1: #3b82f6;
-        --chart-2: #30caa0;
-        --chart-3: #f4a261;
-        --chart-4: #b266e0;
-        --chart-5: #e03b67;
-        --sidebar-background: #1a1a1a;
-        --sidebar-foreground: #f4f4f4;
-        --sidebar-primary: #3765f0;
-        --sidebar-primary-foreground: #ffffff;
-        --sidebar-accent: #292929;
-        --sidebar-accent-foreground: #f4f4f4;
-        --sidebar-border: #292929;
-        --sidebar-ring: #3b82f6;
-    }
-}
+
 
 body {
     background: var(--background);
