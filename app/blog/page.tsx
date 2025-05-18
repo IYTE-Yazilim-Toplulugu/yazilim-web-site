@@ -2,8 +2,8 @@
 import BlogPreview from "@/components/blog-preview";
 
 
-export default function Blog() {
 
+export default function Blog() {
 
     return (
         <main className="min-h-screen pt-16">
