@@ -102,7 +102,7 @@ export default function ResponsiveHeader() {
                                 <div className="text-xs text-muted-foreground">Software for Everyone</div>
                             </div>
                         </div>
-                        <div className='absolute inset-0 -top-8 w-64 bg-background blur-xl rounded-md z-0'></div>
+                        <div className={`absolute inset-0 -top-8 -left-4 w-40 bg-background blur-xl rounded-md z-0 md:w-64 md:left-0 md:block ${mobileMenuOpen ? "block" : "hidden"}`}></div>
                     </motion.div>
                 </Link>
 
