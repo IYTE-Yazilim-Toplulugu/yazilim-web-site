@@ -12,7 +12,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { ThemePreview } from "@/components/theme-preview"
+import Link from "next/link"
 
 // Form validation schema
 const subscribeSchema = z.object({
@@ -147,14 +147,16 @@ export default function EnhancedFooter() {
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
                             <h3 className="font-semibold mb-4">Quick Links</h3>
-                            <ul className="space-y-2 text-nowrap">
-                                <FooterLink href="/home" label="Home" />
-                                <FooterLink href="/blogs" label="Blogs" />
-                                <FooterLink href="/surveys" label="Surveys" />
-                                <FooterLink href="/announcements" label="Announcements" />
-                                <FooterLink href="/gallery" label="Gallery" />
-                                <FooterLink href="/contact" label="Contact" />
-                            </ul>
+                            <div className="flex flex-col space-y-1 text-nowrap">
+                                <Link href="/home" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Home</Link>
+                                <Link href="/home#about" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">About Us</Link>
+                                <Link href="/home#events" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Events</Link>
+                                <Link href="/home#announcements" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Announcements</Link>
+                                <Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Blogs</Link>
+                                <Link href="/survey" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Surveys</Link>
+                                <Link href="/gallery" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Gallery</Link>
+                                <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Contact</Link>
+                            </div>
                         </motion.div>
                     </div>
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Circle, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname } from 'next/navigation';
 import ThemeChanger from "@/components/themeChanger"
@@ -49,9 +49,9 @@ export default function ResponsiveHeader() {
         { name: "Home", href: "/home" },
         { name: "About Us", href: "/home#about" },
         { name: "Events", href: "/home#events" },
-        { name: "Blogs", href: "/blogs" },
-        { name: "Surveys", href: "/surveys" },
-        { name: "Announcements", href: "/announcements" },
+        { name: "Blogs", href: "/blog" },
+        { name: "Surveys", href: "/survey" },
+        { name: "Announcements", href: "/announcement" },
         { name: "Gallery", href: "/gallery" },
         { name: "Contact", href: "/contact" },
     ]
