@@ -18,7 +18,7 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: "Home", href: "/home", icon: <Home className="h-[18px] w-[18px]" /> },
     { name: "About Us", href: "/home#about", icon: <Code className="h-[18px] w-[18px]" /> },
-    { name: "Announcements", href: "/announcement", icon: <Briefcase className="h-[18px] w-[18px]" /> },
+    { name: "Announcements", href: "/homne#announcements", icon: <Briefcase className="h-[18px] w-[18px]" /> },
     { name: "Blog", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
     { name: "Contact", href: "/contact", icon: <Send className="h-[18px] w-[18px]" /> },
 ]

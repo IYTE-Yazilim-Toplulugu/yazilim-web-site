@@ -51,7 +51,7 @@ export default function ResponsiveHeader() {
         { name: "Events", href: "/home#events" },
         { name: "Blogs", href: "/blog" },
         { name: "Surveys", href: "/survey" },
-        { name: "Announcements", href: "/announcement" },
+        { name: "Announcements", href: "/home#announcements" },
         { name: "Gallery", href: "/gallery" },
         { name: "Contact", href: "/contact" },
     ]
