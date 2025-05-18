@@ -83,3 +83,93 @@ export const SwiperData =
         }
     ]
 
+
+export const SurveyData = {
+    "code": 0,
+    "message": null,
+    "surveys": [
+        {
+            "id": "user-experience",
+            "title": "User Experience Survey",
+            "icon": "user",
+            "description": "Help us improve the design and usability of our website.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "rating",
+                    "question": "How would you rate your overall experience?",
+                    "scale": 10
+                },
+                {
+                    "id": "q2",
+                    "type": "multiple_choice",
+                    "question": "What device do you use the most to visit our site?",
+                    "options": ["Desktop", "Tablet", "Mobile"]
+                },
+                {
+                    "id": "q3",
+                    "type": "checkboxes",
+                    "question": "Which of these features do you find helpful?",
+                    "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"]
+                },
+                {
+                    "id": "q4",
+                    "type": "text",
+                    "question": "Any suggestions for improvement?"
+                }
+            ]
+        },
+        {
+            "id": "event-feedback",
+            "title": "Hackathon 2025 Feedback",
+            "icon": "event",
+            "description": "We’d love to hear what you thought of our latest event.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "yes_no",
+                    "question": "Did you participate in a team?"
+                },
+                {
+                    "id": "q2",
+                    "type": "dropdown",
+                    "question": "Which track did you join?",
+                    "options": ["AI/ML", "Web Dev", "Cybersecurity", "Game Dev", "Didn't Join"]
+                },
+                {
+                    "id": "q3",
+                    "type": "number",
+                    "question": "How many hours did you spend on your project?"
+                },
+                {
+                    "id": "q4",
+                    "type": "text",
+                    "question": "Share your favorite moment from the event."
+                }
+            ]
+        },
+        {
+            "id": "feature-request",
+            "title": "Feature Request",
+            "icon": "feature",
+            "description": "Let us know what new features you'd love to see.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "text",
+                    "question": "What feature would you like us to build?"
+                },
+                {
+                    "id": "q2",
+                    "type": "text",
+                    "question": "Why is this feature important to you?"
+                },
+                {
+                    "id": "q3",
+                    "type": "date",
+                    "question": "When do you need this feature by?"
+                }
+            ]
+        }
+    ]
+}

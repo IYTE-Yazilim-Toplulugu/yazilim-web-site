@@ -84,7 +84,7 @@ export default function ResponsiveHeader() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${isScrolled ? "border-b border-border" : "bg-transparent"}`}
+            className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-border transition-all duration-300 ${isScrolled ? "border-b" : "bg-transparent"}`}
         >
             <div className="flex h-16 items-center justify-between px-4">
                 <Link href="/">
