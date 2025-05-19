@@ -113,7 +113,7 @@ export default function RedesignedHero() {
 
                     <ScrollReveal delay={0.1}>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 tracking-tight">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">
+                            <span className="bg-clip-text text-transparent text-nowrap bg-gradient-to-r from-happy-hearts to-golden-nugget">
                                 IYTE Yazilim Society
                             </span>
                         </h1>
@@ -187,7 +187,7 @@ export default function RedesignedHero() {
                                     size="lg"
                                     variant="outline"
                                     onClick={handleContactClick}
-                                    className="group relative overflow-hidden bg-background border-copper-coin/50 hover:border-copper-coin transition-colors duration-300"
+                                    className="group relative overflow-hidden bg-transparent border-copper-coin/50 hover:border-copper-coin transition-colors duration-300"
                                 >
                                     <span className="relative z-10">Contact Us</span>
                                     <span className="absolute inset-0 bg-gradient-to-r from-copper-coin/30 to-golden-nugget/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Circle, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname } from 'next/navigation';
 import ThemeChanger from "@/components/themeChanger"
@@ -49,9 +49,9 @@ export default function ResponsiveHeader() {
         { name: "Home", href: "/home" },
         { name: "About Us", href: "/home#about" },
         { name: "Events", href: "/home#events" },
-        { name: "Blogs", href: "/blogs" },
-        { name: "Surveys", href: "/surveys" },
-        { name: "Announcements", href: "/announcements" },
+        { name: "Blogs", href: "/blog" },
+        { name: "Surveys", href: "/survey" },
+        { name: "Announcements", href: "/home#announcements" },
         { name: "Gallery", href: "/gallery" },
         { name: "Contact", href: "/contact" },
     ]
@@ -84,7 +84,7 @@ export default function ResponsiveHeader() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${isScrolled ? "border-b border-border" : "bg-transparent"}`}
+            className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-border transition-all duration-300 ${isScrolled ? "border-b" : "bg-transparent"}`}
         >
             <div className="flex h-16 items-center justify-between px-4">
                 <Link href="/">
@@ -102,7 +102,7 @@ export default function ResponsiveHeader() {
                                 <div className="text-xs text-muted-foreground">Software for Everyone</div>
                             </div>
                         </div>
-                        <div className='absolute inset-0 -top-8 w-64 bg-background blur-xl rounded-md z-0'></div>
+                        <div className={`absolute inset-0 -top-8 -left-4 w-40 bg-background blur-xl rounded-md z-0 md:w-64 md:left-0 md:block ${mobileMenuOpen ? "block" : "hidden"}`}></div>
                     </motion.div>
                 </Link>
 
