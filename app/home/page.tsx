@@ -1,20 +1,99 @@
 "use client";
-import { Input } from '@/components/ui/input';
-import { Menubar } from '@/components/ui/menubar';
+import { ErrorBoundary } from '@/components/error-boundary';
+import RedesignedHero from '@/components/redesigned-hero';
+import { SectionFallback } from '@/components/section-fallback';
+import EnhancedFooter from '@/components/enhanced-footer';
+import { ArrowDown, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Suspense } from 'react';
+import FreeSwiper from '@/components/freeSwiper';
+import { SwiperData } from '@/lib/pseudo';
 import Image from 'next/image';
+import Link from 'next/link';
+import AboutSection from '@/components/about-section';
+import { SectionContainer } from '@/components/ui/section-container';
+import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { motion } from 'framer-motion';
+import { useIsClient } from '@/hooks/use-is-client';
+
+// Simple loading component
+function LoadingSection({ name }: { name: string }) {
+    return (
+        <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+            <p className="text-muted-foreground">Loading {name} section...</p>
+        </div>
+    )
+}
 
 export default function Home() {
+    const isClient = useIsClient()
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
+        <main className="min-h-screen">
 
-            {/* just an example for component structure */}
-            <Menubar />
-            <Input />
-            <h1>Home Page for IYTE Yazilim Society Website</h1>
-            <section className='flex flex-row mx-8 space-x-8 items-center'>
-                <Image className='' src="/images/yazilim.png" alt="IYTE Logo" width={200} height={200} />
-                <p>Software for everyone.</p>
-            </section>
-        </div>
+            <ErrorBoundary fallback={<SectionFallback title="Hero" />}>
+                <Suspense fallback={<LoadingSection name="Hero" />}>
+                    <RedesignedHero />
+                </Suspense>
+            </ErrorBoundary>
+
+            <ErrorBoundary fallback={<SectionFallback title="Events" />}>
+                <Suspense fallback={<LoadingSection name="Events" />}>
+                    <SectionContainer id="events" className="relative overflow-hidden">
+                        <ScrollReveal delay={0.2} >
+                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-destructive'>Etkinlikler</h1>
+                            <div className='m-8 md:m-24'>
+                                <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
+                                    {SwiperData.map((item, index) => (
+                                        <div key={index} className="keen-slider__slide rounded-2xl h-fit bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive">
+                                            <Link href={"/place" + item.slug} >
+                                                <Image
+                                                    src={item.image}
+                                                    alt={`Slide ${index + 1}`}
+                                                    width={1000} height={500}
+                                                    className="rounded-lg object-cover aspect-[2] w-full h-full"
+                                                />
+                                                <div className='m-8 flex flex-col text-center items-center space-y-4'>
+                                                    <p className='text-2xl font-bold'>{item.title}</p>
+                                                    <p className='text-lg font-semibold'>{item.description}</p>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </FreeSwiper>
+                            </div>
+                        </ScrollReveal>
+                        {/* Scroll indicator */}
+                        {isClient && (
+                            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                                <motion.div
+                                    animate={{ y: [0, 10, 0] }}
+                                    transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
+                                    whileHover={{ scale: 1.1 }}
+                                >
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="rounded-full border border-primary/20 backdrop-blur-sm hover:bg-white/10 transition-colors"
+                                        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+                                    >
+                                        <ArrowDown className="h-4 w-4" />
+                                    </Button>
+                                </motion.div>
+                            </div>
+                        )}
+
+                    </SectionContainer>
+                </Suspense>
+            </ErrorBoundary>
+
+            <ErrorBoundary fallback={<SectionFallback title="About" />}>
+                <Suspense fallback={<LoadingSection name="About" />}>
+                    <AboutSection />
+                </Suspense>
+            </ErrorBoundary>
+
+            <EnhancedFooter />
+        </main >
     )
 }
