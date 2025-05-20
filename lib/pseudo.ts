@@ -94,7 +94,6 @@ export const SurveyData = {
             "icon": "user",
             "description": "Help us improve the design and usability of our website.",
             "release_date": "2023-10-01",
-            // will be new indicator and answer date
             "questions": [
                 {
                     "id": "q1",

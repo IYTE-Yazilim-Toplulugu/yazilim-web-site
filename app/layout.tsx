@@ -41,7 +41,7 @@ export default function RootLayout({
                 <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
             </head>
             <body
-                className={`${poppins.variable} antialiased`}
+                className={`${poppins.variable} antialiased selection:bg-bite-tongue selection:text-primary-foreground`}
             >
                 {/* defaultTheme enableSystem */}
                 <ThemeProvider defaultTheme="system" enableSystem={true}>
