@@ -27,9 +27,9 @@ export default function RedesignedHero() {
         offset: ["start start", "end start"],
     })
 
-    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-    const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
-    const y = useTransform(scrollYProgress, [0, 0.5], [0, 100])
+    const opacity = useTransform(scrollYProgress, [0.9, 1], [1, 0])
+    const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95])
+    const y = useTransform(scrollYProgress, [0, 1], [0, 100])
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!containerRef.current) return
@@ -52,9 +52,9 @@ export default function RedesignedHero() {
         document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })
     }
 
-    const scrollToProjects = () => {
-        document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
-    }
+    // const scrollToProjects = () => {
+    //     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
+    // }
 
     // Typing effect for the subtitle
     const [displayedText, setDisplayedText] = useState("")

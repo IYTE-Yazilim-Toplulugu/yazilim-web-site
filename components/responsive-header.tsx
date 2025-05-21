@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -12,6 +12,7 @@ export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
+    const mobileMenuRef = useRef<HTMLDivElement>(null)
 
     const NavItem = ({ href, pathname, children, className }: { href: string; pathname: string; children: React.ReactNode, className?: string }) => {
         const isActive = pathname === href;
@@ -38,12 +39,42 @@ export default function ResponsiveHeader() {
 
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 300)
+
+            if (mobileMenuOpen) {
+                setMobileMenuOpen(false)
+            }
         }
 
         // Only add event listener client-side
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
-    }, [])
+    }, [mobileMenuOpen])
+
+    // Close mobile menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(event.target as Node)
+            ) {
+                setMobileMenuOpen(false)
+            }
+        }
+
+        if (mobileMenuOpen) {
+            document.addEventListener("mousedown", handleClickOutside)
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [mobileMenuOpen])
+
+    useEffect(() => {
+        setMobileMenuOpen(false)
+    }, [pathname])
+
+
 
     const navItems = [
         { name: "Home", href: "/home" },
@@ -97,7 +128,7 @@ export default function ResponsiveHeader() {
                         <div className="relative flex items-center gap-4 z-50">
                             <div className="absolute -top-1 -left-2 bg-destructive rounded-full h-14 w-14" />
                             <Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={40} height={40} />
-                            <div className="hidden md:block">
+                            <div className="hidden lg:block">
                                 <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">IYTE Yazilim Society</div>
                                 <div className="text-xs text-muted-foreground">Software for Everyone</div>
                             </div>
@@ -106,7 +137,7 @@ export default function ResponsiveHeader() {
                     </motion.div>
                 </Link>
 
-                <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-4 lg:gap-6 text-sm">
+                <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-4 lg:gap-6 text-sm">
                     {navItems.map((item, index) => (
                         <motion.div
                             key={item.name}
@@ -145,12 +176,14 @@ export default function ResponsiveHeader() {
                         <ThemeChanger />
                     </motion.div>
 
-                    <div className="md:hidden">
+                    <div className="lg:hidden">
                         <Button
                             variant="ghost"
                             size="icon"
+                            disabled={mobileMenuOpen}
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                            className="disabled:opacity-100"
                         >
                             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </Button>
@@ -161,11 +194,12 @@ export default function ResponsiveHeader() {
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
+                        ref={mobileMenuRef}
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="md:hidden border-t overflow-hidden backdrop-blur-md"
+                        className="lg:hidden border-t overflow-hidden backdrop-blur-md"
                     >
                         <div className="flex flex-col space-y-3 p-4">
                             {navItems.map((item, index) => (

@@ -94,12 +94,13 @@ export const SurveyData = {
             "icon": "user",
             "description": "Help us improve the design and usability of our website.",
             "release_date": "2023-10-01",
+            // will be new indicator and answer date
             "questions": [
                 {
                     "id": "q1",
                     "type": "rating",
                     "question": "How would you rate your overall experience?",
-                    "scale": 5
+                    "options": [1, 2, 3, 4, 5]
                 },
                 {
                     "id": "q2",
@@ -116,7 +117,8 @@ export const SurveyData = {
                 {
                     "id": "q4",
                     "type": "text",
-                    "question": "Any suggestions for improvement?"
+                    "question": "Any suggestions for improvement?",
+                    "placeholder": "Your feedback is valuable to us."
                 }
             ]
         },
@@ -133,19 +135,21 @@ export const SurveyData = {
                 },
                 {
                     "id": "q2",
-                    "type": "dropdown",
+                    "type": "single_choice",
                     "question": "Which track did you join?",
                     "options": ["AI/ML", "Web Dev", "Cybersecurity", "Game Dev", "Didn't Join"]
                 },
                 {
                     "id": "q3",
                     "type": "number",
-                    "question": "How many hours did you spend on your project?"
+                    "question": "How many hours did you spend on your project?",
+                    "placeholder": "Enter a number"
                 },
                 {
                     "id": "q4",
                     "type": "text",
-                    "question": "Share your favorite moment from the event."
+                    "question": "Share your favorite moment from the event.",
+                    "placeholder": "We'd love to hear your story!"
                 }
             ]
         },
@@ -158,12 +162,14 @@ export const SurveyData = {
                 {
                     "id": "q1",
                     "type": "text",
-                    "question": "What feature would you like us to build?"
+                    "question": "What feature would you like us to build?",
+                    "placeholder": "Describe the feature in detail."
                 },
                 {
                     "id": "q2",
                     "type": "text",
-                    "question": "Why is this feature important to you?"
+                    "question": "Why is this feature important to you?",
+                    "placeholder": "Explain how this feature would benefit you."
                 },
                 {
                     "id": "q3",
@@ -187,7 +193,7 @@ const SurveyRequest = {
                     "id": "q1",
                     "type": "rating",
                     "question": "How would you rate your overall experience?",
-                    "scale": 5,
+                    "options": [1, 2, 3, 4, 5],
                     "answer": 4
                 },
                 {

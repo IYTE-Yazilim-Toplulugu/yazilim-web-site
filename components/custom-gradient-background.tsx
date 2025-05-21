@@ -59,7 +59,6 @@ export function CustomGradientBackground({ children, className }: CustomGradient
                     repeat: Infinity,
                     repeatType: "loop",
                     ease: "easeInOut",
-                    delay: 2,
                 }}
             />
             <motion.div
@@ -75,7 +74,6 @@ export function CustomGradientBackground({ children, className }: CustomGradient
                     repeat: Infinity,
                     repeatType: "loop",
                     ease: "easeInOut",
-                    delay: 1,
                 }}
             />
             {/*     </div> */}
