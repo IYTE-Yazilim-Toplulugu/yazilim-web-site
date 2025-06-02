@@ -3,8 +3,6 @@
 import { Card, CardContent, CardFooter, CardTitle, CardDescription, CardHeader } from "@/components/ui/card"
 import  Image  from "next/image";
 
-
-
 export default function Blog() {
 
     return (
