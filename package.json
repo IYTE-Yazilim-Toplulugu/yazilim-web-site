@@ -40,6 +40,7 @@
         "@radix-ui/react-tooltip": "^1.2.0",
         "@react-three/drei": "^10.0.6",
         "@react-three/fiber": "^9.1.2",
+        "@supabase/supabase-js": "^2.49.9",
         "axios": "^1.8.4",
         "chart.js": "^4.4.9",
         "class-variance-authority": "^0.7.1",
