@@ -1,13 +1,13 @@
 "use client"
 
 import type React from "react"
+import Link from "next/link"
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Home, Code, Briefcase, Send, Menu, X, ChevronUp } from "lucide-react"
+import { Home, Code, Briefcase, Send, ChevronUp, Image, Scroll, Ticket, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { useToast } from "@/components/ui/use-toast"
+// import { useToast } from "@/components/ui/use-toast"
 
 interface NavItem {
     name: string
@@ -18,17 +18,22 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: "Home", href: "/home", icon: <Home className="h-[18px] w-[18px]" /> },
     { name: "About Us", href: "/home#about", icon: <Code className="h-[18px] w-[18px]" /> },
-    { name: "Announcements", href: "/announcement", icon: <Briefcase className="h-[18px] w-[18px]" /> },
-    { name: "Blog", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
+    { name: "Events", href: "/home#events", icon: <Ticket className="h-[18px] w-[18px]" /> },
+    { name: "Blogs", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
+    { name: "Surveys", href: "/survey", icon: <Scroll className="h-[18px] w-[18px]" /> },
+    { name: "Announcements", href: "/home#announcements", icon: <Megaphone className="h-[18px] w-[18px]" /> },
+    { name: "Gallery", href: "/gallery", icon: <Image className="h-[18px] w-[18px]" /> },
     { name: "Contact", href: "/contact", icon: <Send className="h-[18px] w-[18px]" /> },
+
+
 ]
 
 export default function FloatingNav() {
     const [activeSection, setActiveSection] = useState("")
     const [isVisible, setIsVisible] = useState(false)
     const [showBackToTop, setShowBackToTop] = useState(false)
-    const [isOpen, setIsOpen] = useState(false)
-    const { toast } = useToast()
+    // const [isOpen, setIsOpen] = useState(false)
+    // const { toast } = useToast()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -73,20 +78,20 @@ export default function FloatingNav() {
         }
     }, [])
 
-    const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        e.preventDefault()
-        const element = document.querySelector(href)
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth" })
-            setIsOpen(false) // Close mobile menu on click
-        } else {
-            toast({
-                title: "Section not found",
-                description: `The section "${href}" could not be found on the page.`,
-                variant: "destructive",
-            })
-        }
-    }
+    // const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    //     e.preventDefault()
+    //     const element = document.querySelector(href)
+    //     if (element) {
+    //         element.scrollIntoView({ behavior: "smooth" })
+    //         setIsOpen(false) // Close mobile menu on click
+    //     } else {
+    //         toast({
+    //             title: "Section not found",
+    //             description: `The section "${href}" could not be found on the page.`,
+    //             variant: "destructive",
+    //         })
+    //     }
+    // }
 
     return (
         <>
@@ -98,21 +103,21 @@ export default function FloatingNav() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block"
+                        className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 hidden lg:block"
                     >
-                        <div className="backdrop-blur-md bg-background/80 rounded-full border shadow-lg p-1.5">
-                            <nav className="flex items-center gap-1">
+                        <div className="backdrop-blur-md bg-background/80 rounded-full border shadow-lg p-1.5 dark:border-2">
+                            <nav className="flex text-nowrap items-center gap-1">
                                 {navItems.map((item) => (
-                                    <a
+                                    <Link
                                         key={item.name}
                                         href={item.href}
-                                        onClick={(e) => handleItemClick(e, item.href)}
-                                        className={cn(
-                                            "relative px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300",
-                                            activeSection === item.href.slice(1)
+                                        // onClick={(e) => handleItemClick(e, item.href)}
+                                        className={`
+                                            relative px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300
+                                            ${activeSection === item.href.slice(1)
                                                 ? "text-white bg-primary"
-                                                : "text-muted-foreground hover:text-foreground hover:bg-accent",
-                                        )}
+                                                : "text-muted-foreground hover:text-foreground hover:bg-accent"}
+                                        `}
                                     >
                                         {item.icon}
                                         <span>{item.name}</span>
@@ -127,89 +132,95 @@ export default function FloatingNav() {
                                                 transition={{ duration: 0.2 }}
                                             />
                                         )}
-                                    </a>
+                                    </Link>
                                 ))}
                             </nav>
                         </div>
                     </motion.div>
                 )}
-            </AnimatePresence>
+            </AnimatePresence >
 
             {/* Mobile floating navigation button */}
-            <AnimatePresence>
-                {isVisible && (
-                    <motion.div
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 100, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="fixed bottom-4 right-4 z-50 md:hidden"
-                    >
-                        <Button
-                            size="icon"
-                            className="h-12 w-12 rounded-full shadow-lg bg-primary text-white"
-                            onClick={() => setIsOpen(!isOpen)}
-                        >
-                            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                        </Button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* <AnimatePresence> */}
+            {/*     { */}
+            {/*         isVisible && ( */}
+            {/*             <motion.div */}
+            {/*                 initial={{ y: 100, opacity: 0 }} */}
+            {/*                 animate={{ y: 0, opacity: 1 }} */}
+            {/*                 exit={{ y: 100, opacity: 0 }} */}
+            {/*                 transition={{ duration: 0.3 }} */}
+            {/*                 className="fixed bottom-4 right-4 z-50 md:hidden" */}
+            {/*             > */}
+            {/*                 <Button */}
+            {/*                     size="icon" */}
+            {/*                     className="h-12 w-12 rounded-full shadow-lg bg-primary text-white" */}
+            {/*                     onClick={() => setIsOpen(!isOpen)} */}
+            {/*                 > */}
+            {/*                     {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />} */}
+            {/*                 </Button> */}
+            {/*             </motion.div> */}
+            {/*         ) */}
+            {/*     } */}
+            {/* </AnimatePresence > */}
 
             {/* Mobile navigation menu */}
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed bottom-20 right-4 z-50 md:hidden"
-                    >
-                        <div className="bg-background/95 backdrop-blur-lg rounded-lg border shadow-lg p-2 flex flex-col gap-1 w-48">
-                            {navItems.map((item) => (
-                                <a
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={(e) => handleItemClick(e, item.href)}
-                                    className={cn(
-                                        "px-3 py-2 rounded-md flex items-center gap-3 transition-all duration-200",
-                                        activeSection === item.href.slice(1)
-                                            ? "bg-primary/10 text-primary"
-                                            : "hover:bg-accent text-muted-foreground hover:text-foreground",
-                                    )}
-                                >
-                                    {item.icon}
-                                    <span>{item.name}</span>
-                                </a>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
+            {/* <AnimatePresence> */}
+            {/*     { */}
+            {/*         isOpen && ( */}
+            {/*             <motion.div */}
+            {/*                 initial={{ opacity: 0, scale: 0.9 }} */}
+            {/*                 animate={{ opacity: 1, scale: 1 }} */}
+            {/*                 exit={{ opacity: 0, scale: 0.9 }} */}
+            {/*                 transition={{ duration: 0.2 }} */}
+            {/*                 className="fixed bottom-20 right-4 z-50 md:hidden" */}
+            {/*             > */}
+            {/*                 <div className="bg-background/95 backdrop-blur-lg rounded-lg border shadow-lg p-2 flex flex-col gap-1 w-48"> */}
+            {/*                     {navItems.map((item) => ( */}
+            {/*                         <a */}
+            {/*                             key={item.name} */}
+            {/*                             href={item.href} */}
+            {/*                             onClick={(e) => handleItemClick(e, item.href)} */}
+            {/*                             className={cn( */}
+            {/*                                 "px-3 py-2 rounded-md flex items-center gap-3 transition-all duration-200", */}
+            {/*                                 activeSection === item.href.slice(1) */}
+            {/*                                     ? "bg-primary/10 text-primary" */}
+            {/*                                     : "hover:bg-accent text-muted-foreground hover:text-foreground", */}
+            {/*                             )} */}
+            {/*                         > */}
+            {/*                             {item.icon} */}
+            {/*                             <span>{item.name}</span> */}
+            {/*                         </a> */}
+            {/*                     ))} */}
+            {/*                 </div> */}
+            {/*             </motion.div> */}
+            {/*         ) */}
+            {/*     } */}
+            {/* </AnimatePresence > */}
+            {/**/}
             {/* Back to top button */}
             <AnimatePresence>
-                {showBackToTop && (
-                    <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 20, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed bottom-4 left-4 z-50"
-                    >
-                        <Button
-                            size="icon"
-                            variant="outline"
-                            className="h-10 w-10 rounded-full shadow-md bg-background/80 backdrop-blur-sm hover:bg-accent"
-                            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                            title="Back to top"
+                {
+                    showBackToTop && (
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 20, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="fixed bottom-4 left-4 z-50"
                         >
-                            <ChevronUp className="h-5 w-5" />
-                        </Button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                            <Button
+                                size="icon"
+                                variant="outline"
+                                className="h-10 w-10 rounded-full shadow-md bg-background/80 backdrop-blur-sm hover:bg-accent"
+                                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                                title="Back to top"
+                            >
+                                <ChevronUp className="h-5 w-5" />
+                            </Button>
+                        </motion.div>
+                    )
+                }
+            </AnimatePresence >
         </>
     )
 }
