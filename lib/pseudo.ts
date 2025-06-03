@@ -83,3 +83,140 @@ export const SwiperData =
         }
     ]
 
+
+export const SurveyData = {
+    "code": 0,
+    "message": null,
+    "surveys": [
+        {
+            "id": 13123123123,
+            "title": "User Experience Survey",
+            "icon": "user",
+            "description": "Help us improve the design and usability of our website.",
+            "release_date": "2023-10-01",
+            // will be new indicator and answer date
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "rating",
+                    "question": "How would you rate your overall experience?",
+                    "options": [1, 2, 3, 4, 5]
+                },
+                {
+                    "id": "q2",
+                    "type": "multiple_choice",
+                    "question": "What device do you use the most to visit our site?",
+                    "options": ["Desktop", "Tablet", "Mobile"]
+                },
+                {
+                    "id": "q3",
+                    "type": "checkbox",
+                    "question": "Which of these features do you find helpful?",
+                    "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"]
+                },
+                {
+                    "id": "q4",
+                    "type": "text",
+                    "question": "Any suggestions for improvement?",
+                    "placeholder": "Your feedback is valuable to us."
+                }
+            ]
+        },
+        {
+            "id": 1312312312312,
+            "title": "Hackathon 2025 Feedback",
+            "icon": "event",
+            "description": "We’d love to hear what you thought of our latest event.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "yes_no",
+                    "question": "Did you participate in a team?"
+                },
+                {
+                    "id": "q2",
+                    "type": "single_choice",
+                    "question": "Which track did you join?",
+                    "options": ["AI/ML", "Web Dev", "Cybersecurity", "Game Dev", "Didn't Join"]
+                },
+                {
+                    "id": "q3",
+                    "type": "number",
+                    "question": "How many hours did you spend on your project?",
+                    "placeholder": "Enter a number"
+                },
+                {
+                    "id": "q4",
+                    "type": "text",
+                    "question": "Share your favorite moment from the event.",
+                    "placeholder": "We'd love to hear your story!"
+                }
+            ]
+        },
+        {
+            "id": 1312323421,
+            "title": "Feature Request",
+            "icon": "feature",
+            "description": "Let us know what new features you'd love to see.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "text",
+                    "question": "What feature would you like us to build?",
+                    "placeholder": "Describe the feature in detail."
+                },
+                {
+                    "id": "q2",
+                    "type": "text",
+                    "question": "Why is this feature important to you?",
+                    "placeholder": "Explain how this feature would benefit you."
+                },
+                {
+                    "id": "q3",
+                    "type": "date",
+                    "question": "When do you need this feature by?"
+                }
+            ]
+        }
+    ]
+}
+
+// This is an example for answered survey POST request
+const SurveyRequest = {
+    "surveys": [
+        {
+            "id": 13123123123,
+            "title": "User Experience Survey",
+            "description": "Help us improve the design and usability of our website.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "type": "rating",
+                    "question": "How would you rate your overall experience?",
+                    "options": [1, 2, 3, 4, 5],
+                    "answer": 4
+                },
+                {
+                    "id": "q2",
+                    "type": "multiple_choice",
+                    "question": "What device do you use the most to visit our site?",
+                    "options": ["Desktop", "Tablet", "Mobile"],
+                    "answer": "Desktop"
+                },
+                {
+                    "id": "q3",
+                    "type": "checkbox",
+                    "question": "Which of these features do you find helpful?",
+                    "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"],
+                    "answer": ["Events", "Blog Posts"]
+                },
+                {
+                    "id": "q4",
+                    "type": "text",
+                    "question": "Any suggestions for improvement?",
+                    "answer": "The site is great, but I would love to see more tutorials."
+                }
+            ]
+        }
+    ]
+}

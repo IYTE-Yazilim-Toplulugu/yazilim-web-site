@@ -14,17 +14,20 @@ bun dev
 
 Open [https://localhost:3000](https://localhost:3000) with your browser to see the result.
 
-```
-### Please do not commit directly to main branch. Don't forget to pull main branch.
+## Please do not commit directly to main branch. Don't forget to pull main branch.
+```bash
 $ git checkout -b {myBranch}
-## For merge your branch
+```
+### For merge your branch
+```bash
 $ gh pr create --base main --head {myBranch} --title "Your pr title." --body "Your pr body."
 ```
+
 -------------------------------------------------------------------------------
 
 Changes:
-- Optimized responsive-header for all pages.
-- Fix tailwind color variables.
+- Survey Page
+- Updated Navigators
 
 TODO:
-- Add theme changer.
+- Create assigned pages.

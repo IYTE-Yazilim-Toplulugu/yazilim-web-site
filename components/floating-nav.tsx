@@ -5,7 +5,7 @@ import Link from "next/link"
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Home, Code, Briefcase, Send, ChevronUp } from "lucide-react"
+import { Home, Code, Briefcase, Send, ChevronUp, Image, Scroll, Ticket, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 // import { useToast } from "@/components/ui/use-toast"
 
@@ -18,9 +18,14 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: "Home", href: "/home", icon: <Home className="h-[18px] w-[18px]" /> },
     { name: "About Us", href: "/home#about", icon: <Code className="h-[18px] w-[18px]" /> },
-    { name: "Announcements", href: "/announcement", icon: <Briefcase className="h-[18px] w-[18px]" /> },
-    { name: "Blog", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
+    { name: "Events", href: "/home#events", icon: <Ticket className="h-[18px] w-[18px]" /> },
+    { name: "Blogs", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
+    { name: "Surveys", href: "/survey", icon: <Scroll className="h-[18px] w-[18px]" /> },
+    { name: "Announcements", href: "/home#announcements", icon: <Megaphone className="h-[18px] w-[18px]" /> },
+    { name: "Gallery", href: "/gallery", icon: <Image className="h-[18px] w-[18px]" /> },
     { name: "Contact", href: "/contact", icon: <Send className="h-[18px] w-[18px]" /> },
+
+
 ]
 
 export default function FloatingNav() {
@@ -98,7 +103,7 @@ export default function FloatingNav() {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -100, opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 hidden md:block"
+                        className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 hidden lg:block"
                     >
                         <div className="backdrop-blur-md bg-background/80 rounded-full border shadow-lg p-1.5 dark:border-2">
                             <nav className="flex text-nowrap items-center gap-1">
