@@ -1,20 +1,28 @@
 "use client"
-import { motion } from "framer-motion"
+
+import {handleAuthMessage} from "@/lib/auth";
+import { useSearchParams } from "next/navigation";
 
 
 export default function Login() {
+    const params = useSearchParams();
+    const msg = params.get("msg");
+    const rel = params.get("reload");
 
+    if (window){
+        if (rel === 'true'){
+            window.location.href = '/login';
+            //window.location.reload();
+        }
+
+        handleAuthMessage(window);
+    }
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center min-h-screen"
-        >
-            Login page
+        <div>
+            <iframe className="w-dvw h-dvh" src={"http://localhost:3001/login" + (msg != null ? "?msg=" + msg : "")}>
 
-        </motion.div>
+            </iframe>
+        </div>
     )
 }

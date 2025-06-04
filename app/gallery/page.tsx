@@ -1,9 +1,21 @@
 'use client';
 
+import {createClient} from "@/lib/supabase/client";
+
+export type GalleryImage = {
+  id: number;
+  title: string;
+  description: string;
+  uploaded_at: string;
+  file_path: string;
+  uploader_id: number;
+};
+
 import { useEffect, useState } from 'react';
-import { supabase, GalleryImage } from '@/lib/supabase';
 import Image from 'next/image';
 import GalleryUpload from '@/components/GalleryUpload';
+
+const supabase = createClient();
 
 export default function GalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
@@ -20,7 +32,9 @@ export default function GalleryPage() {
           .select('*')
           .order('uploaded_at', { ascending: false });
 
-        if (error) throw error;
+        if (error)
+          throw error;
+
         setImages(data || []);
       } catch (error) {
         console.error('Error fetching gallery images:', error);

@@ -16,7 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-    title: "IYTE Yazilim Society",
+    title: "IZTECH Yazilim Society",
     description: "Software for Everyone",
 };
 

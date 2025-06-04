@@ -8,11 +8,19 @@ import { motion, AnimatePresence } from "framer-motion"
 import { usePathname } from 'next/navigation';
 import ThemeChanger from "@/components/themeChanger"
 
+import {getUser} from "@/utils/user_util";
+import {Label} from "@/components/ui/label";
+
 export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
+    const [userInfo, setUserInfo] = useState({})
     const mobileMenuRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        getUser().then(x => setUserInfo(x))
+    }, []);
 
     const NavItem = ({ href, pathname, children, className }: { href: string; pathname: string; children: React.ReactNode, className?: string }) => {
         const isActive = pathname === href;
@@ -161,16 +169,18 @@ export default function ResponsiveHeader() {
                         transition={{ duration: 0.3, delay: 0.7 }}
                         className="flex items-center space-x-3"
                     >
-                        <Link href="/login" >
+                        <Label>
+                            {userInfo?.user_metadata?.fullName}
+                        </Label>
+                        <Link href={userInfo ? "/logout" : "/login"} >
                             <Button
                                 variant="outline"
                                 size="icon"
                                 className="p-4 w-fit"
                                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                             >
-                                Login
+                                {userInfo ? "Logout" : "Login"}
                             </Button>
-
                         </Link>
 
                         <ThemeChanger />
