@@ -2,6 +2,8 @@
 
 import {handleAuthMessage} from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
+import {useEffect} from "react";
+import {getUser} from "@/utils/user_util";
 
 
 export default function Login() {
@@ -14,6 +16,13 @@ export default function Login() {
             window.location.href = '/login';
             //window.location.reload();
         }
+
+        useEffect(() => {
+            getUser().then(x => {
+                if (x && window)
+                    window.location.href = '/';
+            });
+        }, [window.location]);
 
         handleAuthMessage(window);
     }
