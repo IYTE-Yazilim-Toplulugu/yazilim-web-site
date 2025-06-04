@@ -18,8 +18,8 @@ export function handleAuthMessage(wnd:Window){
 
         if (msg == null)
             window.location.href = "/";
-        /*else
-            window.location.href = (data.isRegister ?? true ? '/register?msg=' : '/login?msg=') + msg;*/
+        else
+            window.location.href = (data.isRegister ?? true ? '/register?msg=' : '/login?msg=') + msg;
 
         console.log(msg);
     };
