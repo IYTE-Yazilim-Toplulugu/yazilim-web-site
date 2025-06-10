@@ -1,6 +1,7 @@
 'use client';
 
 import SurveyPieChart from '@/components/survey-pie-chart';
+import { useEffect, useState } from 'react';
 
 interface SurveyResponse {
   id: number;
@@ -29,7 +30,20 @@ function processSurveyData(responses: Array<SurveyResponse>) {
   return { labels, data };
 }
 export default function Stats() {
-  const chartData = processSurveyData(surveyResponses);
+  const [chartData, setChartData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
+  useEffect(() => {
+    console.log("useEffect çalıştı: Anket verisi işleniyor.");
+   
+    const processedData = processSurveyData(surveyResponses);
+   
+    setChartData(processedData);
+
+   
+    return () => {
+      console.log("useEffect cleanup çalıştı.");
+    };
+
+  }, []);
 
   return (
     <div>
