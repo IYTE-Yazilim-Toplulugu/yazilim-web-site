@@ -1,24 +1,12 @@
 'use client';
-
-import SurveyPieChart from '@/components/survey-pie-chart';
 import { useEffect, useState } from 'react';
 
-interface SurveyResponse {
-  id: number;
-  answer: string; // Varsa diğer özellikleri de ekleyebilirsiniz
-}
-const surveyResponses = [
-  { id: 1, answer: 'Evet' },
-  { id: 2, answer: 'Hayır' },
-  { id: 3, answer: 'Evet' },
-  { id: 4, answer: 'Evet' },
-  { id: 5, answer: 'Belki' },
-  { id: 6, answer: 'Hayır' },
-  { id: 7, answer: 'Evet' },
-  // ... daha fazla cevap
-];
-// Veriyi işleyip sayımları yapacak bir fonksiyon
-function processSurveyData(responses: Array<SurveyResponse>) {
+import SurveyPieChart from '@/components/survey-pie-chart';
+import { StatsResponse } from '@/types/types';
+import { StatsPOSTData } from '@/lib/pseudo';
+
+
+function processSurveyData(responses: Array<StatsResponse>) {
   const counts: Record<string, number> = {};
   responses.forEach((response) => {
     counts[response.answer] = (counts[response.answer] || 0) + 1;
@@ -29,18 +17,18 @@ function processSurveyData(responses: Array<SurveyResponse>) {
 
   return { labels, data };
 }
+
 export default function Stats() {
   const [chartData, setChartData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
   useEffect(() => {
-    console.log("useEffect çalıştı: Anket verisi işleniyor.");
+    console.log("Processing survey data...");
    
-    const processedData = processSurveyData(surveyResponses);
+    const processedData = processSurveyData(StatsPOSTData);
    
     setChartData(processedData);
 
    
     return () => {
-      console.log("useEffect cleanup çalıştı.");
     };
 
   }, []);

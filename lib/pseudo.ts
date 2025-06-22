@@ -1,3 +1,4 @@
+import { Event } from "@/types/types";
 
 // an example for test responses
 export const Test = {
@@ -181,8 +182,61 @@ export const SurveyData = {
     ]
 }
 
+export const EventsData: Event[] = [
+    {
+        slug: 'kjashdlkjads',
+        title: "Tech Conference 2025",
+        description: "A large conference focusing on the latest in tech innovation.",
+        event_date: "2025-06-15T10:00:00",
+        location: [40.7128, -74.0060], // New York City coords
+        capacity_limit: 500,
+        is_online: false,
+        registration_url: "https://techconf2025.com/register"
+    },
+    {
+        slug: 'alsjdhjadbaj',
+        title: "Online Marketing Webinar",
+        description: "A free online webinar about digital marketing strategies.",
+        event_date: "2025-05-20T18:00:00",
+        location: [0, 0], // Online, so dummy coords
+        capacity_limit: 1000,
+        is_online: true,
+        registration_url: "https://marketingwebinar.com/signup"
+    },
+    {
+        slug: 'lajksdgabsd',
+        title: "Community Cleanup Day",
+        description: "Join us in cleaning up the local park and making a difference.",
+        event_date: "2025-06-01T09:00:00",
+        location: [34.0522, -118.2437], // Los Angeles coords
+        capacity_limit: 200,
+        is_online: false,
+        registration_url: null
+    },
+    {
+        slug: 'asdflkjhadsasdbasbdf',
+        title: "AI & Ethics Panel",
+        description: "Discussion on the ethical implications of AI technologies.",
+        event_date: "2025-07-10T14:00:00",
+        location: [51.5074, -0.1278], // London coords
+        capacity_limit: 300,
+        is_online: true,
+        registration_url: "https://aiethics2025.com"
+    },
+    {
+        slug: 'kasndjlabnajbq',
+        title: "Startup Pitch Night",
+        description: "Local startups present their ideas to investors.",
+        event_date: "2025-08-05T19:00:00",
+        location: [37.7749, -122.4194], // San Francisco coords
+        capacity_limit: 150,
+        is_online: false,
+        registration_url: "https://startuppitchnight.com/register"
+    }
+];
+
 // This is an example for answered survey POST request
-const SurveyRequest = {
+const _SurveyRequest = {
     "surveys": [
         {
             "id": 13123123123,
@@ -220,3 +274,15 @@ const SurveyRequest = {
         }
     ]
 }
+
+export const StatsPOSTData = [
+    { id: 1, answer: 'Evet' },
+    { id: 2, answer: 'Hayır' },
+    { id: 3, answer: 'Evet' },
+    { id: 4, answer: 'Evet' },
+    { id: 5, answer: 'Belki' },
+    { id: 6, answer: 'Hayır' },
+    { id: 7, answer: 'Evet' },
+];
+
+

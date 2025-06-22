@@ -90,7 +90,7 @@ export default function ResponsiveHeader() {
         { name: "Events", href: "/home#events" },
         { name: "Blogs", href: "/blog" },
         { name: "Surveys", href: "/survey" },
-        { name: "Announcements", href: "/home#announcements" },
+        { name: "Announcements", href: "/home#events" },
         { name: "Gallery", href: "/gallery" },
         { name: "Contact", href: "/contact" },
     ]
