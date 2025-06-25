@@ -1,23 +1,18 @@
 "use client";
-import { SectionHeader } from '@/components/ui/section-container';
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, Circle, X } from 'lucide-react';
 import Image from 'next/image';
-import axios from 'axios';
 
 import { SurveyData } from '@/lib/pseudo';
 import API from '@/lib/api';
+import supabase from '@/lib/supabase';
+import { SectionHeader } from '@/components/ui/section-container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Slider } from '@/components/ui/slider';
-
-interface QuestionFill {
-    survey_id: number;
-    question_id: string;
-    type: string;
-    answer: string | number | boolean | null;
-}
+// import { Slider } from '@/components/ui/slider';
+import Loading from '@/components/loading';
+import { QuestionFill } from '@/types/types';
 
 export default function Survey() {
     const containerRef = useRef(null);
@@ -29,8 +24,8 @@ export default function Survey() {
     // Handler variables
     const [focusedId, setFocusedId] = useState<number | null>();
     const currentSurvey = surveyData.surveys.find((s) => s.id === focusedId);
-
     const [rating, setRating] = useState();
+    const [loading, setLoading] = useState(true);
 
     const api = API
 
@@ -38,7 +33,6 @@ export default function Survey() {
     useEffect(() => {
         if (!focusedId) {
             setSurveyFill([]);
-            console.log("Survey Fill: ", surveyFill);
         }
     }, [focusedId])
 
@@ -56,16 +50,10 @@ export default function Survey() {
                     answer: answer,
                 },
             ])
-            console.log("Survey Fill: ", surveyFill);
         } catch (error) {
             console.error("Error adding answer:", error);
         }
     }
-
-    useEffect(() => {
-        console.log(rating)
-
-    }, [rating])
 
     const isAnswered = (question_id: string, answer: string | number | boolean | null) => {
         return surveyFill.find((item) => item.question_id === question_id)?.answer === answer
@@ -80,14 +68,20 @@ export default function Survey() {
                         <Button variant="outline"
                             onClick={() => addAnswer(survey_id, question_id, type, true)}
                             disabled={isAnswered(question_id, true)}
-                            className='group p-2 m-2 flex flex-row space-x-4 rounded-lg bg-succulent/40 cursor-pointer hover:bg-succulent/80 disabled:bg-succulent disabled:opacity-100 disabled:text-background dark:disabled:text-primary'>
+                            className='group p-2 m-2 flex flex-row space-x-4
+                            rounded-lg bg-succulent/40 hover:bg-succulent/80
+                            disabled:bg-succulent disabled:opacity-100 disabled:text-background
+                            dark:disabled:text-primary cursor-pointer'>
                             <p>Yes</p>
                             <Check className="text-succulent transition-colors dark:group-hover:text-primary group-disabled:text-background dark:group-disabled:text-primary" />
                         </Button >
                         <Button variant="outline"
                             onClick={() => addAnswer(survey_id, question_id, type, false)}
                             disabled={isAnswered(question_id, false)}
-                            className="group p-2 m-2 flex flex-row space-x-4 rounded-lg bg-destructive/40 hover:bg-destructive/80 cursor-pointer disabled:bg-destructive disabled:opacity-100 disabled:text-background dark:disabled:text-primary">
+                            className="group p-2 m-2 flex flex-row space-x-4
+                            rounded-lg bg-destructive/40 hover:bg-destructive/80 
+                            disabled:bg-destructive disabled:opacity-100 disabled:text-background 
+                            dark:disabled:text-primary cursor-pointer">
                             <p>No</p>
                             <X className="text-destructive-foreground transition-colors group-hover:text-background dark:group-hover:text-primary group-disabled:text-background dark:group-disabled:text-primary" />
                         </Button>
@@ -134,7 +128,10 @@ export default function Survey() {
                                 <div
                                     key={option}
                                     onClick={() => { !isSelected && addAnswer(survey_id, question_id, type, option) }}
-                                    className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer ${isSelected ? "pointer-events-none" : ""}`}
+                                    className={`pt-4 flex flex-row gap-4
+                                w-fit items-center rounded-md
+                                transition-colors cursor-pointer
+                                ${isSelected ? "pointer-events-none" : ""}`}
                                 >
                                     <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
                                     <Button variant="outline" disabled={isSelected} className='cursor-pointer disabled:opacity-100'>
@@ -155,7 +152,10 @@ export default function Survey() {
                                 <div
                                     key={option}
                                     onClick={() => { !isSelected && addAnswer(survey_id, question_id, type, option) }}
-                                    className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer ${isSelected ? "pointer-events-none" : ""}`}
+                                    className={`pt-4 flex flex-row gap-4
+                                w-fit items-center rounded-md
+                                transition-colors cursor-pointer
+                                ${isSelected ? "pointer-events-none" : ""}`}
                                 >
                                     <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
                                     <Button variant="outline" disabled={isSelected} className='cursor-pointer disabled:opacity-100'>
@@ -217,25 +217,32 @@ export default function Survey() {
         }
     }
 
-    const HandleRateClick = (_index: number) => {
-
-
-    }
+    // const HandleRateClick = (_index: number) => {
+    //
+    //
+    // }
 
     // Data fetching
     useEffect(() => {
         const fetchSurveyData = async () => {
             try {
-                const response = await axios.get(`${api}/surveys`, {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                        "Content-Type": "application/json",
-                    }
-                })
-                setSurveyData(response.data);
-                console.log("Response: ", response.data);
+                const { data, error } = await supabase
+                    .from("surveys")
+                    .select("*")
+                    .eq("is_active", true);
+
+                if (error) {
+                    console.error("Error fetching survey data:", error);
+                    throw error;
+                }
+                // @ts-ignore
+                setSurveyData(data);
+                console.log("Response: ", data);
+
             } catch (error) {
                 console.error("Error fetching survey data:", error);
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -262,6 +269,11 @@ export default function Survey() {
     {/* }} */ }
     {/* transition={{ type: "spring", stiffness: 80, damping: 10 }} */ }
 
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
 
     // move the selected survey to center of screen and focus that survey is current idea for survey system
     // might be there is better options for that

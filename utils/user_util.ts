@@ -1,5 +1,5 @@
-import {createClient} from "@/lib/supabase/client";
-import {createServer} from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
+import { createServer } from "@/lib/supabase/server";
 
 export async function getUsers() {
     const supabase = await createServer();
@@ -78,7 +78,26 @@ export async function getSessionUser() {
     return createClient()?.auth.getSession().then(x => x?.data?.session?.user);
 }
 
-export async function signOut(){
+export async function signOut() {
     const supabase = await createServer();
     await supabase?.auth.signOut();
 }
+
+export async function updateUser(updates: { email?: string; password?: string; data?: Record<string, any> }) {
+    const supabase = await createServer();
+
+    const response = await supabase.auth.updateUser({
+        email: updates.email,
+        password: updates.password,
+        data: updates.data, // for user_metadata
+    });
+
+    if (response.error) {
+        console.log("error while updating user: %s", JSON.stringify(response.error));
+        return response.error.message;
+    }
+
+    return null;
+}
+
+

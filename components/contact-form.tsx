@@ -51,7 +51,7 @@ export default function ContactForm() {
         setIsSubmitting(true)
 
         try {
-            const res = await fetch("/backend/contact", {
+            const res = await fetch("/utils/contact_util", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
