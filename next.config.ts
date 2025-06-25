@@ -2,9 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     /* config options here */
-    allowedDevOrigins: [
-        "10.8.34.199",
-    ],
+
     async redirects() {
         return [
             {
@@ -15,10 +13,22 @@ const nextConfig: NextConfig = {
         ];
     },
     images: {
-        domains: [
-            "hwzvfnnxidvvtqwbetrm.supabase.co"
-        ]
-    }
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "hwzvfnnxidvvtqwbetrm.supabase.co",
+            },
+        ],
+    },
+
+    webpack(config) {
+        config.module.rules.push({
+            test: /\.svg$/i,
+            issuer: /\.[jt]sx?$/,
+            use: ['@svgr/webpack'],
+        });
+        return config;
+    },
 };
 
 export default nextConfig;
