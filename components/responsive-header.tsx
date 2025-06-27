@@ -15,12 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
 import ThemeChanger from "@/components/themeChanger"
 import { NavbarProps } from "@/types/types"
+import {User} from "@supabase/supabase-js";
 
 export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
-    const [userInfo, setUserInfo] = useState<UserInfo>()
+    const [userInfo, setUserInfo] = useState<User>()
     const mobileMenuRef = useRef<HTMLDivElement>(null)
     const { theme, setTheme } = useTheme();
     const pathname = usePathname();
@@ -34,7 +35,6 @@ export default function ResponsiveHeader() {
     useEffect(() => {
         // @ts-ignore
         getUser().then(x => setUserInfo(x)) // or default user info
-        // typescript ne diye duruyor bayvan
     }, []);
 
     const NavItem = ({ href,
@@ -188,7 +188,7 @@ export default function ResponsiveHeader() {
                         className="flex items-center space-x-3"
                     >
                         <Label>
-                            {userInfo?.full_name}
+                            {userInfo?.user_metadata?.fullName}
                         </Label>
 
                         {pathname === '/login' || pathname === '/register' ? null :

@@ -5,11 +5,12 @@ export function handleAuthMessage(wnd:Window){
     if (typeof window === "undefined")
         return;
     wnd.onmessage = async (e) => {
+        if (typeof e.data !== "string")
+            return;
+
         const data = JSON.parse(e.data);
 
         let msg;
-
-        console.log(data.body)
 
         if (data.isRegister ?? true){
             msg = await Register(data.body);
