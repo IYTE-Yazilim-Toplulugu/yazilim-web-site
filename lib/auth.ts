@@ -2,6 +2,8 @@ import Login from "@/app/server/login";
 import Register from "@/app/server/register";
 
 export function handleAuthMessage(wnd:Window){
+    if (typeof window === "undefined")
+        return;
     wnd.onmessage = async (e) => {
         const data = JSON.parse(e.data);
 

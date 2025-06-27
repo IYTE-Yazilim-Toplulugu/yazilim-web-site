@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 import { SurveyData } from '@/lib/pseudo';
 import API from '@/lib/api';
-import supabase from '@/lib/supabase';
+import supabase from '@/lib/supabase/supabase';
 import { SectionHeader } from '@/components/ui/section-container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

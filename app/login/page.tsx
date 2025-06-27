@@ -11,7 +11,7 @@ export default function Login() {
     const msg = params.get("msg");
     const rel = params.get("reload");
 
-    if (window){
+    if (typeof window !== "undefined"){
         if (rel === 'true'){
             window.location.href = '/login';
             //window.location.reload();
