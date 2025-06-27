@@ -58,3 +58,10 @@ export interface SurveyGET {
     surveys: Survey[];
 }
 
+
+export interface NavbarProps {
+    href: string;
+    pathname: string;
+    children: React.ReactNode;
+    className?: string;
+}

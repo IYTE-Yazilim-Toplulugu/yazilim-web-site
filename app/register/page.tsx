@@ -1,11 +1,11 @@
 "use client"
 
-import {handleAuthMessage} from "@/lib/auth";
-import {useSearchParams} from "next/navigation";
-import {useEffect} from "react";
-import {getUser} from "@/utils/user_util";
+import { handleAuthMessage } from "@/lib/auth";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { getUser } from "@/utils/user_util";
 
-export default function RegisterPage(){
+export default function RegisterPage() {
 
     const params = useSearchParams();
     const msg = params.get("msg");
@@ -21,7 +21,7 @@ export default function RegisterPage(){
 
     return (
         <div>
-            <iframe className="w-dvw h-dvh" src={"http://localhost:3001/register" + (msg != null ? "?msg=" + msg : "")}>
+            <iframe className="w-dvw h-dvh" src={"http://192.168.1.10:3001/register" + (msg != null ? "?msg=" + msg : "")}>
 
             </iframe>
         </div>

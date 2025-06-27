@@ -1,28 +1,47 @@
 "use client"
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import { useTheme } from "next-themes"
+import { usePathname } from 'next/navigation';
+
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { usePathname } from 'next/navigation';
-import ThemeChanger from "@/components/themeChanger"
 
-import {getUser} from "@/utils/user_util";
-import {Label} from "@/components/ui/label";
+import { getUser } from "@/utils/user_util";
+import { UserInfo } from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail"
+
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button"
+import ThemeChanger from "@/components/themeChanger"
+import { NavbarProps } from "@/types/types"
 
 export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
-    const [userInfo, setUserInfo] = useState({})
+    const [userInfo, setUserInfo] = useState<UserInfo>()
     const mobileMenuRef = useRef<HTMLDivElement>(null)
+    const { theme, setTheme } = useTheme();
+    const pathname = usePathname();
+
+    useLayoutEffect(() => {
+
+        setIsMounted(true)
+    }, [pathname])
+
 
     useEffect(() => {
-        getUser().then(x => setUserInfo(x))
+        // @ts-ignore
+        getUser().then(x => setUserInfo(x)) // or default user info
+        // typescript ne diye duruyor bayvan
     }, []);
 
-    const NavItem = ({ href, pathname, children, className }: { href: string; pathname: string; children: React.ReactNode, className?: string }) => {
+    const NavItem = ({ href,
+        pathname,
+        children,
+        className
+    }: NavbarProps) => {
         const isActive = pathname === href;
 
         return (
@@ -39,11 +58,9 @@ export default function ResponsiveHeader() {
         );
     }
 
-    const pathname = usePathname();
 
     // Handle scroll effect
     useEffect(() => {
-        setIsMounted(true)
 
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 300)
@@ -57,6 +74,7 @@ export default function ResponsiveHeader() {
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
     }, [mobileMenuOpen])
+
 
     // Close mobile menu when clicking outside
     useEffect(() => {
@@ -170,20 +188,24 @@ export default function ResponsiveHeader() {
                         className="flex items-center space-x-3"
                     >
                         <Label>
-                            {userInfo?.user_metadata?.fullName}
+                            {userInfo?.full_name}
                         </Label>
-                        <Link href={userInfo ? "/logout" : "/login"} >
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="p-4 w-fit"
-                                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-                            >
-                                {userInfo ? "Logout" : "Login"}
-                            </Button>
-                        </Link>
 
-                        <ThemeChanger />
+                        {pathname === '/login' || pathname === '/register' ? null :
+                            <div className="flex items-center space-x-3">
+                                <Link href={userInfo ? "/logout" : "/login"} >
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        className="p-4 w-fit"
+                                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                                    >
+                                        {userInfo ? "Logout" : "Login"}
+                                    </Button>
+                                </Link>
+                                <ThemeChanger />
+                            </div>
+                        }
                     </motion.div>
 
                     <div className="lg:hidden">

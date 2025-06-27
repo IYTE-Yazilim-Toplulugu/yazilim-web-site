@@ -8,26 +8,38 @@ import { useEffect, useState } from 'react';
 import haversine from 'haversine-distance';
 import { EventsData } from '@/lib/pseudo';
 import { Event } from '@/types/types';
-// Dynamically import the Map component with SSR disabled
-const Map = dynamic(() => import("../../../components/map-component"), { ssr: false });
-const [events, setEvents] = useState<Event[]>(EventsData)
+import Loading from '@/components/loading';
 
 
+export default function PostPage() {
+    const router = useRouter()
+    const params = useParams(); // `useParams` hook'u ile slug'ı alıyoruz
+    const slug = params.slug;   // Slug'ı params üzerinden alıyoruz
+    const Map = dynamic(() => import("@/components/map-component"), { ssr: false });
+    // This not necessary, but it is a good practice to
+    // use dynamic import for components that depend on browser APIs like geolocation or maps.
 
-const PostPage = () => {
+    const [isMounted, setIsMounted] = useState<boolean>(false);
     const [userLocation, setUserLocation] = useState<{
         latitude: number;
         longitude: number;
     } | null>(null);
-
-    const params = useParams(); // `useParams` hook'u ile slug'ı alıyoruz
-    const router = useRouter()
-    const slug = params.slug;   // Slug'ı params üzerinden alıyoruz
+    const [events, _setEvents] = useState<Event[]>(EventsData)
     const thisEvent: Event | undefined = events.find((event: Event) => event.id.toString() === slug)
-    if (thisEvent === undefined) {
-        router.push("/")
-        return null;
+
+
+    useEffect(() => {
+        if (thisEvent === undefined) {
+            router.push("/")
+        }
+
+        setIsMounted(true);
+    }, [])
+
+    if (!isMounted) {
+        return <Loading />
     }
+
     useEffect(() => {
         const getUserLocation = () => {
             if (navigator.geolocation) {
@@ -52,7 +64,7 @@ const PostPage = () => {
         <div>
             <Header />
             <div><p className='text-center text-3xl'>{thisEvent?.title}</p></div>
-            <div className='flex gap-5 justify-center'><div className='flex gap-2'><Calendar className='h-10 w-10' /><p className='text-2xl my-auto'>Tarih: {thisEvent.event_date}</p></div><div className='flex gap-2'><UsersRound className='h-10 w-10' /> <p className='text-2xl my-auto'>Kapasite: {thisEvent.capacity_limit}</p></div></div>
+            <div className='flex gap-5 justify-center'><div className='flex gap-2'><Calendar className='h-10 w-10' /><p className='text-2xl my-auto'>Tarih: {thisEvent?.event_date}</p></div><div className='flex gap-2'><UsersRound className='h-10 w-10' /> <p className='text-2xl my-auto'>Kapasite: {thisEvent?.capacity_limit}</p></div></div>
             <div className='w-1/2 mx-auto border-orange-500 rounded shadow border-2 m-20'>
                 <p className='text-xl'>About This Event</p>
                 <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
@@ -61,8 +73,8 @@ const PostPage = () => {
             <div className='flex justify-center'>
                 <div className='w-1/4 p-10 border-orange-400 shadow rounded-xl border-2'>
                     <p className='text-xl'>Konum</p>
-                    <Map location={thisEvent.location} />
-                    {userLocation && thisEvent.location ? (
+                    <Map location={thisEvent?.location || [0, 0]} />
+                    {userLocation && thisEvent?.location ? (
                         <p className='text-center'>
                             {(
                                 haversine(
@@ -89,4 +101,3 @@ const PostPage = () => {
     );
 };
 
-export default PostPage;

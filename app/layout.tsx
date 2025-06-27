@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import ClientDiagnosticWrapper from "@/components/client-diagnostic-wrapper";
 import ScrollProgress from "@/components/scroll-progress";
 import FloatingNav from "@/components/floating-nav";
-// import { FloatingThemeSwitcher } from "@/components/floating-theme-switcher";
 
 const poppins = Poppins({
     subsets: ["latin"],
