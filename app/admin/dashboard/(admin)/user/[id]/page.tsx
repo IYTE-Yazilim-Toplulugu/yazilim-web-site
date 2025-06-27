@@ -2,10 +2,10 @@
 
 import Input from "@/components/admin/form/input/InputField";
 import Select from "@/components/admin/form/Select";
-import UserDetailServer, {Department, UserInfo} from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
-import {useEffect, useState} from "react";
+import UserDetailServer, { Department, UserInfo } from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
+import { useEffect, useState } from "react";
 import Label from "@/components/admin/form/Label";
-import {useParams} from "next/navigation";
+import { useParams } from "next/navigation";
 import Checkbox from "@/components/admin/form/input/Checkbox";
 import Button from "@/components/admin/ui/button/Button";
 import Form from "@/components/admin/form/Form";
@@ -15,24 +15,24 @@ import UserDelete from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_de
 async function onSubmit(user: any) {
     const error = await UserDetailUpdatePost(user);
 
-    if (!error){
+    if (!error) {
         alert("OK");
     }
-    else{
+    else {
         console.log(error);
         alert(error);
     }
 }
 
-async function submitDelete(id: string){
+async function submitDelete(id: string) {
     const result = await UserDelete(id);
 
 }
 
-export default function UserDetail(){
+export default function UserDetail() {
 
     const params = useParams();
-    const id: string|undefined = params.id?.toString();
+    const id: string | undefined = params.id?.toString();
 
     const [user, setUser] = useState<any>();
     const [departments, setDepartments] = useState<Department[]>();
@@ -45,7 +45,7 @@ export default function UserDetail(){
                 setUser(u);
                 setDepartments(obj.departments);
             });
-        }, [ window.location ])
+        }, [window.location])
     }
 
     const handleChange = (event: any) => {
@@ -92,7 +92,7 @@ export default function UserDetail(){
                             departments?.map(x => {
                                 return { value: x.id.toString(), label: x.name };
                             }) ?? []
-                        } onChange={x => handleValueChange("department", parseInt(x))}/>
+                        } onChange={x => handleValueChange("department", parseInt(x))} />
 
                         <Label htmlFor={"email"}>E-Mail</Label>
                         <Input type={"email"} disabled={true} name={"email"} onChange={handleChange} defaultValue={user?.email} placeholder={"E-Mail"} />
@@ -101,9 +101,9 @@ export default function UserDetail(){
                         <Input type={"datetime-local"} name={"created_at"} disabled={true} onChange={handleChange} defaultValue={date} />
 
                         <div className={"flex gap-2 w-[100%] justify-center"}>
-                            <Checkbox label={"Is Admin"} onChange={x => handleValueChange("is_admin", x)} checked={user?.is_admin ?? false}/>
-                            <Checkbox label={"Is Special"} onChange={x => handleValueChange("is_special", x)} checked={user?.is_special ?? false}/>
-                            <Checkbox label={"Is Student"} onChange={x => handleValueChange("is_student", x)} checked={user?.is_student ?? false}/>
+                            <Checkbox label={"Is Admin"} onChange={x => handleValueChange("is_admin", x)} checked={user?.is_admin ?? false} />
+                            <Checkbox label={"Is Special"} onChange={x => handleValueChange("is_special", x)} checked={user?.is_special ?? false} />
+                            <Checkbox label={"Is Student"} onChange={x => handleValueChange("is_student", x)} checked={user?.is_student ?? false} />
                         </div>
 
                         <div className={"flex gap-2 justify-end w-[100%]"}>

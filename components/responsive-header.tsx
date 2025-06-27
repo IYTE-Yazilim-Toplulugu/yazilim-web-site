@@ -2,20 +2,19 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { useTheme } from "next-themes"
 import { usePathname } from 'next/navigation';
 
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { getUser } from "@/utils/user_util";
-import { UserInfo } from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail"
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
 import ThemeChanger from "@/components/themeChanger"
 import { NavbarProps } from "@/types/types"
-import {User} from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -23,12 +22,13 @@ export default function ResponsiveHeader() {
     const [isMounted, setIsMounted] = useState(false)
     const [userInfo, setUserInfo] = useState<User>()
     const mobileMenuRef = useRef<HTMLDivElement>(null)
-    const { theme, setTheme } = useTheme();
     const pathname = usePathname();
+    const isMobile = useIsMobile()
 
     useLayoutEffect(() => {
 
         setIsMounted(true)
+
     }, [pathname])
 
 
@@ -36,6 +36,8 @@ export default function ResponsiveHeader() {
         // @ts-ignore
         getUser().then(x => setUserInfo(x)) // or default user info
     }, []);
+
+    console.log("userInfo", userInfo)
 
     const NavItem = ({ href,
         pathname,
@@ -57,6 +59,7 @@ export default function ResponsiveHeader() {
             </Link>
         );
     }
+
 
 
     // Handle scroll effect
@@ -139,10 +142,25 @@ export default function ResponsiveHeader() {
         )
     }
 
+    if (pathname == '/admin/dashboard') {
+        return null;
+    }
+
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-border transition-all duration-300 ${isScrolled ? "border-b" : "bg-transparent"}`}
         >
+            {!isMobile && userInfo?.user_metadata.isAdmin && (
+                <Link href="/admin/dashboard">
+                    <Button variant="outline" className="m-4 absolute top-16 right-0 z-50 cursor-pointer">
+                        Go To Dashboard
+                    </Button>
+                </Link>
+
+            )}
+            <div>
+
+            </div>
             <div className="flex h-16 items-center justify-between px-4">
                 <Link href="/">
                     <motion.div
@@ -192,18 +210,22 @@ export default function ResponsiveHeader() {
                         </Label>
 
                         {pathname === '/login' || pathname === '/register' ? null :
-                            <div className="flex items-center space-x-3">
-                                <Link href={userInfo ? "/logout" : "/login"} >
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="p-4 w-fit"
-                                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-                                    >
-                                        {userInfo ? "Logout" : "Login"}
-                                    </Button>
-                                </Link>
-                                <ThemeChanger />
+                            <div>
+                                {!isMobile && (
+                                    <div className="flex items-center space-x-3">
+                                        <Link href={userInfo ? "/logout" : "/login"} >
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="p-4 w-fit"
+                                                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                                            >
+                                                {userInfo ? "Logout" : "Login"}
+                                            </Button>
+                                        </Link>
+                                        <ThemeChanger />
+                                    </div>
+                                )}
                             </div>
                         }
                     </motion.div>
@@ -249,10 +271,34 @@ export default function ResponsiveHeader() {
                                     </NavItem>
                                 </motion.div>
                             ))}
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: 10 * 0.05 }}
+                            >
+                                <Link href={userInfo ? "/logout" : "/login"} >
+                                    <div className="p-1 -mt-1.5 mb-2
+                                        relative transition-colors hover:text-primary w-fit 
+                                        after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                                    >
+                                        {userInfo ? "Logout" : "Login"}
+                                    </div>
+                                </Link>
+                                {userInfo?.user_metadata.isAdmin && (
+                                    <Link href="/admin/dashboard">
+                                        <div className="p-1
+                                        relative transition-colors hover:text-primary w-fit 
+                                        after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
+                                            Go To Dashboard
+                                        </div>
+                                    </Link>
+                                )}
+                            </motion.div>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </header>
+        </header >
     )
 }

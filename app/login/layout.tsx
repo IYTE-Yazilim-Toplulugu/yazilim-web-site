@@ -9,7 +9,7 @@ export default function LoginLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
+        <html lang="en" data-theme={"dark"}>
             <body>
                 {children}
             </body>

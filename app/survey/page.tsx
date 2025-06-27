@@ -6,11 +6,10 @@ import Image from 'next/image';
 
 import { SurveyData } from '@/lib/pseudo';
 import API from '@/lib/api';
-import supabase from '@/lib/supabase/supabase';
+import { createClient } from '@/lib/supabase/client';
 import { SectionHeader } from '@/components/ui/section-container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-// import { Slider } from '@/components/ui/slider';
 import Loading from '@/components/loading';
 import { QuestionFill } from '@/types/types';
 
@@ -23,11 +22,11 @@ export default function Survey() {
 
     // Handler variables
     const [focusedId, setFocusedId] = useState<number | null>();
-    const currentSurvey = surveyData.surveys.find((s) => s.id === focusedId);
+    const currentSurvey = surveyData.find((s) => s.id === focusedId);
     const [rating, setRating] = useState();
     const [loading, setLoading] = useState(true);
 
-    const api = API
+    const supabase = createClient();
 
 
     useEffect(() => {
@@ -36,7 +35,7 @@ export default function Survey() {
         }
     }, [focusedId])
 
-    const addAnswer = (survey_id: number, question_id: string, type: string, answer: string | number | boolean | null) => {
+    const addAnswer = (survey_id: number, question_id: string, type: number, answer: string | number | boolean | null) => {
         try {
             if (surveyFill.some((item) => item.question_id === question_id)) { // might be there is more efficient solution for that
                 setSurveyFill((prevState) => [...prevState.filter((item) => item.question_id !== question_id)]);
@@ -59,10 +58,11 @@ export default function Survey() {
         return surveyFill.find((item) => item.question_id === question_id)?.answer === answer
     };
 
+    // 0: yes_no, 1: single_choice, 2: number, 3: text, 4: multiple_choice, 5: rating, 6: checkbox, 7: date, 8: dropdown
     // Form Handling
-    const HandleQuestions = (survey_id: number, question_id: string, type: string, options?: number[] | string[], placeholder?: string) => {
+    const HandleQuestions = (survey_id: number, question_id: string, type: number, options?: number[] | string[], placeholder?: string) => {
         switch (type) {
-            case "yes_no":
+            case 0:
                 return (
                     <section className="flex flex-row gap-8">
                         <Button variant="outline"
@@ -87,7 +87,7 @@ export default function Survey() {
                         </Button>
                     </section >
                 )
-            case "single_choice":
+            case 1:
                 return (
                     <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {options?.map((option) => {
@@ -107,19 +107,19 @@ export default function Survey() {
                         })}
                     </section>
                 )
-            case "number":
+            case 2:
                 return (
                     <section className='p-2'>
                         <Input placeholder={placeholder} type="number" className='border border-border rounded-lg p-2' />
                     </section>
                 )
-            case "text":
+            case 3:
                 return (
                     <section className='p-2'>
                         <Input placeholder={placeholder} type="text" className='border border-border rounded-lg p-2' />
                     </section>
                 )
-            case "multiple_choice":
+            case 4:
                 return (
                     <section>
                         {options?.map((option) => {
@@ -143,7 +143,7 @@ export default function Survey() {
 
                     </section>
                 )
-            case "rating":
+            case 5:
                 return (
                     <section className='flex flex-wrap items-center justify-start gap-4'>
                         {options?.map((option) => {
@@ -235,8 +235,12 @@ export default function Survey() {
                     console.error("Error fetching survey data:", error);
                     throw error;
                 }
+
+                console.log("Fetched survey data:", data);
                 // @ts-ignore
-                setSurveyData(data);
+                if (data) {
+                    setSurveyData(data);
+                }
                 console.log("Response: ", data);
 
             } catch (error) {
@@ -295,7 +299,7 @@ export default function Survey() {
             </SectionHeader>
 
             <section ref={containerRef} className={`flex flex-wrap justify-center items-center ${focusedId ? "blur-sm pointer-events-none" : ""}`}>
-                {surveyData.surveys.map((survey: any) => (
+                {surveyData.map((survey: any) => (
                     <motion.div key={survey.id}
                         layoutId={`survey-${survey.id}`}
                         onClick={() => setFocusedId(survey.id)}

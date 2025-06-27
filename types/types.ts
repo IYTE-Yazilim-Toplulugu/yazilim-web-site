@@ -16,7 +16,7 @@ export interface GalleryImage {
 export interface QuestionFill {
     survey_id: number;
     question_id: string;
-    type: string;
+    type: number;
     answer: string | number | boolean | null;
 }
 
@@ -50,12 +50,6 @@ interface Question {
     question: string; // soru metni
     options?: any[]; // sadece "select" ve "multi-select" tipleri için
     placeholder?: string; // sadece "text" ve "number" tipleri için
-}
-
-export interface SurveyGET {
-    code: number;
-    message: string | null;
-    surveys: Survey[];
 }
 
 

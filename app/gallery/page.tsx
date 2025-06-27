@@ -56,11 +56,12 @@ export default function GalleryPage() {
 
     return (
         <div className="container mx-auto px-4 py-8 pt-24">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-4xl font-bold">Gallery</h1>
+            <div className="flex flex-col items-center mb-8">
+                <h1 className="text-4xl text-start self-start font-bold">Gallery</h1>
                 <button
                     onClick={() => setShowUpload(!showUpload)}
-                    className="bg-card px-4 py-2 rounded-md hover:bg-bite-tongue transition-colors duration-200"
+                    className="w-fit bg-card px-4 py-2 rounded-md
+                    hover:bg-bite-tongue transition-colors duration-200"
                 >
                     {showUpload ? 'Hide Upload Form' : 'Upload New Image'}
                 </button>

@@ -8,7 +8,7 @@ const outfit = Outfit({
     subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default function AdminPageLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
