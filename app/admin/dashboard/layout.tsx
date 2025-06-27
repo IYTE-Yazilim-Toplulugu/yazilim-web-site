@@ -14,12 +14,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={`${outfit.className} dark:bg-gray-900`}>
-                <ThemeProvider>
-                    <SidebarProvider>{children}</SidebarProvider>
-                </ThemeProvider>
-            </body>
-        </html>
+        <div className={`${outfit.className} dark:bg-gray-900`}>
+            <ThemeProvider>
+                <SidebarProvider>{children}</SidebarProvider>
+            </ThemeProvider>
+        </div>
     );
 }
