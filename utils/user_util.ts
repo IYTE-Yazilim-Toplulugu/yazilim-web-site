@@ -15,18 +15,21 @@ export async function register(data: any) {
         return "sign out error";
     }
 
-    const response = await supabase.auth.signUp({
+    const toSend = {
         email: data.email,
         password: data.password,
-        phone: data.phone,
-        options: {
-            data: data
-            // sending email password and phone does not affect the security
-            // since supabase trigger ignoring them
-        }
-    });
+        options: {}
+    };
 
+    delete data.password;
 
+    toSend.options = {
+        data: data
+        // sending email password and phone does not affect the security
+        // since supabase trigger ignoring them
+    }
+
+    const response = await supabase.auth.signUp(toSend);
 
     if (response.error) {
         if (response.error.code === "user_already_exists")
