@@ -59,3 +59,12 @@ export interface NavbarProps {
     children: React.ReactNode;
     className?: string;
 }
+
+export type blog = {
+
+    id: number;
+    slug:string;
+    title: string;
+    content: string;
+    cover_image_url: string;
+}
