@@ -3,7 +3,7 @@
 import { handleAuthMessage } from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { getUser } from "@/utils/user_util";
+import { getUser } from "@/utils/user_client_util";
 
 export default function RegisterPage() {
 

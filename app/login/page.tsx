@@ -3,8 +3,7 @@
 import { handleAuthMessage } from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { getUser } from "@/utils/user_util";
-import { useTheme } from "next-themes";
+import { getUser } from "@/utils/user_client_util";
 
 
 export default function Login() {
@@ -35,7 +34,7 @@ export default function Login() {
 
     return (
         <div>
-            <iframe className="w-dvw h-dvh" src={"http://192.168.1.10:3001/login" + (msg != null ? "?msg=" + msg : "")}>
+            <iframe className="w-dvw h-dvh" src={"http://localhost:3001/login" + (msg != null ? "?msg=" + msg : "")}>
 
             </iframe>
         </div>

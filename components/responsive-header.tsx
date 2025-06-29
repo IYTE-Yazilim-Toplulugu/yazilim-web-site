@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
-import { getUser } from "@/utils/user_util";
+import { getUser } from "@/utils/user_client_util";
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
@@ -142,7 +142,7 @@ export default function ResponsiveHeader() {
         )
     }
 
-    if (pathname == '/admin/dashboard') {
+    if (pathname.startsWith("/admin")) {
         return null;
     }
 

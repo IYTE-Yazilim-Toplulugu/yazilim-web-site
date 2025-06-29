@@ -1,3 +1,5 @@
+import Input from "@/components/admin/form/input/InputField";
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -18,7 +20,7 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="flex items-center ">
       <button
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage <= 1}
         className="mr-2.5 flex items-center h-10 justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] text-sm"
       >
         Previous
@@ -40,9 +42,25 @@ const Pagination: React.FC<PaginationProps> = ({
         ))}
         {currentPage < totalPages - 2 && <span className="px-2">...</span>}
       </div>
+        <Input className={" text-center !w-[60px]"} placeholder={currentPage.toString()} onEnter={e => {
+            if (!(e.target instanceof HTMLInputElement))
+                return;
+
+            let value: number;
+
+            try{
+               value = parseInt(e.target.value);
+            }
+            catch (err){
+                return;
+            }
+
+            if (value <= totalPages && value >= 1)
+                onPageChange(value);
+        }} />
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage >= totalPages}
         className="ml-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs text-sm hover:bg-gray-50 h-10 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]"
       >
         Next

@@ -1,11 +1,24 @@
-import { createClient } from "@/lib/supabase/client";
-import { createServer } from "@/lib/supabase/server";
+import {createServer} from "@/lib/supabase/server";
+import supabase from "@/lib/supabase/supabase";
 
-export async function getUsers() {
-    const supabase = await createServer();
-    const all = await supabase.from("departments").select();
-    return all.data;
-}
+const pageSize = 50;
+
+export type UserInfo = {
+    id: string,
+    full_name: string,
+    place: string | undefined,
+    email: string | undefined,
+    phone: string,
+    school_number: string | undefined,
+    department: number | undefined,
+    updated_at: string | undefined,
+    created_at: string,
+    receives_emails: boolean,
+    is_admin: boolean,
+    is_special: boolean,
+    is_student: boolean,
+    from_iztech: boolean
+};
 
 export async function register(data: any) {
     const supabase = await createServer();
@@ -65,42 +78,42 @@ export async function login(data: any) {
     return null;
 }
 
-export async function isSignedIn() {
-    const supabase = createClient();
-
-    const session = await supabase.auth.getSession();
-
-    return !!session.data.session;
-}
-
-export async function getUser() {
-    return createClient()?.auth.getUser().then(x => x.error ? null : x.data).then(x => x?.user);
-}
-
-export async function getSessionUser() {
-    return createClient()?.auth.getSession().then(x => x?.data?.session?.user);
-}
-
 export async function signOut() {
     const supabase = await createServer();
     await supabase?.auth.signOut();
 }
 
-export async function updateUser(updates: { email?: string; password?: string; data?: Record<string, any> }) {
-    const supabase = await createServer();
+export async function getUsers(page: number, query?: string) {
+    page--;
 
-    const response = await supabase.auth.updateUser({
-        email: updates.email,
-        password: updates.password,
-        data: updates.data, // for user_metadata
-    });
+    if (page < 0)
+        page = 0;
 
-    if (response.error) {
-        console.log("error while updating user: %s", JSON.stringify(response.error));
-        return response.error.message;
+    const index = page * pageSize;
+
+    let q = supabase
+        .from("full_users")
+        .select<"*", UserInfo>("*", {
+            count: "exact"
+        });
+
+    if (query && query.length > 0) {
+        if (!query.startsWith("%") && !query.endsWith("%"))
+            query = `%${query}%`;
+        q = q.ilike('search_impl', query);
     }
 
-    return null;
+    const {data, error, count} = await q
+        .order("created_at", {
+            ascending: false
+        })
+        .range(index, index + pageSize - 1);
+
+    if (error)
+        console.log(error);
+
+    return {
+        data: data,
+        pageCount: !count ? 1 : Math.ceil(count / pageSize)
+    };
 }
-
-

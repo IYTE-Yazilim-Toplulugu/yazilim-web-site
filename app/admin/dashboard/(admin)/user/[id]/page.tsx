@@ -2,31 +2,51 @@
 
 import Input from "@/components/admin/form/input/InputField";
 import Select from "@/components/admin/form/Select";
-import UserDetailServer, { Department, UserInfo } from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
-import { useEffect, useState } from "react";
+import UserDetailServer, {Department} from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
+import {useEffect, useState} from "react";
 import Label from "@/components/admin/form/Label";
-import { useParams } from "next/navigation";
+import {redirect, useParams} from "next/navigation";
 import Checkbox from "@/components/admin/form/input/Checkbox";
 import Button from "@/components/admin/ui/button/Button";
 import Form from "@/components/admin/form/Form";
-import UserDetailUpdatePost from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail_post";
-import UserDelete from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_delete";
+import UserDetailUpdateServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail_update";
+import UserDeleteServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_delete";
+import Link from "next/link";
+import {toast} from "@/hooks/use-toast";
 
 async function onSubmit(user: any) {
-    const error = await UserDetailUpdatePost(user);
+    const error = await UserDetailUpdateServer(user);
 
     if (!error) {
-        alert("OK");
+        alert("Successful.");
     }
     else {
         console.log(error);
-        alert(error);
+        alert("Failed. See console.");
     }
 }
 
 async function submitDelete(id: string) {
-    const result = await UserDelete(id);
+    if (!confirm("Are you sure?"))
+        return;
 
+    const error = await UserDeleteServer(id);
+
+    if (!error) {
+        toast({
+            variant: "default",
+            description: "Success",
+        });
+        redirect('/admin/dashboard/user/all');
+    }
+    else {
+        console.log(error);
+        toast({
+            variant: "default",
+            description: "See console.",
+            title: "Failed"
+        });
+    }
 }
 
 export default function UserDetail() {
@@ -106,13 +126,20 @@ export default function UserDetail() {
                             <Checkbox label={"Is Student"} onChange={x => handleValueChange("is_student", x)} checked={user?.is_student ?? false} />
                         </div>
 
-                        <div className={"flex gap-2 justify-end w-[100%]"}>
-                            <Button type={"button"} variant={"outline"} onClick={() => id && submitDelete(id)}>
-                                Delete
-                            </Button>
-                            <Button>
-                                Save
-                            </Button>
+                        <div className={"flex w-[100%]"}>
+                            <div className={"gap-2 flex items-center"}>
+                                <Link type={"button"} href={"/admin/dashboard/user/all"}>
+                                    Back
+                                </Link>
+                            </div>
+                            <div className={"gap-2 flex justify-end w-[100%]"}>
+                                <Button type={"button"} variant={"outline"} onClick={() => id && submitDelete(id)}>
+                                    Delete
+                                </Button>
+                                <Button>
+                                    Save
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </Form>

@@ -7,6 +7,7 @@ interface InputProps {
   placeholder?: string;
   defaultValue?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   className?: string;
   min?: string;
   max?: string;
@@ -24,6 +25,7 @@ const Input: FC<InputProps> = ({
   placeholder,
   defaultValue,
   onChange,
+  onEnter,
   className = "",
   min,
   max,
@@ -47,38 +49,40 @@ const Input: FC<InputProps> = ({
     inputClasses += ` bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800`;
   }
 
-  return (
-    <div className="relative">
-      <input
-        type={type}
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        onChange={onChange}
-        min={min}
-        max={max}
-        step={step}
-        disabled={disabled}
-        className={inputClasses}
-      />
+  const inp = (<input
+      type={type}
+      id={id}
+      name={name}
+      placeholder={placeholder}
+      defaultValue={defaultValue}
+      onChange={onChange}
+      min={min}
+      max={max}
+      step={step}
+      disabled={disabled}
+      className={inputClasses}
+      onKeyDown={e => e.key === "Enter" && onEnter && onEnter(e)}
+  />);
 
-      {/* Optional Hint Text */}
-      {hint && (
-        <p
-          className={`mt-1.5 text-xs ${
-            error
-              ? "text-error-500"
-              : success
-              ? "text-success-500"
-              : "text-gray-500"
-          }`}
-        >
-          {hint}
-        </p>
-      )}
-    </div>
-  );
+  return hint ?(
+      <div className="relative">
+        {inp}
+        {/* Optional Hint Text */}
+        {hint && (
+            <p
+                className={`mt-1.5 text-xs ${
+                    error
+                        ? "text-error-500"
+                        : success
+                            ? "text-success-500"
+                            : "text-gray-500"
+                }`}
+            >
+              {hint}
+            </p>
+        )}
+      </div>
+  ) : inp;
 };
 
 export default Input;

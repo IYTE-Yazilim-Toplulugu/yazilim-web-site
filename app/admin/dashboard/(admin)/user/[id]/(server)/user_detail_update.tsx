@@ -2,12 +2,10 @@
 
 import supabase from "@/lib/supabase/supabase";
 
-export default async function UserDetailUpdatePost(user: any){
+export default async function UserDetailUpdateServer(user: any){
     delete user.email;
 
     const id = user.id;
-    console.log("USER");
-    console.log(user);
     if (!id || typeof id !== "string")
         return "Invalid user id.";
 

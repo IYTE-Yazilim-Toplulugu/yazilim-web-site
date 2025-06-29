@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {signOut} from "@/utils/user_util";
+import {signOut} from "@/utils/user_server_util";
 import {revalidatePath} from "next/cache";
 
 export async function GET(req: NextRequest){
