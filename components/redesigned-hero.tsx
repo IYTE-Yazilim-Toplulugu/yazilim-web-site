@@ -13,9 +13,11 @@ import { Github, Linkedin, Mail, ArrowDown, ExternalLink, Instagram } from "luci
 import { useToast } from "@/components/ui/use-toast"
 import { useIsClient } from "@/hooks/use-is-client"
 import Link from "next/link"
+import { HomeHeroConfig } from "@/types/types"
+import HandleIcons from "./handle-icons"
 
-export default function RedesignedHero() {
-    const { toast } = useToast()
+
+export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConfig }) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const [isHovered, setIsHovered] = useState(false)
@@ -40,14 +42,6 @@ export default function RedesignedHero() {
         })
     }
 
-    const handleContactClick = () => {
-        toast({
-            title: "Contact Info",
-            description: "Email: iyte-yazilim@iyte.edu.tr | Phone: 555 555 5555",
-            duration: 5000,
-        })
-    }
-
     const scrollToEvents = () => {
         document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })
     }
@@ -58,8 +52,7 @@ export default function RedesignedHero() {
 
     // Typing effect for the subtitle
     const [displayedText, setDisplayedText] = useState("")
-    const fullText =
-        "Loorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    const fullText = home_hero?.description ?? ""
 
     useEffect(() => {
         if (!isClient) return
@@ -79,7 +72,7 @@ export default function RedesignedHero() {
 
     // Function to highlight specific terms in the text
     const highlightText = (text: string) => {
-        const termsToHighlight = ["AI", "machine learning", "Web Development", "Software Solutions", ""]
+        const termsToHighlight = ["AI", "Machine Learning", "Web Development", "Software Solutions", ""]
         let highlightedText = text
 
         termsToHighlight.forEach((term) => {
@@ -106,15 +99,21 @@ export default function RedesignedHero() {
                 {/* Left column - Text content */}
                 <div className="order-2 md:order-1 text-center md:text-left">
                     <ScrollReveal>
-                        <Badge variant={"destructive"} className="mb-4 px-3 py-1.5 text-sm bg-primary/5 border-primary/30 text-primary">
-                            Software for everyone
+                        <Badge variant={"outline"} className="mb-4 px-3 py-1.5 text-sm border-primary/30 text-primary"
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = home_hero?.up_header.color + "80";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = "transparent";
+                            }}>
+                            {home_hero?.up_header.title}
                         </Badge>
                     </ScrollReveal>
 
                     <ScrollReveal delay={0.1}>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 tracking-tight">
                             <span className="bg-clip-text text-transparent text-nowrap bg-gradient-to-r from-happy-hearts to-golden-nugget">
-                                IYTE Yazilim Society
+                                {home_hero?.header}
                             </span>
                         </h1>
                     </ScrollReveal>
@@ -134,36 +133,23 @@ export default function RedesignedHero() {
 
                     <ScrollReveal delay={0.3}>
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6 md:mb-8">
-                            <Badge
-                                variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-happy-hearts/30 transition-colors"
-                            >
-                                Machine Learning
-                            </Badge>
-                            <Badge
-                                variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-[#0A66C2]/30 transition-colors"
-                            >
-                                Generative AI
-                            </Badge>
-                            <Badge
-                                variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-[#c13584]/30 transition-colors"
-                            >
-                                Web Development
-                            </Badge>
-                            <Badge
-                                variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-green-700/30 transition-colors"
-                            >
-                                Software Solutions
-                            </Badge>
-                            <Badge
-                                variant="outline"
-                                className="px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-sm border-estragon/30 hover:bg-purple-500/30 transition-colors"
-                            >
-                                Data Science
-                            </Badge>
+                            {home_hero?.workspaces.map((workspace, index) => (
+                                <Badge
+                                    variant="outline"
+                                    key={index}
+                                    className={`px-2 py-1 sm:px-3 sm:py-1.5 
+                                    backdrop-blur-sm border-estragon/30
+                                    transition-colors`}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = workspace.color + "80"; // optional opacity
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = "transparent";
+                                    }}
+                                >
+                                    {workspace.content}
+                                </Badge>
+                            ))}
                         </div>
                     </ScrollReveal>
 
@@ -186,7 +172,6 @@ export default function RedesignedHero() {
                                 <Button
                                     size="lg"
                                     variant="outline"
-                                    onClick={handleContactClick}
                                     className="group relative overflow-hidden bg-transparent border-copper-coin/50 hover:border-copper-coin transition-colors duration-300"
                                 >
                                     <span className="relative z-10">Contact Us</span>
@@ -198,63 +183,30 @@ export default function RedesignedHero() {
 
                     <ScrollReveal delay={0.5}>
                         <div className="flex gap-4 justify-center md:justify-start">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-succulent/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a
-                                    href="https://github.com/IYTE-Yazilim-Toplulugu/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="GitHub"
+                            {home_hero?.links.map((link, index) => (
+                                <Button
+                                    variant="ghost"
+                                    key={index}
+                                    size="icon"
+                                    asChild
+                                    className="rounded-full transition-all duration-300 hover:scale-110"
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = link.color + "80"; // optional opacity
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = "transparent";
+                                    }}
                                 >
-                                    <Github className="h-5 w-5" />
-                                </a>
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-[#c13584]/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a
-                                    href="https://www.instagram.com/iyte_yazilim/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Instagram"
-                                >
-                                    <Instagram className="h-5 w-5" />
-                                </a>
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-[#0A66C2]/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a
-                                    href="https://www.linkedin.com/company/iyteyazilim/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="LinkedIn"
-                                >
-                                    <Linkedin className="h-5 w-5" />
-                                </a>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-[#15a5ee]/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a href="mailto:iyteyazilim@iyte.edu.tr" aria-label="Email">
-                                    <Mail className="h-5 w-5" />
-                                </a>
-                            </Button>
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={`link-${index}`}
+                                    >
+                                        <HandleIcons icon={link.icon} />
+                                    </a>
+                                </Button>
+                            ))}
                         </div>
                     </ScrollReveal >
                 </div>

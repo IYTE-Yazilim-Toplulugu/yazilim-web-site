@@ -8,8 +8,10 @@ import { Download, Award, Briefcase, GraduationCap, Heart, ExternalLink } from "
 import Image from "next/image"
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { HomeAboutUsConfig } from "@/types/types"
+import HandleIcons from "./handle-icons"
 
-export default function AboutSection() {
+export default function AboutSection({ home_about_us }: { home_about_us?: HomeAboutUsConfig }) {
     return (
         <SectionContainer id="about" className="relative overflow-hidden">
             {/* Background decorative elements */}
@@ -17,8 +19,8 @@ export default function AboutSection() {
             <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary/5 rounded-full blur-3xl -z-10" />
 
             <SectionHeader
-                title="About Us"
-                subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                title={home_about_us?.title ?? "About Us"}
+                subtitle={home_about_us?.description}
             />
 
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -26,18 +28,17 @@ export default function AboutSection() {
                     <div className="relative">
                         <div className="relative z-10 rounded-lg overflow-hidden border border-white/10 shadow-xl">
                             <Image
-                                src="/images/yazilim.png"
+                                src={home_about_us?.left_content.find(item => item.name === "background")?.image ?? "/images/yazilim.png"}
                                 alt="Yazilim Toplulugu"
                                 width={600}
                                 height={800}
                                 className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
                             />
 
-                            {/* Add an overlay with a subtle gradient */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
                                 <div className="p-4 text-white">
-                                    <p className="font-medium">Yazilim Toplulugu</p>
-                                    <p className="text-sm text-white/80">Lorem ipsum dolae sti amet</p>
+                                    <p className="font-medium">{home_about_us?.left_content.find(item => item.name === "lower_right")?.title}</p>
+                                    <p className="text-sm text-white/80">{home_about_us?.left_content.find(item => item.name === "lower_right")?.subtitle}</p>
                                 </div>
                             </div>
                         </div>
@@ -56,8 +57,8 @@ export default function AboutSection() {
                                     <div className="flex items-center gap-2">
                                         <Award className="h-5 w-5 text-primary" />
                                         <div>
-                                            <div className="text-sm font-medium">Experience</div>
-                                            <div className="text-2xl font-bold">5+ Years</div>
+                                            <div className="text-sm font-medium">{home_about_us?.left_content.find(item => item.name === "lower_left")?.title}</div>
+                                            <div className="text-2xl font-bold">{home_about_us?.left_content.find(item => item.name === "lower_left")?.subtitle}</div>
                                         </div>
                                     </div>
                                 </CardContent>
@@ -73,8 +74,8 @@ export default function AboutSection() {
                                     <div className="flex items-center gap-2">
                                         <Briefcase className="h-5 w-5 text-primary" />
                                         <div>
-                                            <div className="text-sm font-medium">Projects</div>
-                                            <div className="text-2xl font-bold">20+</div>
+                                            <div className="text-sm font-medium">{home_about_us?.left_content.find(item => item.name === "upper_right")?.title}</div>
+                                            <div className="text-2xl font-bold">{home_about_us?.left_content.find(item => item.name === "upper_right")?.subtitle}</div>
                                         </div>
                                     </div>
                                 </CardContent>
@@ -86,39 +87,33 @@ export default function AboutSection() {
                 <div>
                     <StaggeredContainer>
                         <StaggerItem>
-                            <h3 className="text-2xl font-bold mb-4">Software for everyone</h3>
+                            <h3 className="text-2xl font-bold mb-4">{home_about_us?.right_content.title}</h3>
                         </StaggerItem>
 
                         <StaggerItem>
-                            <p className="text-muted-foreground mb-6">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-                            </p>
+                            <p className="text-muted-foreground mb-6">{home_about_us?.right_content.description1}</p>
                         </StaggerItem>
 
                         <StaggerItem>
-                            <p className="text-muted-foreground mb-6">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-                            </p>
+                            <p className="text-muted-foreground mb-6">{home_about_us?.right_content.description2}</p>
                         </StaggerItem>
 
                         <StaggerItem>
                             <div className="flex flex-wrap gap-3 mb-8">
-                                <Badge className="px-3 py-1.5 bg-blue-500/20 text-blue-500 border-blue-500/30 hover:bg-blue-500/30 transition-colors">
-                                    <Briefcase className="h-3.5 w-3.5 mr-1" />
-                                    Technical Leadership
-                                </Badge>
-                                <Badge className="px-3 py-1.5 bg-purple-500/20 text-purple-500 border-purple-500/30 hover:bg-purple-500/30 transition-colors">
-                                    <GraduationCap className="h-3.5 w-3.5 mr-1" />
-                                    STEM Education
-                                </Badge>
-                                <Badge className="px-3 py-1.5 bg-green-500/20 text-green-500 border-green-500/30 hover:bg-green-500/30 transition-colors">
-                                    <Heart className="h-3.5 w-3.5 mr-1" />
-                                    Community Building
-                                </Badge>
+                                {home_about_us?.right_content.events.map((event, index) => (
+                                    <Badge
+                                        key={index}
+                                        className="px-3 py-1.5 border transition-colors flex items-center gap-2"
+                                        style={{
+                                            backgroundColor: `${event.color}20`,
+                                            color: event.color,
+                                            borderColor: `${event.color}50`,
+                                        }}
+                                    >
+                                        <HandleIcons icon={event.icon} />
+                                        {event.content}
+                                    </Badge>
+                                ))}
                             </div>
                         </StaggerItem>
 
@@ -133,11 +128,11 @@ export default function AboutSection() {
                                 </Link>
                                 <Button variant="outline" className="ml-3 gap-2 group" asChild>
                                     <a
-                                        href="https://github.com/IYTE-Yazilim-Toplulugu/"
+                                        href={home_about_us?.right_content.link.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        <span>View Github</span>
+                                        <span>{home_about_us?.right_content.link.title}</span>
                                         <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </a>
                                 </Button>

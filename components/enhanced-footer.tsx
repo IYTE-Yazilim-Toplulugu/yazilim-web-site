@@ -6,13 +6,17 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "@/hooks/use-toast"
 import { Github, Linkedin, Mail, Twitter, Send, ArrowUp, MapPin, Phone, Calendar, CheckCircle, Instagram } from "lucide-react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import Link from "next/link"
+import { HomeFooterConfig } from "@/types/types"
+import HandleIcons from "@/components/handle-icons"
+import { createClient } from "@/lib/supabase/client"
+import handleErrorCode from "./handle-error-code"
 
 // Form validation schema
 const subscribeSchema = z.object({
@@ -21,9 +25,9 @@ const subscribeSchema = z.object({
     }),
 })
 
-export default function EnhancedFooter() {
+export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFooterConfig }) {
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const { toast } = useToast()
+    const supabase = createClient()
 
     // Initialize form
     const form = useForm<z.infer<typeof subscribeSchema>>({
@@ -33,26 +37,43 @@ export default function EnhancedFooter() {
         },
     })
 
+
+    const postMail = async (values: z.infer<typeof subscribeSchema>) => {
+        try {
+            const { data, error } = await supabase
+                .from("newsletter_users")
+                .insert([
+                    {
+                        email: values.email,
+                        created_at: new Date().toISOString()
+                    }
+                ])
+            if (error) {
+                console.error("Error inserting data:", error)
+                handleErrorCode(error.code)
+            } else {
+                toast({
+                    title: "Subscribed!",
+                    description: `You've been added to the newsletter with ${data}.`,
+                    variant: "success",
+                })
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error)
+            toast({
+                title: "Error",
+                description: "An unexpected error occurred while subscribing. Please try again later.",
+                variant: "destructive",
+            })
+        }
+    }
+
+
     // Handle form submission
     function onSubmit(values: z.infer<typeof subscribeSchema>) {
         setIsSubmitting(true)
-
-        // Simulate API call
-        setTimeout(() => {
-            console.log(values)
-            setIsSubmitting(false)
-            form.reset()
-
-            toast({
-                title: "Subscribed!",
-                description: "You've been added to the newsletter.",
-                action: (
-                    <div className="h-8 w-8 bg-green-500/20 rounded-full flex items-center justify-center">
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                    </div>
-                ),
-            })
-        }, 1000)
+        postMail(values)
+        setIsSubmitting(false)
     }
 
     const scrollToTop = () => {
@@ -60,6 +81,7 @@ export default function EnhancedFooter() {
     }
 
     const currentYear = new Date().getFullYear()
+
 
     return (
         <footer className="bg-gradient-to-b from-background to-background/80 border-t">
@@ -71,69 +93,34 @@ export default function EnhancedFooter() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="font-bold text-xl mb-4">IYTE Yazilim Toplulugu</div>
-                        <p className="text-muted-foreground mb-6">
-                            lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Lorem ipsum dolor sit amet consectetur
-                        </p>
+                        <div className="font-bold text-xl mb-4">{home_footer?.left_content.title}</div>
+                        <p className="text-muted-foreground mb-6">{home_footer?.left_content.description}</p>
 
                         <div className="flex gap-3">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-succulent/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a
-                                    href="https://github.com/IYTE-Yazilim-Toplulugu/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="GitHub"
+                            {home_footer?.left_content.links.map((link, index) => (
+                                <Button
+                                    variant="ghost"
+                                    key={index}
+                                    size="icon"
+                                    asChild
+                                    className="rounded-full transition-all duration-300 hover:scale-110"
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = link.color + "80";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = "transparent";
+                                    }}
                                 >
-                                    <Github className="h-5 w-5" />
-                                </a>
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-[#c13584]/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a
-                                    href="https://www.instagram.com/iyte_yazilim/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Instagram"
-                                >
-                                    <Instagram className="h-5 w-5" />
-                                </a>
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-[#0A66C2]/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a
-                                    href="https://www.linkedin.com/company/iyteyazilim/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="LinkedIn"
-                                >
-                                    <Linkedin className="h-5 w-5" />
-                                </a>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                asChild
-                                className="rounded-full hover:bg-[#15a5ee]/30 transition-all duration-300 hover:scale-110"
-                            >
-                                <a href="mailto:iyteyazilim@iyte.edu.tr" aria-label="Email">
-                                    <Mail className="h-5 w-5" />
-                                </a>
-                            </Button>
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={`link-${index + 1}`}
+                                    >
+                                        <HandleIcons icon={link.icon} />
+                                    </a>
+                                </Button>
+                            ))}
                         </div>
                     </motion.section>
 
@@ -145,15 +132,9 @@ export default function EnhancedFooter() {
                     >
                         <h3 className="font-semibold mb-4">Quick Links</h3>
                         <div className="grid grid-cols-2 gap-y-3 text-nowrap">
-                            {/* I will use child props cuz this repeated statements look weird */}
-                            <Link href="/home" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Home</Link>
-                            <Link href="/home#about" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">About Us</Link>
-                            <Link href="/home#events" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Events</Link>
-                            <Link href="/home#announcements" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Announcements</Link>
-                            <Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Blogs</Link>
-                            <Link href="/survey" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Surveys</Link>
-                            <Link href="/gallery" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Gallery</Link>
-                            <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">Contact</Link>
+                            {home_footer?.quick_links.map((link, index) => (
+                                <Link href={link.url} key={index} className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">{link.title}</Link>
+                            ))}
                         </div>
                     </motion.section>
 
@@ -165,23 +146,12 @@ export default function EnhancedFooter() {
                     >
                         <h3 className="font-semibold mb-4">Contact Info</h3>
                         <ul className="space-y-3">
-                            {/* Why this guy uses the same props on every child? Is there any solution for that? */}
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <Mail className="h-4 w-4 text-primary" />
-                                <span>iyteyazilim@iyte.edu.te</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <Phone className="h-4 w-4 text-primary" />
-                                <span>(555) 555 55 55</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <MapPin className="h-4 w-4 text-primary" />
-                                <span>Izmir, IYTE</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-muted-foreground">
-                                <Calendar className="h-4 w-4 text-primary" />
-                                <span>08:00 - 17:00</span>
-                            </li>
+                            {home_footer?.contact_info.map((info, index) => (
+                                <Link key={index} href={info.url ?? ""} className="flex items-center gap-3 text-muted-foreground hover:underline">
+                                    <HandleIcons icon={info.icon} />
+                                    <span>{info.title}</span>
+                                </Link>
+                            ))}
                         </ul>
 
                     </motion.section>
@@ -193,7 +163,7 @@ export default function EnhancedFooter() {
                         transition={{ duration: 0.5, delay: 0.3 }}
                     >
                         <h3 className="font-semibold mb-4">Newsletter</h3>
-                        <p className="text-muted-foreground mb-4">Subscribe to receive updates on new projects and articles.</p>
+                        <p className="text-muted-foreground mb-4">{home_footer?.newsletter.description}</p>
 
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -204,7 +174,7 @@ export default function EnhancedFooter() {
                                         <FormItem>
                                             <div className="flex gap-2">
                                                 <FormControl>
-                                                    <Input placeholder="Your email" {...field} />
+                                                    <Input placeholder={home_footer?.newsletter.placeholder} {...field} />
                                                 </FormControl>
                                                 <Button type="submit" size="icon" disabled={isSubmitting}>
                                                     {isSubmitting ? (
@@ -240,13 +210,13 @@ export default function EnhancedFooter() {
                             </form>
                         </Form>
 
-                        <p className="text-xs text-muted-foreground mt-2">I respect your privacy. Unsubscribe at any time.</p>
+                        <p className="text-xs text-muted-foreground mt-2">{home_footer?.newsletter.terms}</p>
                     </motion.section>
                 </div>
 
                 <div className="border-t pt-6 flex md:flex-row justify-end items-center">
                     <div className="absolute left-1/2 -translate-x-1/2 text-sm text-muted-foreground text-center justify-center mb-4 md:mb-0">
-                        © {currentYear} IYTE Yazilim Toplulugu. All rights reserved.
+                        {home_footer?.all_rights_reserved}
                     </div>
 
                     <div className="flex items-center gap-4">

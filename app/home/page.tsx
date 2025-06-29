@@ -15,6 +15,12 @@ import { SectionContainer } from '@/components/ui/section-container';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { motion } from 'framer-motion';
 import { useIsClient } from '@/hooks/use-is-client';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Configuration } from '@/types/types';
+import Loading from '@/components/loading';
+import ConfigurationDefaults from './conf-defaults';
+
 
 // Simple loading component
 function LoadingSection({ name }: { name: string }) {
@@ -28,12 +34,49 @@ function LoadingSection({ name }: { name: string }) {
 
 export default function Home() {
     const isClient = useIsClient()
+    const [loading, setLoading] = useState(true);
+
+    const [homeData, setHomeData] = useState<Configuration>(ConfigurationDefaults);
+
+    const supabase = createClient();
+
+    // Data fetching
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from("configuration")
+                    .select("*")
+
+                if (error) {
+                    console.error("Error fetching Home page data:", error);
+                }
+                if (data) {
+                    console.log("Fetched Home page data:", data);
+                    // @ts-ignore
+                    setHomeData(data);
+                }
+            } catch (error) {
+                console.error("Unexpected error while fetchin Home page data:", error);
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchHomeData();
+    }, [])
+
+
+    if (loading) {
+        return <Loading />
+    }
+
     return (
         <main className="min-h-screen">
 
             <ErrorBoundary fallback={<SectionFallback title="Hero" />}>
                 <Suspense fallback={<LoadingSection name="Hero" />}>
-                    <RedesignedHero />
+                    <RedesignedHero home_hero={homeData.find(item => item.key === "home_hero")?.value} />
                 </Suspense>
             </ErrorBoundary>
 
@@ -99,11 +142,15 @@ export default function Home() {
 
             <ErrorBoundary fallback={<SectionFallback title="About" />}>
                 <Suspense fallback={<LoadingSection name="About" />}>
-                    <AboutSection />
+                    <AboutSection home_about_us={homeData.find(item => item.key === "home_about_us")?.value} />
                 </Suspense>
             </ErrorBoundary>
 
-            <EnhancedFooter />
+            <ErrorBoundary fallback={<SectionFallback title="Footer" />}>
+                <Suspense fallback={<LoadingSection name="Footer" />}>
+                    <EnhancedFooter home_footer={homeData.find(item => item.key === "home_footer")?.value} />
+                </Suspense>
+            </ErrorBoundary>
         </main >
     )
 }

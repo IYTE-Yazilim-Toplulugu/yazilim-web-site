@@ -5,13 +5,18 @@ import { Check, Circle, X } from 'lucide-react';
 import Image from 'next/image';
 
 import { SurveyData } from '@/lib/pseudo';
-import API from '@/lib/api';
 import { createClient } from '@/lib/supabase/client';
 import { SectionHeader } from '@/components/ui/section-container';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Loading from '@/components/loading';
-import { QuestionFill } from '@/types/types';
+import DatePicker from '@/components/datepicker';
+import { Dropdown } from '@/components/dropdown';
+import handleErrorCode from '@/components/handle-error-code';
+import { toast } from '@/hooks/use-toast';
+import { getUser } from '@/utils/user_util';
+import { QuestionFill, AnswerHandlerProps, Question } from '@/types/types';
 
 export default function Survey() {
     const containerRef = useRef(null);
@@ -23,207 +28,18 @@ export default function Survey() {
     // Handler variables
     const [focusedId, setFocusedId] = useState<number | null>();
     const currentSurvey = surveyData.find((s) => s.id === focusedId);
-    const [rating, setRating] = useState();
     const [loading, setLoading] = useState(true);
+    const [errors, setErrors] = useState<Record<number, string>>({});
+
+    // const [rating, setRating] = useState();
 
     const supabase = createClient();
+    const [userInfo, setUserInfo] = useState<any>(null);
 
-
-    useEffect(() => {
-        if (!focusedId) {
-            setSurveyFill([]);
-        }
-    }, [focusedId])
-
-    const addAnswer = (survey_id: number, question_id: string, type: number, answer: string | number | boolean | null) => {
-        try {
-            if (surveyFill.some((item) => item.question_id === question_id)) { // might be there is more efficient solution for that
-                setSurveyFill((prevState) => [...prevState.filter((item) => item.question_id !== question_id)]);
-            }
-            setSurveyFill((prevState) => [
-                ...prevState,
-                {
-                    survey_id: survey_id,
-                    question_id: question_id,
-                    type: type,
-                    answer: answer,
-                },
-            ])
-        } catch (error) {
-            console.error("Error adding answer:", error);
-        }
-    }
-
-    const isAnswered = (question_id: string, answer: string | number | boolean | null) => {
-        return surveyFill.find((item) => item.question_id === question_id)?.answer === answer
-    };
-
-    // 0: yes_no, 1: single_choice, 2: number, 3: text, 4: multiple_choice, 5: rating, 6: checkbox, 7: date, 8: dropdown
-    // Form Handling
-    const HandleQuestions = (survey_id: number, question_id: string, type: number, options?: number[] | string[], placeholder?: string) => {
-        switch (type) {
-            case 0:
-                return (
-                    <section className="flex flex-row gap-8">
-                        <Button variant="outline"
-                            onClick={() => addAnswer(survey_id, question_id, type, true)}
-                            disabled={isAnswered(question_id, true)}
-                            className='group p-2 m-2 flex flex-row space-x-4
-                            rounded-lg bg-succulent/40 hover:bg-succulent/80
-                            disabled:bg-succulent disabled:opacity-100 disabled:text-background
-                            dark:disabled:text-primary cursor-pointer'>
-                            <p>Yes</p>
-                            <Check className="text-succulent transition-colors dark:group-hover:text-primary group-disabled:text-background dark:group-disabled:text-primary" />
-                        </Button >
-                        <Button variant="outline"
-                            onClick={() => addAnswer(survey_id, question_id, type, false)}
-                            disabled={isAnswered(question_id, false)}
-                            className="group p-2 m-2 flex flex-row space-x-4
-                            rounded-lg bg-destructive/40 hover:bg-destructive/80 
-                            disabled:bg-destructive disabled:opacity-100 disabled:text-background 
-                            dark:disabled:text-primary cursor-pointer">
-                            <p>No</p>
-                            <X className="text-destructive-foreground transition-colors group-hover:text-background dark:group-hover:text-primary group-disabled:text-background dark:group-disabled:text-primary" />
-                        </Button>
-                    </section >
-                )
-            case 1:
-                return (
-                    <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {options?.map((option) => {
-                            const isSelected = isAnswered(question_id, option);
-                            return (
-                                <div
-                                    key={option}
-                                    onClick={() => { !isSelected && addAnswer(survey_id, question_id, type, option) }}
-                                    className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer ${isSelected ? "pointer-events-none" : ""}`}
-                                >
-                                    <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
-                                    <Button variant="outline" disabled={isSelected} className='cursor-pointer disabled:opacity-100'>
-                                        {option}
-                                    </Button>
-                                </div>
-                            )
-                        })}
-                    </section>
-                )
-            case 2:
-                return (
-                    <section className='p-2'>
-                        <Input placeholder={placeholder} type="number" className='border border-border rounded-lg p-2' />
-                    </section>
-                )
-            case 3:
-                return (
-                    <section className='p-2'>
-                        <Input placeholder={placeholder} type="text" className='border border-border rounded-lg p-2' />
-                    </section>
-                )
-            case 4:
-                return (
-                    <section>
-                        {options?.map((option) => {
-                            const isSelected = isAnswered(question_id, option);
-                            return (
-                                <div
-                                    key={option}
-                                    onClick={() => { !isSelected && addAnswer(survey_id, question_id, type, option) }}
-                                    className={`pt-4 flex flex-row gap-4
-                                w-fit items-center rounded-md
-                                transition-colors cursor-pointer
-                                ${isSelected ? "pointer-events-none" : ""}`}
-                                >
-                                    <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
-                                    <Button variant="outline" disabled={isSelected} className='cursor-pointer disabled:opacity-100'>
-                                        {option}
-                                    </Button>
-                                </div>
-                            )
-                        })}
-
-                    </section>
-                )
-            case 5:
-                return (
-                    <section className='flex flex-wrap items-center justify-start gap-4'>
-                        {options?.map((option) => {
-                            const isSelected = isAnswered(question_id, option);
-                            return (
-                                <div
-                                    key={option}
-                                    onClick={() => { !isSelected && addAnswer(survey_id, question_id, type, option) }}
-                                    className={`pt-4 flex flex-row gap-4
-                                w-fit items-center rounded-md
-                                transition-colors cursor-pointer
-                                ${isSelected ? "pointer-events-none" : ""}`}
-                                >
-                                    <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
-                                    <Button variant="outline" disabled={isSelected} className='cursor-pointer disabled:opacity-100'>
-                                        {option}
-                                    </Button>
-                                </div>
-                            )
-                        })}
-
-                        {/* broken for now. I can create a new slider for this */}
-                        {/* <Slider */}
-                        {/*     // @ts-ignore */}
-                        {/*     min={1} */}
-                        {/*     max={5} */}
-                        {/*     step={1} */}
-                        {/*     onValueChange={(v) => setRating(v[0])} */}
-                        {/*     // @ts-ignore */}
-                        {/*     value={options} */}
-                        {/* /> */}
-                    </section>
-                )
-            //     case "checkbox":
-            //         return (
-            //             <section>
-            //
-            //
-            //             </section>
-            //         )
-            //     case "date":
-            //         return (
-            //             <section>
-            //             </section>
-            //         )
-            //     case "dropdown":
-            //         return (
-            //              <section></section>
-            //         )
-        }
-    }
-
-    // there will be some emojis or icons for each survey
-    const HandleIcon = (icon: string) => {
-        switch (icon) {
-            case "user":
-                return <p className='text-xl'>👨</p>
-            case "feature":
-                return <p className='text-xl'>🧠</p>
-            case "event":
-                return <p className='text-xl'>🎫</p>
-            case "feedback":
-                return <p className='text-xl'>📝</p>
-            case "design":
-                return <p className='text-xl'>🎨</p>
-            case "code":
-                return <p className='text-xl'>💻</p>
-            default:
-                return <p ><Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={16} height={16} />
-                </p>
-        }
-    }
-
-    // const HandleRateClick = (_index: number) => {
-    //
-    //
-    // }
 
     // Data fetching
     useEffect(() => {
+        getUser().then((user) => setUserInfo(user));
         const fetchSurveyData = async () => {
             try {
                 const { data, error } = await supabase
@@ -236,15 +52,12 @@ export default function Survey() {
                     throw error;
                 }
 
-                console.log("Fetched survey data:", data);
-                // @ts-ignore
                 if (data) {
                     setSurveyData(data);
                 }
-                console.log("Response: ", data);
-
             } catch (error) {
                 console.error("Error fetching survey data:", error);
+
             } finally {
                 setLoading(false)
             }
@@ -252,6 +65,521 @@ export default function Survey() {
 
         fetchSurveyData();
     }, [])
+
+    const postSurveyData = async () => {
+        try {
+            const answers = surveyFill.map(({ survey_id, type, ...rest }) => rest);
+            console.log(userInfo)
+            const { error } = await supabase
+                .from("survey_answers")
+                .insert({
+                    user_id: userInfo?.id,
+                    survey_id: focusedId,
+                    answered_at: new Date().toISOString(),
+                    answers: answers,
+                });
+            if (error) {
+                console.error("Error submitting survey answers:", error);
+                handleErrorCode(error.code);
+            } else {
+                toast({
+                    title: "Success",
+                    description: "Your survey answers have been submitted successfully.",
+                    variant: "success",
+                })
+                setFocusedId(null);
+            }
+        } catch (error) {
+            console.error("Unexpected Error", error);
+            toast({
+                title: "Unexpected Error",
+                description: "An unexpected error occurred while submitting your survey answers. Please try again later.",
+                variant: "destructive",
+            })
+        }
+    }
+
+    useEffect(() => {
+        if (!focusedId) {
+            setSurveyFill([]);
+        }
+    }, [focusedId])
+
+
+    const addAnswer = ({ survey_id, question_id, type, answer }: AnswerHandlerProps) => {
+        try {
+            if (surveyFill.some((item) => item.question_id === question_id)) {
+                setSurveyFill((prevState) => [...prevState.filter((item) => item.question_id !== question_id)]);
+            }
+            setSurveyFill((prevState) => {
+                return [
+                    ...prevState,
+                    {
+                        survey_id: survey_id,
+                        question_id: question_id,
+                        type: type,
+                        answer: answer,
+                    },
+                ]
+            })
+        } catch (error) {
+            console.error("Error adding answer:", error);
+        }
+    }
+
+
+    const addMultipleAnswer = ({ survey_id, question_id, type, answer }: AnswerHandlerProps) => {
+        setSurveyFill((prevState) => {
+            const existing = prevState.find(
+                (item) => item.question_id === question_id
+            );
+
+            if (existing) {
+                return prevState.map((item) =>
+                    item.question_id === question_id
+                        ? {
+                            ...item,
+                            answer: [...(item.answer as (string | number | boolean)[]), answer],
+                        }
+                        : item
+                );
+            } else {
+
+                return [
+                    ...prevState,
+                    {
+                        survey_id,
+                        question_id,
+                        type,
+                        answer: [answer],
+                    },
+                ];
+            }
+        });
+    };
+
+
+    const removeMultipleAnswer = ({ survey_id, question_id, type, answer }: AnswerHandlerProps) => {
+        setSurveyFill((prevState) => {
+            return prevState
+                .map((item) => {
+                    if (item.question_id === question_id) {
+                        const filteredAnswers = (item.answer as (string | number | boolean)[]).filter(
+                            (a) => a !== answer
+                        );
+
+                        if (filteredAnswers.length === 0) return null;
+
+                        return {
+                            ...item,
+                            answer: filteredAnswers,
+                        };
+                    }
+                    return item;
+                })
+                .filter((item): item is QuestionFill => item !== null); // Remove nulls
+        });
+    }
+
+
+    // 0: yes_no, 1: single_choice, 2: number, 3: text, 4: multiple_choice, 5: rating, 6: checkbox, 7: date, 8: dropdown
+    // Form Handling
+    const HandleQuestions = (survey_id: number, question_id: number, type: number, options?: (number | string)[], placeholder?: string) => {
+        switch (type) {
+            case 0: // yes_no
+                return (
+                    <section className="flex flex-row gap-8">
+                        <Button variant="outline"
+                            onClick={() => !isAnswered(question_id, true)
+                                ? addAnswer({
+                                    survey_id,
+                                    question_id,
+                                    type,
+                                    answer: true
+                                })
+                                : setSurveyFill((prevState) => {
+                                    return prevState.filter((item) => item.question_id !== question_id)
+                                })
+                            }
+                            className={`group p-2 m-2 flex flex-row space-x-4
+                            rounded-lg bg-succulent/40 hover:bg-succulent/80
+                            ${isAnswered(question_id, true) ? "bg-succulent text-background dark:text-primary" : ""}
+                            cursor-pointer`}>
+                            <p>Yes</p>
+                            <Check className={`text-succulent transition-colors dark:group-hover:text-primary
+${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
+                        </Button >
+                        <Button variant="outline"
+                            onClick={() => !isAnswered(question_id, false)
+                                ? addAnswer({
+                                    survey_id,
+                                    question_id,
+                                    type,
+                                    answer: false
+                                })
+                                : setSurveyFill((prevState) => {
+                                    return prevState.filter((item) => item.question_id !== question_id)
+                                })
+                            }
+                            className={`group p-2 m-2 flex flex-row space-x-4
+                            rounded-lg bg-destructive/40 hover:bg-destructive/80 
+                            ${isAnswered(question_id, false) ? "bg-destructive text-background dark:text-primary" : ""}
+                            cursor-pointer`}>
+                            <p>No</p>
+                            <X className={`text-destructive-foreground transition-colors group-hover:text-background dark:group-hover:text-primary
+                                ${isAnswered(question_id, false) ? "text-background dark:text-primary" : ""}`} />
+                        </Button>
+                    </section >
+                )
+            case 1: // single_choice
+                return (
+                    <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {options?.map((option) => {
+                            const isSelected = isAnswered(question_id, option);
+                            return (
+                                <div
+                                    key={option}
+                                    onClick={() => {
+                                        !isSelected
+                                            ? addAnswer({
+                                                survey_id,
+                                                question_id,
+                                                type,
+                                                answer: option
+                                            })
+                                            : setSurveyFill((prevState) => {
+                                                return prevState.filter((item) => item.question_id !== question_id)
+                                            })
+                                    }}
+                                    className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer `}
+                                >
+                                    <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
+                                    <Button variant="outline" className='cursor-pointer '>
+                                        {option}
+                                    </Button>
+                                </div>
+                            )
+                        })}
+                    </section>
+                )
+            case 2: // number
+                const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const numeric = Number(e.target.value);
+
+                    setSurveyFill((prevState) => {
+                        const exists = prevState.some((item) => item.question_id === question_id);
+                        const updatedAnswer: QuestionFill = {
+                            survey_id,
+                            question_id,
+                            type,
+                            answer: numeric,
+                        };
+                        return exists
+                            ? prevState.map((item) =>
+                                item.question_id === question_id ? updatedAnswer : item
+                            )
+                            : [...prevState, updatedAnswer];
+                    });
+                };
+                return (
+                    <section className='p-2' >
+                        <Input
+                            placeholder={placeholder}
+                            type="number"
+                            min={0}
+                            value={surveyFill.find((item) => item.question_id === question_id)?.answer?.toString() || ""}
+                            onChange={(e) => handleNumberChange(e)}
+                            onWheel={(e) => e.currentTarget.blur()}
+                            onPaste={(e) => {
+                                const pasted = e.clipboardData.getData("text");
+                                if (!/^\d+$/.test(pasted)) {
+                                    e.preventDefault();
+                                }
+                            }}
+                            className="border border-border rounded-lg p-2"
+                        />
+                    </section >
+                )
+            case 3: // text
+                return (
+                    <section className='p-2' >
+                        <textarea
+                            name="text-area"
+                            rows={3}
+                            maxLength={400}
+                            placeholder={placeholder}
+                            value={surveyFill.find((item) => item.question_id === question_id)?.answer?.toString() || ""}
+                            inputMode="text"
+                            onChange={(e) => {
+                                const newNote = e.target.value;
+                                if (newNote === "") {
+                                    setSurveyFill(prev => {
+
+                                        return prev.filter(item => item.question_id !== question_id);
+                                    })
+                                }
+                                if (surveyFill.find(item => item.question_id === question_id)) {
+                                    setSurveyFill(prev => {
+                                        console.log(prev.map(item =>
+                                            item.question_id === question_id
+                                                ? { ...item, answer: newNote }
+                                                : item
+                                        ));
+                                        return prev.map(item =>
+                                            item.question_id === question_id
+                                                ? { ...item, answer: newNote }
+                                                : item
+                                        )
+                                    });
+                                } else {
+                                    setSurveyFill(prev => {
+                                        console.log([...prev,
+                                        {
+                                            survey_id: survey_id,
+                                            question_id: question_id,
+                                            type: type,
+                                            answer: newNote
+                                        }]);
+                                        return [...prev,
+                                        {
+                                            survey_id: survey_id,
+                                            question_id: question_id,
+                                            type: type,
+                                            answer: newNote
+                                        }]
+                                    })
+                                }
+
+
+                            }}
+                            className="w-full bg-background outline-none border border-border rounded-lg p-2"
+                        />
+                    </section >
+                )
+            case 4: // multiple_choice
+                return (
+                    <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {options?.map((option) => {
+                            const isSelected = isAnswered(question_id, option);
+                            return (
+                                <div
+                                    key={option}
+                                    onClick={() => {
+                                        !isSelected
+                                            ? addMultipleAnswer({
+                                                survey_id,
+                                                question_id,
+                                                type, answer: option
+                                            })
+                                            : removeMultipleAnswer({
+                                                survey_id,
+                                                question_id,
+                                                type, answer: option
+                                            })
+                                    }}
+                                    className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer `}
+                                >
+                                    <Checkbox checked={isSelected} className={`transition-all duration-300`} />
+                                    <Button variant="outline" className='cursor-pointer '>
+                                        {option}
+                                    </Button>
+                                </div>
+                            )
+                        })}
+                    </section>
+                )
+            case 5: // rating
+                const size = options ? Number(options[options.length - 1]) : 5;
+                return (
+                    <section className='flex flex-wrap items-center justify-start gap-4'>
+                        {Array.from({ length: size }).map((_, id) => {
+                            const isSelected = isAnswered(question_id, id + 1);
+                            return (
+                                <div
+                                    key={id + 1}
+                                    onClick={() => {
+                                        !isSelected
+                                            ? addAnswer({
+                                                survey_id,
+                                                question_id,
+                                                type,
+                                                answer: id + 1
+                                            })
+                                            : setSurveyFill((prevState) => {
+                                                return prevState.filter((item) => item.question_id !== question_id)
+                                            })
+                                    }}
+                                    className={`pt-4 flex flex-row gap-4
+                                w-fit items-center rounded-md
+                                transition-colors cursor-pointer
+                                `}
+                                >
+                                    <Circle className={`w-6 h-6 transition-all ${isSelected ? "bg-muted-foreground rounded-full" : ""}`} />
+                                    <Button variant="outline" className='cursor-pointer '>
+                                        {id + 1}
+                                    </Button>
+                                </div>
+                            )
+                        })}
+
+
+                    </section>
+                    // broken for now. I can create a new slider for this
+                    // <Slider
+                    //     // @ts-ignore
+                    //     min={1}
+                    //     max={5}
+                    //     step={1}
+                    //     onValueChange={(v) => setRating(v[0])}
+                    //     // @ts-ignore
+                    //     value={options}
+                    // />
+                )
+            case 6: // checkbox
+                const isSelected = isAnswered(question_id, true);
+                return (
+                    <section
+                        onClick={() => {
+                            !isSelected
+                                ? addAnswer({
+                                    survey_id,
+                                    question_id,
+                                    type,
+                                    answer: true
+                                })
+                                : setSurveyFill((prevState) => {
+                                    return prevState.filter((item) => item.question_id !== question_id)
+                                })
+                        }}
+                        className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer`}
+                    >
+                        <Checkbox checked={isSelected} className={`transition-all duration-300`} />
+                        <Button variant="outline" className='cursor-pointer '>
+                            {placeholder || "Select"}
+                        </Button>
+                    </section>
+                )
+            case 7: // date
+                return (
+                    <section>
+                        <DatePicker
+                            id="date-picker"
+                            placeholder="Select a date"
+                            onChange={(dates, currentDateString) => {
+                                addAnswer({
+                                    survey_id,
+                                    question_id,
+                                    type,
+                                    answer: currentDateString,
+                                })
+                                console.log({ dates, currentDateString });
+                            }}
+                        />
+                    </section>
+                )
+            case 8: // dropdown
+                return (
+                    <section className="mt-2 mb-10 relative inline-block">
+                        <Dropdown
+                            trigger={
+                                <Button
+                                    variant="outline"
+                                    className="w-64 cursor-pointer"
+                                >
+                                    {surveyFill.filter((item) => item.question_id === question_id)[0]?.answer || "Select a value"}
+                                </Button>
+                            }
+                        >
+                            {options?.map((option) => {
+                                const isSelected = isAnswered(question_id, option);
+
+                                return (
+                                    <div
+                                        key={option}
+                                        onClick={() => {
+                                            !isSelected ?
+                                                addAnswer({
+                                                    survey_id,
+                                                    question_id,
+                                                    type,
+                                                    answer: option,
+                                                })
+                                                : setSurveyFill((prevState) => {
+                                                    return prevState.filter((item) => item.question_id !== question_id)
+                                                })
+                                        }}
+                                        className={`m-1 p-1 text-center cursor-pointer hover:bg-muted rounded-md dark:hover:bg-muted-foreground ${isSelected ? "bg-muted/70" : "bg-background"}`}
+                                    >
+                                        {option}
+                                    </div>
+                                );
+                            })}
+                        </Dropdown>
+                    </section >
+                );
+        }
+    }
+
+    // 0: yazilim, 1: user, 2: feature, 3: event, 4: feedback, 5: design, 6: code
+    // there will be some emojis or icons for each survey
+    const HandleIcon = (icon: number) => {
+        switch (icon) {
+            case 1:
+                return <p className='text-xl'>👨</p>
+            case 2:
+                return <p className='text-xl'>🧠</p>
+            case 3:
+                return <p className='text-xl'>🎫</p>
+            case 4:
+                return <p className='text-xl'>📝</p>
+            case 5:
+                return <p className='text-xl'>🎨</p>
+            case 6:
+                return <p className='text-xl'>💻</p>
+            default:
+                return <p ><Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={16} height={16} />
+                </p>
+        }
+    }
+
+    const handleSubmit = async (survey_content: any) => {
+        setLoading(true);
+        validateSurvey(survey_content);
+        setLoading(false);
+    }
+
+
+    const validateSurvey = (survey_content: any) => {
+        const newErrors: Record<number, string> = {};
+
+        survey_content.questions.forEach((question: Question) => {
+            const isAnswered = surveyFill.some((item) => item.question_id === question.id);
+
+            if (question.required && !isAnswered) {
+                newErrors[question.id] = `Question "${question.question}" is required.`;
+            } else {
+                newErrors[question.id] = "";
+            }
+        });
+
+        setErrors(newErrors);
+
+        const hasError = Object.values(newErrors).some((error) => error !== "");
+        if (hasError) {
+            console.error("Validation errors:", newErrors);
+            toast({
+                title: "Validation Error",
+                description: "Please answer all required questions before submitting.",
+                variant: "destructive",
+            });
+        } else {
+            postSurveyData();
+        }
+    };
+
+
+
+
 
     // I can use this to get the mouse position and animate the surveys around
     // useEffect(() => {
@@ -273,15 +601,39 @@ export default function Survey() {
     {/* }} */ }
     {/* transition={{ type: "spring", stiffness: 80, damping: 10 }} */ }
 
+    // Style Handler
+    const isAnswered = (
+        question_id: number,
+        answer: string | number | (string | number)[] | boolean | null
+    ): boolean => {
+        const entry = surveyFill.find((item) => item.question_id === question_id);
+
+        if (!entry || entry.answer == null) return false;
+
+        if (Array.isArray(entry.answer)) {
+            // @ts-ignore
+            return entry.answer.includes(answer);
+        }
+
+        return entry.answer === answer;
+    };
+
+    const handleQuestionType = (type: number) => {
+        switch (type) {
+            case 1:
+                return "(single choice)"
+            case 4:
+                return "(multiple choice)"
+        }
+    }
+
+
     if (loading) {
         return (
             <Loading />
         )
     }
 
-    // move the selected survey to center of screen and focus that survey is current idea for survey system
-    // might be there is better options for that
-    // I want to gameify the survey system, so that user can have fun while filling the survey
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -347,19 +699,28 @@ export default function Survey() {
                                 {currentSurvey.description}
                             </p>
                             {currentSurvey.questions.map((question: any) => (
-                                <div key={question.id} className='py-4 sm:p-4'>
-                                    <p className='font-semibold'>{question.question}</p>
+                                <div key={question.id} className='relative py-4 sm:p-4'>
+                                    <div className='absolute -left-4 sm:left-0'>
+                                        {question.required && "*"}
+                                    </div>
+                                    <p className='font-semibold'>{question.question} {handleQuestionType(question.type)}</p>
                                     {HandleQuestions(currentSurvey.id,
                                         question.id,
                                         question.type,
                                         question.options,
                                         question.placeholder
                                     )}
+                                    <div className="text-destructive text-sm">
+                                        {errors[question.id] &&
+                                            <p className="mt-2">{errors[question.id]}</p>
+                                        }
+                                    </div>
                                 </div>
                             ))}
+
                             <Button
                                 variant="outline"
-                                onClick={() => setFocusedId(null)}
+                                onClick={() => handleSubmit(currentSurvey)}
                                 className="mt-6 px-4 py-2 bg-bite-tongue text-white rounded hover:bg-bite-tongue/80 transition duration-200"
                             >
                                 Submit

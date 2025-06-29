@@ -15,9 +15,16 @@ export interface GalleryImage {
 
 export interface QuestionFill {
     survey_id: number;
-    question_id: string;
+    question_id: number;
     type: number;
-    answer: string | number | boolean | null;
+    answer: string | number | boolean | (string | number | boolean)[] | null;
+}
+
+export type AnswerHandlerProps = {
+    survey_id: number,
+    question_id: number,
+    type: number,
+    answer: string | number | boolean
 }
 
 export type Event = {
@@ -32,7 +39,7 @@ export type Event = {
 };
 
 
-interface Survey {
+export interface Survey {
     id: number;
     title: string;
     icon: string;
@@ -44,9 +51,10 @@ interface Survey {
     questions: Question[];
 }
 
-interface Question {
-    id: string; // UUID format
-    type: string; // "text", "number", "boolean", "select", "multi-select"
+export interface Question {
+    id: number; // UUID format
+    type: number; // "text", "number", "boolean", "select", "multi-select"
+    required: boolean; // true veya false
     question: string; // soru metni
     options?: any[]; // sadece "select" ve "multi-select" tipleri için
     placeholder?: string; // sadece "text" ve "number" tipleri için
@@ -63,8 +71,89 @@ export interface NavbarProps {
 export type blog = {
 
     id: number;
-    slug:string;
+    slug: string;
     title: string;
     content: string;
     cover_image_url: string;
 }
+
+export type HexColor = `#${string}`;
+
+export interface HomeHeroConfig {
+    up_header: {
+        title: string;
+        color: string; // HexColor
+    };
+    header: string;
+    description: string;
+    workspaces: {
+        content: string;
+        color: HexColor;
+
+    }[];
+    links: {
+        icon: number; // int32
+        color: HexColor;
+        url: string;
+    }[];
+}
+
+export interface HomeAboutUsConfig {
+    title: string;
+    description: string;
+    left_content: {
+        name: string;
+        title?: string;
+        subtitle?: string;
+        icon?: number; // int32
+        image?: string;
+    }[];
+    right_content: {
+        title: string;
+        description1: string;
+        description2: string;
+        events: {
+            content: string;
+            icon: number; // int32
+            color: HexColor;
+        }[];
+        link: {
+            title: string;
+            url: string;
+        };
+    };
+}
+
+export interface HomeFooterConfig {
+    left_content: {
+        title: string;
+        description: string;
+        links: {
+            icon: number; // int32
+            color: HexColor;
+            url: string;
+        }[];
+    };
+    quick_links: {
+        title: string;
+        url: string;
+    }[];
+    contact_info: {
+        title: string;
+        icon: number;
+        url?: string;
+    }[];
+    newsletter: {
+        description: string;
+        placeholder: string;
+        terms: string;
+    };
+    all_rights_reserved: string;
+}
+
+export interface Objects {
+    key: string;
+    value: any;
+}
+
+export type Configuration = Objects[];
