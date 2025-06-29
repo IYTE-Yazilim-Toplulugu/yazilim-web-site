@@ -15,7 +15,7 @@ import DatePicker from '@/components/datepicker';
 import { Dropdown } from '@/components/dropdown';
 import handleErrorCode from '@/components/handle-error-code';
 import { toast } from '@/hooks/use-toast';
-import { getUser } from '@/utils/user_util';
+import { getUser } from '@/utils/user_client_util';
 import { QuestionFill, AnswerHandlerProps, Question } from '@/types/types';
 
 export default function Survey() {
