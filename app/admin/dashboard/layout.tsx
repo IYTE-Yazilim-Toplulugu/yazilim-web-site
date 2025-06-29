@@ -1,0 +1,23 @@
+import { Outfit } from 'next/font/google';
+import './globals.css';
+
+import { SidebarProvider } from '@/components/admin/context/SidebarContext';
+import { ThemeProvider } from '@/components/admin/context/ThemeContext';
+
+const outfit = Outfit({
+    subsets: ["latin"],
+});
+
+export default function AdminPageLayout({
+    children,
+}: Readonly<{
+    children: React.ReactNode;
+}>) {
+    return (
+        <div className={`${outfit.className} dark:bg-gray-900`}>
+            <ThemeProvider>
+                <SidebarProvider>{children}</SidebarProvider>
+            </ThemeProvider>
+        </div>
+    );
+}

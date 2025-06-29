@@ -46,7 +46,7 @@ export default function Home() {
                                 <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
                                     {SwiperData.map((item, index) => (
                                         <div key={index} className="keen-slider__slide rounded-2xl h-fit bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive">
-                                            <Link href={"/place" + item.slug} >
+                                            <Link href={"/event/" + item.slug} >
                                                 <Image
                                                     src={item.image}
                                                     alt={`Slide ${index + 1}`}
@@ -60,6 +60,16 @@ export default function Home() {
                                             </Link>
                                         </div>
                                     ))}
+                                    <div className="keen-slider__slide rounded-2xl aspect-[1.6] w-full h-full bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive flex items-center justify-center">
+                                        <div className="text-center space-y-4">
+                                            <p className="text-4xl font-bold">Can't find what you are looking for?</p>
+                                            <Link href="/events">
+                                                <p className="text-2xl font-semibold hover:underline hover:underline-offset-2">
+                                                    See all events
+                                                </p>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </FreeSwiper>
                             </div>
                         </ScrollReveal>

@@ -84,17 +84,15 @@ export const SwiperData =
     ]
 
 
-export const SurveyData = {
-    "code": 0,
-    "message": null,
-    "surveys": [
+export const SurveyData =
+    [
         {
             "id": 13123123123,
             "title": "User Experience Survey",
             "icon": "user",
             "description": "Help us improve the design and usability of our website.",
             "release_date": "2023-10-01",
-            // will be new indicator and answer date
+            "requirements": null,
             "questions": [
                 {
                     "id": "q1",
@@ -127,6 +125,7 @@ export const SurveyData = {
             "title": "Hackathon 2025 Feedback",
             "icon": "event",
             "description": "We’d love to hear what you thought of our latest event.",
+            "release_date": "2023-10-10",
             "questions": [
                 {
                     "id": "q1",
@@ -158,6 +157,7 @@ export const SurveyData = {
             "title": "Feature Request",
             "icon": "feature",
             "description": "Let us know what new features you'd love to see.",
+            "release_date": "2023-10-15",
             "questions": [
                 {
                     "id": "q1",
@@ -179,44 +179,105 @@ export const SurveyData = {
             ]
         }
     ]
-}
 
 // This is an example for answered survey POST request
-const SurveyRequest = {
-    "surveys": [
-        {
-            "id": 13123123123,
-            "title": "User Experience Survey",
-            "description": "Help us improve the design and usability of our website.",
-            "questions": [
-                {
-                    "id": "q1",
-                    "type": "rating",
-                    "question": "How would you rate your overall experience?",
-                    "options": [1, 2, 3, 4, 5],
-                    "answer": 4
-                },
-                {
-                    "id": "q2",
-                    "type": "multiple_choice",
-                    "question": "What device do you use the most to visit our site?",
-                    "options": ["Desktop", "Tablet", "Mobile"],
-                    "answer": "Desktop"
-                },
-                {
-                    "id": "q3",
-                    "type": "checkbox",
-                    "question": "Which of these features do you find helpful?",
-                    "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"],
-                    "answer": ["Events", "Blog Posts"]
-                },
-                {
-                    "id": "q4",
-                    "type": "text",
-                    "question": "Any suggestions for improvement?",
-                    "answer": "The site is great, but I would love to see more tutorials."
-                }
-            ]
-        }
-    ]
-}
+const SurveyRequest = [
+    {
+        "id": 13123123123,
+        "title": "User Experience Survey",
+        "description": "Help us improve the design and usability of our website.",
+        "questions": [
+            {
+                "id": "q1",
+                "type": "rating",
+                "question": "How would you rate your overall experience?",
+                "options": [1, 2, 3, 4, 5],
+                "answer": 4
+            },
+            {
+                "id": "q2",
+                "type": "multiple_choice",
+                "question": "What device do you use the most to visit our site?",
+                "options": ["Desktop", "Tablet", "Mobile"],
+                "answer": "Desktop"
+            },
+            {
+                "id": "q3",
+                "type": "checkbox",
+                "question": "Which of these features do you find helpful?",
+                "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"],
+                "answer": ["Events", "Blog Posts"]
+            },
+            {
+                "id": "q4",
+                "type": "text",
+                "question": "Any suggestions for improvement?",
+                "answer": "The site is great, but I would love to see more tutorials."
+            }
+        ]
+    }
+]
+
+export const StatsPOSTData = [
+    { id: 1, answer: 'Evet' },
+    { id: 2, answer: 'Hayır' },
+    { id: 3, answer: 'Evet' },
+    { id: 4, answer: 'Evet' },
+    { id: 5, answer: 'Belki' },
+    { id: 6, answer: 'Hayır' },
+    { id: 7, answer: 'Evet' },
+];
+
+export const EventsData = [
+    {
+        id: 1,
+        title: "Tech Conference 2025",
+        description: "A large conference focusing on the latest in tech innovation.",
+        event_date: "2025-06-15T10:00:00",
+        location: [40.7128, -74.0060], // New York City coords
+        capacity_limit: 500,
+        is_online: false,
+        registration_url: "https://techconf2025.com/register"
+    },
+    {
+        id: 2,
+        title: "Online Marketing Webinar",
+        description: "A free online webinar about digital marketing strategies.",
+        event_date: "2025-05-20T18:00:00",
+        location: [0, 0], // Online, so dummy coords
+        capacity_limit: 1000,
+        is_online: true,
+        registration_url: "https://marketingwebinar.com/signup"
+    },
+    {
+        id: 3,
+        title: "Community Cleanup Day",
+        description: "Join us in cleaning up the local park and making a difference.",
+        event_date: "2025-06-01T09:00:00",
+        location: [34.0522, -118.2437], // Los Angeles coords
+        capacity_limit: 200,
+        is_online: false,
+        registration_url: null
+    },
+    {
+        id: 4,
+        title: "AI & Ethics Panel",
+        description: "Discussion on the ethical implications of AI technologies.",
+        event_date: "2025-07-10T14:00:00",
+        location: [51.5074, -0.1278], // London coords
+        capacity_limit: 300,
+        is_online: true,
+        registration_url: "https://aiethics2025.com"
+    },
+    {
+        id: 5,
+        title: "Startup Pitch Night",
+        description: "Local startups present their ideas to investors.",
+        event_date: "2025-08-05T19:00:00",
+        location: [37.7749, -122.4194], // San Francisco coords
+        capacity_limit: 150,
+        is_online: false,
+        registration_url: "https://startuppitchnight.com/register"
+    }
+];
+
