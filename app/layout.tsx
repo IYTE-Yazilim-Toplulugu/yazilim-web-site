@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import "./admin/(dashboard)/globals.css";
+// import "./admin/(dashboard)/globals.css";
 import ResponsiveHeader from "@/components/responsive-header";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";

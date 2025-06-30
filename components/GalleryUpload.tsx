@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { SectionHeader } from './ui/section-container';
-import {GalleryImage} from "@/types/types_gallery";
-import {getUser} from "@/utils/user_client_util";
-import {toast} from "@/hooks/use-toast";
+import { GalleryImage } from "@/types/types_gallery";
+import { getUser } from "@/utils/user_client_util";
+import { toast } from "@/hooks/use-toast";
 import GalleryUploadServer from "@/app/admin/(dashboard)/(admin)/gallery/(server)/gallery_upload";
 
 interface GalleryUploadProps {
@@ -38,11 +38,11 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
             file: file
         });
 
-        if (result.error){
+        if (result.error) {
             console.error(`Error uploading image(on: ${result.errorType}):`, result.error);
             setError('Error uploading image. Please try again.');
         }
-        else{
+        else {
 
             // Reset form
             setTitle('');
