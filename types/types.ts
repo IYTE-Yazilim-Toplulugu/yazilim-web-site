@@ -4,15 +4,6 @@ export interface StatsResponse {
     answer: string;
 }
 
-export interface GalleryImage {
-    id: number;
-    title: string;
-    description: string;
-    uploaded_at: string;
-    file_path: string;
-    uploader_id: number;
-};
-
 export interface QuestionFill {
     survey_id: number;
     question_id: number;

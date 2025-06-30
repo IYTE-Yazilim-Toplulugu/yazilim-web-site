@@ -1,16 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { createClient } from "@/lib/supabase/client";
+import React, { useState } from 'react';
 import { SectionHeader } from './ui/section-container';
+import {GalleryImage} from "@/types/types_gallery";
+import {getUser} from "@/utils/user_client_util";
+import {toast} from "@/hooks/use-toast";
+import GalleryUploadServer from "@/app/admin/dashboard/(admin)/gallery/(server)/gallery_upload";
 
-export default function GalleryUpload() {
+interface GalleryUploadProps {
+    onUpload: (image: GalleryImage) => void;
+}
+
+const GalleryUpload: React.FC<GalleryUploadProps> = ({
+    onUpload
+}) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const supabase = createClient();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,42 +27,36 @@ export default function GalleryUpload() {
             return;
         }
 
-        try {
-            setUploading(true);
-            setError(null);
+        setUploading(true);
+        setError(null);
 
-            // Upload file to storage
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-            const filePath = `${fileName}`;
+        const user = await getUser();
+        const result = await GalleryUploadServer({
+            title: title,
+            description: description,
+            uploaderId: user?.id ?? "",
+            file: file
+        });
 
-            const { error: uploadError } = await supabase.storage
-                .from('gallery-images')
-                .upload(filePath, file);
-
-            if (uploadError) throw uploadError;
-
-            // Create gallery entry
-            const { error: insertError } = await supabase.from('gallery').insert({
-                title,
-                description,
-                file_path: filePath,
-                uploaded_at: new Date().toISOString(),
-            });
-
-            if (insertError) throw insertError;
+        if (result.error){
+            console.error(`Error uploading image(on: ${result.errorType}):`, result.error);
+            setError('Error uploading image. Please try again.');
+        }
+        else{
 
             // Reset form
             setTitle('');
             setDescription('');
             setFile(null);
-            alert('Image uploaded successfully!');
-        } catch (error) {
-            console.error('Error uploading image:', JSON.stringify(error));
-            setError('Error uploading image. Please try again.');
-        } finally {
-            setUploading(false);
+            onUpload(result.data);
+
+            toast({
+                title: 'Successful',
+                variant: 'success',
+                description: 'Image uploaded successfully.'
+            });
         }
+        setUploading(false);
     };
 
     return (
@@ -67,7 +69,7 @@ export default function GalleryUpload() {
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="mt-1 p-2 block w-full 
+                        className="mt-1 p-2 block w-full
                         rounded-md border border-border shadow-sm outline-none
                         focus:ring-bite-tongue focus:ring-1
                         dark:bg-background"
@@ -81,7 +83,7 @@ export default function GalleryUpload() {
                         maxLength={400}
                         onChange={(e) => setDescription(e.target.value)}
                         className="mt-1 p-2 block w-full
-                        rounded-md border border-border 
+                        rounded-md border border-border
                         shadow-sm outline-none
                         focus:ring-bite-tongue focus:ring-1
                         dark:bg-background"
@@ -110,4 +112,6 @@ export default function GalleryUpload() {
             </form>
         </div>
     );
-} 
+};
+
+export default GalleryUpload;
