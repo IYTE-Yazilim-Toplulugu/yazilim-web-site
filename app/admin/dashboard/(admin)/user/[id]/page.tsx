@@ -14,15 +14,24 @@ import UserDeleteServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/u
 import Link from "next/link";
 import {toast} from "@/hooks/use-toast";
 
+import {UserInfo} from "@/types/types_user";
+
 async function onSubmit(user: any) {
     const error = await UserDetailUpdateServer(user);
 
     if (!error) {
-        alert("Successful.");
+        toast({
+            variant: "default",
+            description: "Success",
+        });
     }
     else {
         console.log(error);
-        alert("Failed. See console.");
+        toast({
+            variant: "default",
+            description: "See console.",
+            title: "Failed"
+        });
     }
 }
 
@@ -54,28 +63,22 @@ export default function UserDetail() {
     const params = useParams();
     const id: string | undefined = params.id?.toString();
 
-    const [user, setUser] = useState<any>();
+    const [user, setUser] = useState<UserInfo>();
     const [departments, setDepartments] = useState<Department[]>();
 
     if (id && typeof window !== "undefined") {
         useEffect(() => {
             UserDetailServer(id).then(obj => {
-
                 const u = obj.user;
-                setUser(u);
+                setUser(u ? u : undefined);
                 setDepartments(obj.departments);
             });
         }, [window.location])
     }
 
-    const handleChange = (event: any) => {
-        setUser({
-            ...user,
-            [event.target.name]: event.target.value
-        });
-    }
-
-    const handleValueChange = (key: string, value: any) => {
+    const handleChangeEvent = (event: any) => handleChange(event.target.name, event.target.value);
+    const handleChange = (key: string, value: any) => {
+        // @ts-ignore
         setUser({
             ...user,
             [key]: value
@@ -96,34 +99,34 @@ export default function UserDetail() {
                         <input type="hidden" name={"id"} value={id} />
 
                         <Label htmlFor={"full_name"}>Full Name</Label>
-                        <Input type={"text"} name={"full_name"} onChange={handleChange} defaultValue={user?.full_name} />
+                        <Input type={"text"} name={"full_name"} onChange={handleChangeEvent} defaultValue={user?.full_name} />
 
                         <Label htmlFor={"place"}>Place</Label>
-                        <Input type={"text"} name={"place"} onChange={handleChange} defaultValue={user?.place} placeholder={"Place"} />
+                        <Input type={"text"} name={"place"} onChange={handleChangeEvent} defaultValue={user?.place} placeholder={"Place"} />
 
                         <Label htmlFor={"phone"}>Phone Number</Label>
-                        <Input type={"phone"} name={"phone"} onChange={handleChange} defaultValue={user?.phone} placeholder={"Phone Number"} />
+                        <Input type={"phone"} name={"phone"} onChange={handleChangeEvent} defaultValue={user?.phone} placeholder={"Phone Number"} />
 
                         <Label htmlFor={"school_number"}>School Number</Label>
-                        <Input type={"text"} name={"school_number"} onChange={handleChange} defaultValue={user?.school_number} placeholder={"School Number"} />
+                        <Input type={"text"} name={"school_number"} onChange={handleChangeEvent} defaultValue={user?.school_number} placeholder={"School Number"} />
 
                         <Label htmlFor={"department"}>Department</Label>
-                        <Select defaultValue={user?.department} placeholder={"Department"} options={
+                        <Select defaultValue={user?.department?.toString()} placeholder={"Department"} options={
                             departments?.map(x => {
                                 return { value: x.id.toString(), label: x.name };
                             }) ?? []
-                        } onChange={x => handleValueChange("department", parseInt(x))} />
+                        } onChange={x => handleChange("department", parseInt(x))} />
 
                         <Label htmlFor={"email"}>E-Mail</Label>
-                        <Input type={"email"} disabled={true} name={"email"} onChange={handleChange} defaultValue={user?.email} placeholder={"E-Mail"} />
+                        <Input type={"email"} disabled={true} name={"email"} onChange={handleChangeEvent} defaultValue={user?.email} placeholder={"E-Mail"} />
 
                         <Label htmlFor={"created_at"}>Created At</Label>
-                        <Input type={"datetime-local"} name={"created_at"} disabled={true} onChange={handleChange} defaultValue={date} />
+                        <Input type={"datetime-local"} name={"created_at"} disabled={true} onChange={handleChangeEvent} defaultValue={date} />
 
                         <div className={"flex gap-2 w-[100%] justify-center"}>
-                            <Checkbox label={"Is Admin"} onChange={x => handleValueChange("is_admin", x)} checked={user?.is_admin ?? false} />
-                            <Checkbox label={"Is Special"} onChange={x => handleValueChange("is_special", x)} checked={user?.is_special ?? false} />
-                            <Checkbox label={"Is Student"} onChange={x => handleValueChange("is_student", x)} checked={user?.is_student ?? false} />
+                            <Checkbox label={"Is Admin"} onChange={x => handleChange("is_admin", x)} checked={user?.is_admin ?? false} />
+                            <Checkbox label={"Is Special"} onChange={x => handleChange("is_special", x)} checked={user?.is_special ?? false} />
+                            <Checkbox label={"Is Student"} onChange={x => handleChange("is_student", x)} checked={user?.is_student ?? false} />
                         </div>
 
                         <div className={"flex w-[100%]"}>

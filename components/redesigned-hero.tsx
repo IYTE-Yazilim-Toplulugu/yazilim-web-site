@@ -9,12 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CustomGradientBackground } from "@/components/custom-gradient-background"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
-import { Github, Linkedin, Mail, ArrowDown, ExternalLink, Instagram } from "lucide-react"
-import { useToast } from "@/components/ui/use-toast"
+import { ArrowDown, ExternalLink } from "lucide-react"
 import { useIsClient } from "@/hooks/use-is-client"
 import Link from "next/link"
-import { HomeHeroConfig } from "@/types/types"
 import HandleIcons from "./handle-icons"
+import { HomeHeroConfig } from "@/types/types_config";
 
 
 export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConfig }) {

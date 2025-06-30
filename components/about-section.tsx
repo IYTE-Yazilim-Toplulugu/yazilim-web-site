@@ -4,12 +4,12 @@ import { ScrollReveal, StaggeredContainer, StaggerItem } from "@/components/ui/s
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Download, Award, Briefcase, GraduationCap, Heart, ExternalLink } from "lucide-react"
+import { Download, Award, Briefcase, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { HomeAboutUsConfig } from "@/types/types"
 import HandleIcons from "./handle-icons"
+import {HomeAboutUsConfig} from "@/types/types_config";
 
 export default function AboutSection({ home_about_us }: { home_about_us?: HomeAboutUsConfig }) {
     return (

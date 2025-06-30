@@ -1,24 +1,9 @@
 import {createServer} from "@/lib/supabase/server";
 import supabase from "@/lib/supabase/supabase";
+import {AuthError} from "@supabase/auth-js";
+import {UserInfo} from "@/types/types_user";
 
 const pageSize = 50;
-
-export type UserInfo = {
-    id: string,
-    full_name: string,
-    place: string | undefined,
-    email: string | undefined,
-    phone: string,
-    school_number: string | undefined,
-    department: number | undefined,
-    updated_at: string | undefined,
-    created_at: string,
-    receives_emails: boolean,
-    is_admin: boolean,
-    is_special: boolean,
-    is_student: boolean,
-    from_iztech: boolean
-};
 
 export async function register(data: any) {
     const supabase = await createServer();
@@ -83,6 +68,27 @@ export async function signOut() {
     await supabase?.auth.signOut();
 }
 
+export async function getUser(id: string){
+    try{
+        const { data, error } = await supabase
+            .from("full_users")
+            .select<"*", UserInfo>()
+            .filter("id", "eq", id);
+
+        if (error)
+            console.log(error);
+
+        return data && data.length >= 1 ? data.at(0) : null;
+    }
+    catch (err){
+        if (err instanceof Error && !err.message.includes("UUID")){ // Except Invalid UUID Error
+            console.log(err);
+        }
+
+        return null;
+    }
+}
+
 export async function getUsers(page: number, query?: string) {
     page--;
 
@@ -116,4 +122,34 @@ export async function getUsers(page: number, query?: string) {
         data: data,
         pageCount: !count ? 1 : Math.ceil(count / pageSize)
     };
+}
+
+export async function deleteUser(id: string){
+    try{
+        const { error } = await supabase.auth.admin.deleteUser(id, false);
+
+        return error;
+    }
+    catch (err){
+        if (err instanceof Error && !err.message.includes("UUID")){ // Except Invalid UUID Error
+            console.log(err);
+        }
+
+        return new AuthError("UUID was invalid.");
+    }
+}
+
+export async function updateUser(user: any){
+    delete user.email;
+
+    const id = user.id;
+    if (!id || typeof id !== "string")
+        return "Invalid user id.";
+
+    const {error} = await supabase
+        .from("user_infos")
+        .update(user)
+        .filter("id", "eq", id);
+
+    return error;
 }

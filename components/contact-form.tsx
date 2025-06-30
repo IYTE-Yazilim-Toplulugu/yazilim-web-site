@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { motion } from "framer-motion"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,6 +13,10 @@ import { useToast } from "@/components/ui/use-toast"
 import { Send, CheckCircle, Mail, Phone, MapPin } from "lucide-react"
 import { SectionHeader } from "./ui/section-container"
 import { useIsMobile } from "@/hooks/use-mobile"
+import ContactSubmitServer from "@/app/contact/(server)/contact_submit";
+import { getConfigurations } from "@/utils/config_client_util";
+import { ContactConfig, GeneralContactConfig } from "@/types/types_config";
+import Link from "next/link";
 
 // Form validation schema
 const formSchema = z.object({
@@ -33,8 +37,20 @@ const formSchema = z.object({
 export default function ContactForm() {
     const { toast } = useToast()
     const isMobile = useIsMobile()
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [isSubmitted, setIsSubmitted] = useState(false)
+    const [ isSubmitting, setIsSubmitting ] = useState(false)
+    const [ isSubmitted, setIsSubmitted ] = useState(false)
+
+    const [ pageConfig, setPageConfig ] = useState<ContactConfig>()
+    const [ contactConfig, setContactConfig ] = useState<GeneralContactConfig>()
+
+    useEffect(() => {
+        getConfigurations(["general_contact", "contact"]).then(a => {
+           if (a.data && a.data.length > 0){
+                setContactConfig(a.data.find(x => x.key === 'general_contact')?.value);
+                setPageConfig(a.data.find(x => x.key === 'contact')?.value);
+           }
+        });
+    }, [ window.location ]);
 
     // Initialize form
     const form = useForm<z.infer<typeof formSchema>>({
@@ -50,30 +66,30 @@ export default function ContactForm() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true)
 
-        try {
-            const res = await fetch("/utils/contact_util", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-            })
+        const error = await ContactSubmitServer({
+            ...values,
+            id: undefined,
+            created_at: undefined
+        });
 
-            if (!res.ok) throw new Error("Failed to send message.")
-
+        if (!error){
             toast({
                 title: "Message sent!",
                 description: "Thank you for your message. We will get back to you soon.",
-            })
+            });
 
-            setIsSubmitted(true)
-        } catch (error) {
+            setIsSubmitted(true);
+        }
+        else{
+            console.log(error);
             toast({
                 title: "Failed to send",
                 description: "There was a problem sending your message.",
                 variant: "destructive",
-            })
-        } finally {
-            setIsSubmitting(false)
+            });
         }
+
+        setIsSubmitting(false);
     }
 
     return (
@@ -85,11 +101,11 @@ export default function ContactForm() {
                 transition={{ duration: 0.5 }}
             >
                 {isMobile
-                    ? <SectionHeader titleClassName="text-2xl font-bold mb-6" title="Get in Touch" />
-                    : <h1 className="text-2xl font-bold mb-6">Get in Touch</h1>
+                    ? <SectionHeader titleClassName="text-2xl font-bold mb-6" title={pageConfig?.title ?? ""} />
+                    : <h1 className="text-2xl font-bold mb-6">{pageConfig?.title}</h1>
                 }
                 <p className="text-muted-foreground mb-6">
-                    Have a question or want to work together? Fill out the form and we will get back to you as soon as possible.
+                    { pageConfig?.description }
                 </p>
 
                 <div className="space-y-4 mb-6">
@@ -99,7 +115,7 @@ export default function ContactForm() {
                         </div>
                         <div>
                             <div className="text-sm text-muted-foreground">Email</div>
-                            <div>iyteyazilim@iyte.edu.tr</div>
+                            <div>{contactConfig?.email}</div>
                         </div>
                     </div>
 
@@ -109,7 +125,7 @@ export default function ContactForm() {
                         </div>
                         <div>
                             <div className="text-sm text-muted-foreground">Phone</div>
-                            <div>(555) 123 45 67</div>
+                            <div>{contactConfig?.phone}</div>
                         </div>
                     </div>
 
@@ -119,7 +135,7 @@ export default function ContactForm() {
                         </div>
                         <div>
                             <div className="text-sm text-muted-foreground">Location</div>
-                            <div>Izmir, Iztech</div>
+                            <div><Link href={contactConfig?.location_url ?? ""}>{contactConfig?.location_text}</Link></div>
                         </div>
                     </div>
                 </div>

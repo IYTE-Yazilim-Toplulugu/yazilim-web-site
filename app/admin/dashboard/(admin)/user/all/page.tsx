@@ -1,7 +1,6 @@
 'use client'
 
 import {useEffect, useState} from "react";
-import {UserInfo} from "@/utils/user_server_util";
 import UsersAllServer from "@/app/admin/dashboard/(admin)/user/all/(server)/users_all";
 import {Table, TableBody, TableCell, TableHeader, TableRow} from "@/components/admin/ui/table";
 import Button from "@/components/admin/ui/button/Button";
@@ -11,6 +10,7 @@ import Pagination from "@/components/admin/tables/Pagination";
 import {Search} from "lucide-react";
 import Input from "@/components/admin/form/input/InputField";
 import {toast} from "@/hooks/use-toast";
+import {UserInfo} from "@/types/types_user";
 
 async function handleDelete(id: string, name: string){
     if (!confirm(`Are you sure you want to delete ${name}?`))

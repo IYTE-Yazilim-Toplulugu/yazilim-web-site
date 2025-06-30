@@ -16,10 +16,10 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { motion } from 'framer-motion';
 import { useIsClient } from '@/hooks/use-is-client';
 import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { Configuration } from '@/types/types';
 import Loading from '@/components/loading';
 import ConfigurationDefaults from './conf-defaults';
+import {getConfigurations} from "@/utils/config_client_util";
+import {Configuration} from "@/types/types_config";
 
 
 // Simple loading component
@@ -38,32 +38,18 @@ export default function Home() {
 
     const [homeData, setHomeData] = useState<Configuration>(ConfigurationDefaults);
 
-    const supabase = createClient();
-
     // Data fetching
     useEffect(() => {
-        const fetchHomeData = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from("configuration")
-                    .select("*")
-
-                if (error) {
-                    console.error("Error fetching Home page data:", error);
-                }
-                if (data) {
-                    console.log("Fetched Home page data:", data);
-                    // @ts-ignore
-                    setHomeData(data);
-                }
-            } catch (error) {
-                console.error("Unexpected error while fetchin Home page data:", error);
-            } finally {
-                setLoading(false)
+        getConfigurations(["home_hero", "home_about_us", "home_footer"]).then(x => {
+            if (x.data && x.data.length > 0){
+                console.log("Fetched Home page data:", x.data);
+                setHomeData(x.data);
             }
-        }
-
-        fetchHomeData();
+            else{
+                console.error("Error fetching Home page data:", x.error);
+            }
+            setLoading(false);
+        });
     }, [])
 
 

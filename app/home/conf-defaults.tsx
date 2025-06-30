@@ -1,4 +1,4 @@
-import { Configuration } from "@/types/types";
+import {Configuration} from "@/types/types_config";
 
 
 const ConfigurationDefaults: Configuration = [
