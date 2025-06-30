@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -49,25 +49,40 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
     //     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
     // }
 
-    // Typing effect for the subtitle
     const [displayedText, setDisplayedText] = useState("")
-    const fullText = home_hero?.description ?? ""
+    const fullText = useMemo(() => home_hero?.description ?? "", [home_hero]);
 
     useEffect(() => {
-        if (!isClient) return
+        if (!isClient || !fullText) return;
 
-        let i = 0
-        const interval = setInterval(() => {
-            if (i < fullText.length) {
-                setDisplayedText((prev) => prev + fullText.charAt(i))
-                i++
-            } else {
-                clearInterval(interval)
-            }
-        }, 30)
+        // Reset displayed text when fullText changes
+        setDisplayedText("");
 
-        return () => clearInterval(interval)
-    }, [fullText, isClient])
+        let i = 0;
+        let isActive = true; // Flag to prevent stale closures
+
+        const startTyping = () => {
+            const interval = setInterval(() => {
+                if (!isActive) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                if (i < fullText.length) {
+                    setDisplayedText(fullText.substring(0, i + 1)); // Use substring instead of concatenation
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 30);
+        };
+
+        startTyping();
+
+        return () => {
+            isActive = false;
+        };
+    }, [fullText, isClient]);
 
     // Function to highlight specific terms in the text
     const highlightText = (text: string) => {
@@ -117,18 +132,20 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
                         </h1>
                     </ScrollReveal>
 
-                    <ScrollReveal delay={0.2}>
-                        <p className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 leading-relaxed">
-                            {isClient && displayedText.length === fullText.length ? (
-                                <span dangerouslySetInnerHTML={{ __html: highlightText(displayedText) }} />
-                            ) : (
-                                <>
-                                    {displayedText}
-                                    {isClient && <span className="animate-pulse">|</span>}
-                                </>
-                            )}
-                        </p>
-                    </ScrollReveal>
+                    {fullText && (
+                        <ScrollReveal delay={0.2}>
+                            <p className="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 leading-relaxed">
+                                {isClient && displayedText.length === fullText.length ? (
+                                    <span dangerouslySetInnerHTML={{ __html: highlightText(displayedText) }} />
+                                ) : (
+                                    <>
+                                        {displayedText}
+                                        {isClient && <span className="animate-pulse">|</span>}
+                                    </>
+                                )}
+                            </p>
+                        </ScrollReveal>
+                    )}
 
                     <ScrollReveal delay={0.3}>
                         <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-6 md:mb-8">

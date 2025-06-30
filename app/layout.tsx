@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import "./admin/dashboard/globals.css";
 import ResponsiveHeader from "@/components/responsive-header";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
@@ -28,12 +29,8 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <head>
                 {/* Preload critical resources */}
-                <link rel="preload" href="/placeholder.svg?height=400&width=400" as="image" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-
-                {/* Add preload hints for critical JavaScript */}
-                <link rel="preload" href="/_next/static/chunks/framework.js" as="script" />
 
                 {/* Add meta tags for better performance */}
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
@@ -41,6 +38,7 @@ export default function RootLayout({
             </head>
             <body
                 className={`${poppins.variable} antialiased selection:bg-bite-tongue selection:text-primary-foreground`}
+                suppressHydrationWarning
             >
                 {/* defaultTheme enableSystem */}
                 <ThemeProvider defaultTheme="system" enableSystem={true}>

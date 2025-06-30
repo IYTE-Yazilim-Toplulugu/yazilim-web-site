@@ -1,3 +1,4 @@
+import { Survey } from "@/types/types";
 
 // an example for test responses
 export const Test = {
@@ -84,7 +85,7 @@ export const SwiperData =
     ]
 
 
-export const SurveyData =
+export const SurveyData: Survey[] =
     [
         {
             "id": 13123123123,
@@ -95,26 +96,30 @@ export const SurveyData =
             "requirements": null,
             "questions": [
                 {
-                    "id": "q1",
-                    "type": "rating",
+                    "id": 1231,
+                    "type": 1,
+                    "required": true,
                     "question": "How would you rate your overall experience?",
                     "options": [1, 2, 3, 4, 5]
                 },
                 {
-                    "id": "q2",
-                    "type": "multiple_choice",
+                    "id": 13211,
+                    "type": 1,
+                    "required": true,
                     "question": "What device do you use the most to visit our site?",
                     "options": ["Desktop", "Tablet", "Mobile"]
                 },
                 {
-                    "id": "q3",
-                    "type": "checkbox",
+                    "id": 1234,
+                    "type": 2,
+                    "required": true,
                     "question": "Which of these features do you find helpful?",
                     "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"]
                 },
                 {
-                    "id": "q4",
-                    "type": "text",
+                    "id": 145,
+                    "type": 1,
+                    "required": false,
                     "question": "Any suggestions for improvement?",
                     "placeholder": "Your feedback is valuable to us."
                 }
@@ -128,25 +133,29 @@ export const SurveyData =
             "release_date": "2023-10-10",
             "questions": [
                 {
-                    "id": "q1",
-                    "type": "yes_no",
+                    "id": 1584,
+                    "type": 4,
+                    "required": true,
                     "question": "Did you participate in a team?"
                 },
                 {
-                    "id": "q2",
-                    "type": "single_choice",
+                    "id": 19449,
+                    "type": 7,
+                    "required": true,
                     "question": "Which track did you join?",
                     "options": ["AI/ML", "Web Dev", "Cybersecurity", "Game Dev", "Didn't Join"]
                 },
                 {
-                    "id": "q3",
-                    "type": "number",
+                    "id": 13476,
+                    "type": 3,
+                    "required": true,
                     "question": "How many hours did you spend on your project?",
                     "placeholder": "Enter a number"
                 },
                 {
-                    "id": "q4",
-                    "type": "text",
+                    "id": 62354,
+                    "type": 2,
+                    "required": false,
                     "question": "Share your favorite moment from the event.",
                     "placeholder": "We'd love to hear your story!"
                 }
@@ -160,20 +169,23 @@ export const SurveyData =
             "release_date": "2023-10-15",
             "questions": [
                 {
-                    "id": "q1",
-                    "type": "text",
+                    "id": 11231,
+                    "type": 4,
+                    "required": true,
                     "question": "What feature would you like us to build?",
                     "placeholder": "Describe the feature in detail."
                 },
                 {
-                    "id": "q2",
-                    "type": "text",
+                    "id": 2234,
+                    "type": 1,
+                    "required": true,
                     "question": "Why is this feature important to you?",
                     "placeholder": "Explain how this feature would benefit you."
                 },
                 {
-                    "id": "q3",
-                    "type": "date",
+                    "id": 14938,
+                    "type": 5,
+                    "required": true,
                     "question": "When do you need this feature by?"
                 }
             ]

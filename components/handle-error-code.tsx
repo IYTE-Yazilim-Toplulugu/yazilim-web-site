@@ -12,6 +12,13 @@ const handleErrorCode = (code: string) => {
             });
             break;
 
+        case "23514":
+            toast({
+                title: "Validation Error",
+                description: "The submitted data does not meet validation criteria.",
+                variant: "destructive",
+            })
+            break;
         case '23503': // Foreign key violation
             toast({
                 title: "Submission Error",

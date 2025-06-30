@@ -1,7 +1,7 @@
 "use client";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
-import { MoreDotIcon } from "@/public/admin/icons";
+import { MoreDotIcon } from "@/components/admin/icons";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";

@@ -1,7 +1,7 @@
-import {createServer} from "@/lib/supabase/server";
+import { createServer } from "@/lib/supabase/server";
 import supabase from "@/lib/supabase/supabase";
-import {AuthError} from "@supabase/auth-js";
-import {UserInfo} from "@/types/types_user";
+import { AuthError } from "@supabase/auth-js";
+import { UserInfo } from "@/types/types_user";
 
 const pageSize = 50;
 
@@ -68,8 +68,8 @@ export async function signOut() {
     await supabase?.auth.signOut();
 }
 
-export async function getUser(id: string){
-    try{
+export async function getUser(id: string) {
+    try {
         const { data, error } = await supabase
             .from("full_users")
             .select<"*", UserInfo>()
@@ -80,8 +80,8 @@ export async function getUser(id: string){
 
         return data && data.length >= 1 ? data.at(0) : null;
     }
-    catch (err){
-        if (err instanceof Error && !err.message.includes("UUID")){ // Except Invalid UUID Error
+    catch (err) {
+        if (err instanceof Error && !err.message.includes("UUID")) { // Except Invalid UUID Error
             console.log(err);
         }
 
@@ -109,14 +109,14 @@ export async function getUsers(page: number, query?: string) {
         q = q.ilike('search_impl', query);
     }
 
-    const {data, error, count} = await q
+    const { data, error, count } = await q
         .order("created_at", {
             ascending: false
         })
         .range(index, index + pageSize - 1);
 
     if (error)
-        console.log(error);
+        console.error(error);
 
     return {
         data: data,
@@ -124,14 +124,13 @@ export async function getUsers(page: number, query?: string) {
     };
 }
 
-export async function deleteUser(id: string){
-    try{
+export async function deleteUser(id: string) {
+    try {
         const { error } = await supabase.auth.admin.deleteUser(id, false);
-
-        return error;
+        return { error };
     }
-    catch (err){
-        if (err instanceof Error && !err.message.includes("UUID")){ // Except Invalid UUID Error
+    catch (err) {
+        if (err instanceof Error && !err.message.includes("UUID")) { // Except Invalid UUID Error
             console.log(err);
         }
 
@@ -139,17 +138,17 @@ export async function deleteUser(id: string){
     }
 }
 
-export async function updateUser(user: any){
+export async function updateUser(user: any) {
     delete user.email;
 
     const id = user.id;
     if (!id || typeof id !== "string")
-        return "Invalid user id.";
+        return { error: "Invalid user id." };
 
-    const {error} = await supabase
+    const { error } = await supabase
         .from("user_infos")
         .update(user)
         .filter("id", "eq", id);
 
-    return error;
+    return { error };
 }

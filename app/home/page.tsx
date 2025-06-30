@@ -18,8 +18,8 @@ import { useIsClient } from '@/hooks/use-is-client';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/loading';
 import ConfigurationDefaults from './conf-defaults';
-import {getConfigurations} from "@/utils/config_client_util";
-import {Configuration} from "@/types/types_config";
+import { getConfigurations } from "@/utils/config_client_util";
+import { Configuration } from "@/types/types_config";
 
 
 // Simple loading component
@@ -41,11 +41,11 @@ export default function Home() {
     // Data fetching
     useEffect(() => {
         getConfigurations(["home_hero", "home_about_us", "home_footer"]).then(x => {
-            if (x.data && x.data.length > 0){
+            if (x.data && x.data.length > 0) {
                 console.log("Fetched Home page data:", x.data);
                 setHomeData(x.data);
             }
-            else{
+            else {
                 console.error("Error fetching Home page data:", x.error);
             }
             setLoading(false);
@@ -58,7 +58,7 @@ export default function Home() {
     }
 
     return (
-        <main className="min-h-screen">
+        <div className="min-h-screen">
 
             <ErrorBoundary fallback={<SectionFallback title="Hero" />}>
                 <Suspense fallback={<LoadingSection name="Hero" />}>
@@ -137,6 +137,6 @@ export default function Home() {
                     <EnhancedFooter home_footer={homeData.find(item => item.key === "home_footer")?.value} />
                 </Suspense>
             </ErrorBoundary>
-        </main >
+        </div >
     )
 }

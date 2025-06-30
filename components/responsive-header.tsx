@@ -218,7 +218,7 @@ export default function ResponsiveHeader() {
                                                 variant="outline"
                                                 size="icon"
                                                 className="p-4 w-fit"
-                                                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                                                aria-label="login"
                                             >
                                                 {userInfo ? "Logout" : "Login"}
                                             </Button>
@@ -226,6 +226,7 @@ export default function ResponsiveHeader() {
                                         <ThemeChanger />
                                     </div>
                                 )}
+                                {isMobile && <ThemeChanger />}
                             </div>
                         }
                     </motion.div>
@@ -276,15 +277,17 @@ export default function ResponsiveHeader() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.3, delay: 10 * 0.05 }}
                             >
-                                <Link href={userInfo ? "/logout" : "/login"} >
-                                    <div className="p-1 -mt-1.5 mb-2
+                                {isMobile && (
+                                    <Link href={userInfo ? "/logout" : "/login"} >
+                                        <div className="p-1 -mt-1.5 mb-2
                                         relative transition-colors hover:text-primary w-fit 
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-                                    >
-                                        {userInfo ? "Logout" : "Login"}
-                                    </div>
-                                </Link>
+                                            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                                        >
+                                            {userInfo ? "Logout" : "Login"}
+                                        </div>
+                                    </Link>
+                                )}
                                 {userInfo?.user_metadata.isAdmin && (
                                     <Link href="/admin/dashboard">
                                         <div className="p-1

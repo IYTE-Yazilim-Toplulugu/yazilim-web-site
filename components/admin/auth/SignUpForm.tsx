@@ -2,7 +2,7 @@
 import Checkbox from "../form/input/Checkbox";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/public/admin/icons";
+import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/components/admin/icons";
 import Link from "next/link";
 import React, { useState } from "react";
 

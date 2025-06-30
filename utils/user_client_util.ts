@@ -15,3 +15,9 @@ export async function getUser() {
 export async function getSessionUser() {
     return createClient()?.auth.getSession().then(x => x?.data?.session?.user);
 }
+
+export async function getUserIp(): Promise<string> {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip;
+}

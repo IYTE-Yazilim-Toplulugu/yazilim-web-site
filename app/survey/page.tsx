@@ -5,7 +5,6 @@ import { Check, Circle, X } from 'lucide-react';
 import Image from 'next/image';
 
 import { SurveyData } from '@/lib/pseudo';
-import { createClient } from '@/lib/supabase/client';
 import { SectionHeader } from '@/components/ui/section-container';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -15,8 +14,9 @@ import DatePicker from '@/components/datepicker';
 import { Dropdown } from '@/components/dropdown';
 import handleErrorCode from '@/components/handle-error-code';
 import { toast } from '@/hooks/use-toast';
-import { getUser } from '@/utils/user_client_util';
+import { getUser, getUserIp } from '@/utils/user_client_util';
 import { QuestionFill, AnswerHandlerProps, Question } from '@/types/types';
+import { getSurveys, postSurveyAnswer, getAnsweredSurveys } from '@/utils/survey_client_util';
 
 export default function Survey() {
     const containerRef = useRef(null);
@@ -26,69 +26,72 @@ export default function Survey() {
     const [surveyFill, setSurveyFill] = useState<QuestionFill[]>([]); // Survey Request array
 
     // Handler variables
-    const [focusedId, setFocusedId] = useState<number | null>();
+    const [focusedId, setFocusedId] = useState<number | null>(null);
+    const [_answeredSurveys, setAnsweredSurveys] = useState<QuestionFill[] | null>();
     const currentSurvey = surveyData.find((s) => s.id === focusedId);
     const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState<Record<number, string>>({});
 
-    // const [rating, setRating] = useState();
-
-    const supabase = createClient();
     const [userInfo, setUserInfo] = useState<any>(null);
 
 
     // Data fetching
     useEffect(() => {
-        getUser().then((user) => setUserInfo(user));
-        const fetchSurveyData = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from("surveys")
-                    .select("*")
-                    .eq("is_active", true);
+        getUser()
+            .then((user) => {
+                setUserInfo(user)
+                return user?.id
+            })
+            .then((userId) => {
+                return userId ? getAnsweredSurveyData(userId) : null
+            })
+            .then((data) => {
+                // @ts-ignore
+                return fetchSurveyData(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching user data:", error);
+                handleErrorCode(error.code);
+            })
 
-                if (error) {
-                    console.error("Error fetching survey data:", error);
-                    throw error;
-                }
+    }, [focusedId, userInfo?.id]);
 
-                if (data) {
-                    setSurveyData(data);
-                }
-            } catch (error) {
-                console.error("Error fetching survey data:", error);
-
-            } finally {
-                setLoading(false)
-            }
+    const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null) => {
+        try {
+            getSurveys(answeredSurveys, true)
+                .then(x => {
+                    if (x.data && x.data.length > 0) {
+                        setSurveyData(x.data);
+                    } else {
+                        console.error("Error fetching survey data:", x.error);
+                        handleErrorCode(x.error?.code || "");
+                    }
+                })
+                .then(() => setLoading(false))
+        } catch (error) {
+            console.error("Unexpected error while fetching survey data:", error);
         }
-
-        fetchSurveyData();
-    }, [])
+    }
 
     const postSurveyData = async () => {
         try {
             const answers = surveyFill.map(({ survey_id, type, ...rest }) => rest);
-            console.log(userInfo)
-            const { error } = await supabase
-                .from("survey_answers")
-                .insert({
-                    user_id: userInfo?.id,
-                    survey_id: focusedId,
-                    answered_at: new Date().toISOString(),
-                    answers: answers,
-                });
-            if (error) {
-                console.error("Error submitting survey answers:", error);
-                handleErrorCode(error.code);
-            } else {
-                toast({
-                    title: "Success",
-                    description: "Your survey answers have been submitted successfully.",
-                    variant: "success",
+            const ip: string = await getUserIp();
+
+            postSurveyAnswer(userInfo?.id, focusedId, answers, ip)
+                .then(x => {
+                    if (x.error) {
+                        console.error("Error submitting survey answers:", x.error);
+                        handleErrorCode(x.error.code);
+                    } else {
+                        toast({
+                            title: "Success",
+                            description: "Your survey answers have been submitted successfully.",
+                            variant: "success",
+                        })
+                        setFocusedId(null);
+                    }
                 })
-                setFocusedId(null);
-            }
         } catch (error) {
             console.error("Unexpected Error", error);
             toast({
@@ -98,6 +101,33 @@ export default function Survey() {
             })
         }
     }
+
+    const getAnsweredSurveyData = async (userId: string) => {
+        try {
+            return getAnsweredSurveys(userId)
+                .then(x => {
+                    if (x.data && x.data.length > 0) {
+                        setAnsweredSurveys(x.data);
+                        return x.data;
+                    }
+                    if (x.error) {
+                        console.error("Error fetching survey answers:", x.error);
+                        handleErrorCode(x.error.code);
+                    }
+                    return null;
+                })
+        } catch (error) {
+            console.error("Unexpected error while fetching answered surveys:", error);
+            toast({
+                title: "Unexpected Error",
+                description: "Unexpected error while fetching survey data",
+                variant: "destructive",
+            })
+        }
+
+    }
+
+
 
     useEffect(() => {
         if (!focusedId) {
@@ -264,7 +294,22 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                 )
             case 2: // number
                 const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-                    const numeric = Number(e.target.value);
+                    const value = e.target.value.trim();
+
+                    const MIN_INT32 = 0;
+                    const MAX_INT32 = 4294967295;
+
+                    const numeric = Number(value);
+
+                    // Just for reliability
+                    if (Number.isNaN(numeric) || !Number.isInteger(numeric)) {
+                        console.warn("Invalid input: not an integer.");
+                        return;
+                    }
+                    if (numeric < MIN_INT32 || numeric > MAX_INT32) {
+                        console.warn("Value is out of 32-bit integer range.");
+                        return;
+                    }
 
                     setSurveyFill((prevState) => {
                         const exists = prevState.some((item) => item.question_id === question_id);
@@ -274,6 +319,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                             type,
                             answer: numeric,
                         };
+
                         return exists
                             ? prevState.map((item) =>
                                 item.question_id === question_id ? updatedAnswer : item
@@ -286,9 +332,18 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                         <Input
                             placeholder={placeholder}
                             type="number"
+                            inputMode="numeric"
                             min={0}
-                            value={surveyFill.find((item) => item.question_id === question_id)?.answer?.toString() || ""}
+                            max={4294967295}
+                            step={1}
+                            value={surveyFill.find((item) => item.question_id === question_id)?.answer?.toString() ?? ""}
                             onChange={(e) => handleNumberChange(e)}
+                            onFocus={(e) => {
+                                if (e.currentTarget.value === "") {
+                                    e.currentTarget.value = "0";
+                                    handleNumberChange({ target: e.currentTarget } as React.ChangeEvent<HTMLInputElement>);
+                                }
+                            }}
                             onWheel={(e) => e.currentTarget.blur()}
                             onPaste={(e) => {
                                 const pasted = e.clipboardData.getData("text");
@@ -320,11 +375,6 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                 }
                                 if (surveyFill.find(item => item.question_id === question_id)) {
                                     setSurveyFill(prev => {
-                                        console.log(prev.map(item =>
-                                            item.question_id === question_id
-                                                ? { ...item, answer: newNote }
-                                                : item
-                                        ));
                                         return prev.map(item =>
                                             item.question_id === question_id
                                                 ? { ...item, answer: newNote }
@@ -333,13 +383,6 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                     });
                                 } else {
                                     setSurveyFill(prev => {
-                                        console.log([...prev,
-                                        {
-                                            survey_id: survey_id,
-                                            question_id: question_id,
-                                            type: type,
-                                            answer: newNote
-                                        }]);
                                         return [...prev,
                                         {
                                             survey_id: survey_id,

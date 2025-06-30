@@ -2,36 +2,35 @@
 
 import Input from "@/components/admin/form/input/InputField";
 import Select from "@/components/admin/form/Select";
-import UserDetailServer, {Department} from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
-import {useEffect, useState} from "react";
+import UserDetailServer, { Department } from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
+import { useEffect, useState } from "react";
 import Label from "@/components/admin/form/Label";
-import {redirect, useParams} from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import Checkbox from "@/components/admin/form/input/Checkbox";
 import Button from "@/components/admin/ui/button/Button";
 import Form from "@/components/admin/form/Form";
 import UserDetailUpdateServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail_update";
 import UserDeleteServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_delete";
 import Link from "next/link";
-import {toast} from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 
-import {UserInfo} from "@/types/types_user";
+import { UserInfo } from "@/types/types_user";
+import handleErrorCode from "@/components/handle-error-code";
 
 async function onSubmit(user: any) {
-    const error = await UserDetailUpdateServer(user);
+    const { error } = await UserDetailUpdateServer(user);
 
     if (!error) {
         toast({
-            variant: "default",
-            description: "Success",
+            title: "Success",
+            description: "User updated successfully.",
+            variant: "success",
         });
     }
     else {
-        console.log(error);
-        toast({
-            variant: "default",
-            description: "See console.",
-            title: "Failed"
-        });
+        console.error(error);
+        // @ts-ignore
+        handleErrorCode(error.code);
     }
 }
 

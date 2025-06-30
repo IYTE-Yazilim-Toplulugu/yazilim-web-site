@@ -1,7 +1,7 @@
 import GridShape from "@/components/admin/common/GridShape";
 import ThemeTogglerTwo from "@/components/admin/common/ThemeTogglerTwo";
 
-import { ThemeProvider } from "@/components/admin/context/ThemeContext";
+import { ThemeProvider } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

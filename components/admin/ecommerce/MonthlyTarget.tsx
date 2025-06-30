@@ -4,7 +4,7 @@ import { ApexOptions } from "apexcharts";
 
 import dynamic from "next/dynamic";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { MoreDotIcon } from "@/public/admin/icons";
+import { MoreDotIcon } from "@/components/admin/icons";
 import { useState } from "react";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 // Dynamically import the ReactApexChart component

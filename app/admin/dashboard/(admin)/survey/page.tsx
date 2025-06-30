@@ -1,50 +1,56 @@
-'use client'
-
-import { useEffect, useState } from "react";
-import UsersAllServer from "@/app/admin/dashboard/(admin)/user/all/(server)/users_all";
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/admin/ui/table";
-import Button from "@/components/admin/ui/button/Button";
-import Link from "next/link";
-import UserDeleteServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_delete";
-import Pagination from "@/components/admin/tables/Pagination";
-import { Search } from "lucide-react";
-import Input from "@/components/admin/form/input/InputField";
+"use client";
+import handleErrorCode from "@/components/handle-error-code";
 import { toast } from "@/hooks/use-toast";
-import { UserInfo } from "@/types/types_user";
+import { deleteSurvey } from "@/utils/survey_server_util";
+import { useEffect, useState } from "react";
+import SurveysAll from "./(server)/surveys_all";
+import { Survey } from "@/types/types";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-async function handleDelete(id: string, name: string) {
-    if (!confirm(`Are you sure you want to delete ${name}?`))
+
+async function handleDelete(id: number, title: string) {
+    if (!confirm(`Are you sure you want to delete the survey "${title}"? This action cannot be undone.`)) {
         return;
-
-    const error = await UserDeleteServer(id);
+    }
+    const error = await deleteSurvey(id);
 
     if (!error) {
         toast({
-            variant: "default",
-            description: "Success",
-        });
-    }
-    else {
-        console.error(error);
+            title: "Survey deleted successfully",
+            description: "The survey has been removed from the database.",
+            variant: "success",
+        })
+    } else {
+        console.error("Error deleting survey:", error);
         // @ts-ignore
-        handleErrorCode(error.code);
+        handleErrorCode(error.error?.code)
     }
 }
 
-export default function UsersAll() {
-    const [users, setUsers] = useState<UserInfo[]>();
+
+
+export default function AdminSurveyPage() {
+    const [surveys, setSurveys] = useState<Survey[]>();
     const [pageCount, setPageCount] = useState<number>(1);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState<string>();
     const [queryTemp, setQueryTemp] = useState<string>();
 
     useEffect(() => {
-        UsersAllServer(page, query).then(r => {
-            setUsers(r.data ?? []);
+        SurveysAll(page, query).then(r => {
+            setSurveys(r.data ?? []);
             setPageCount(r.pageCount);
         });
     }, [page, query]);
 
+
+    // ======== THIS NOT IMPLEMENTED YET ========
+    // ======== THIS NOT IMPLEMENTED YET ========
+    // ======== THIS NOT IMPLEMENTED YET ========
+    // ======== THIS NOT IMPLEMENTED YET ========
+    //
+    //
     return (
         <div>
             <div className={"justify-end gap-2 w-full items-center flex flex-row"}>
@@ -61,9 +67,9 @@ export default function UsersAll() {
             <Table className={"p-5 border-separate border-spacing-4 "}>
                 <TableHeader>
                     <TableRow className={"font-bold"}>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Phone</TableCell>
+                        <TableCell>Title</TableCell>
+                        <TableCell>Description</TableCell>
+                        <TableCell>Required</TableCell>
                         <TableCell>Is Special</TableCell>
                         <TableCell>Is Student</TableCell>
                         <TableCell>From IZTECH</TableCell>
@@ -94,5 +100,6 @@ export default function UsersAll() {
                 <Pagination currentPage={page} totalPages={pageCount} onPageChange={setPage} />
             </div>
         </div>
-    );
+    )
+
 }
