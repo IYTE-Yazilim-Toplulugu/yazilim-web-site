@@ -151,7 +151,7 @@ export default function ResponsiveHeader() {
             className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-border transition-all duration-300 ${isScrolled ? "border-b" : "bg-transparent"}`}
         >
             {!isMobile && userInfo?.user_metadata.isAdmin && (
-                <Link href="/admin/dashboard">
+                <Link href="/admin/">
                     <Button variant="outline" className="m-4 absolute top-16 right-0 z-50 cursor-pointer">
                         Go To Dashboard
                     </Button>
@@ -289,7 +289,7 @@ export default function ResponsiveHeader() {
                                     </Link>
                                 )}
                                 {userInfo?.user_metadata.isAdmin && (
-                                    <Link href="/admin/dashboard">
+                                    <Link href="/admin/">
                                         <div className="p-1
                                         relative transition-colors hover:text-primary w-fit 
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
