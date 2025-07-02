@@ -312,7 +312,7 @@ export default function AdminSurveysPage() {
                                     dark:hover:text-primary cursor-pointer
                                     text-center text-sidebar-ring 
                                     hover:bg-sidebar-ring hover:text-background">
-                                        <Link href={"/admin/dashboard/survey/" + u.id} className="p-4">Edit</Link>
+                                        <Link href={"/admin/survey/" + u.id} className="p-4">Edit</Link>
                                     </TableCell>
                                     <TableCell className="p-4
                                     text-destructive text-center
@@ -328,7 +328,7 @@ export default function AdminSurveysPage() {
                 </div>
             </div>
             <div className={"relative w-full flex flex-wrap items-center justify-center gap-4"}>
-                <Link href={"/admin/dashboard/survey/0"}>
+                <Link href={"/admin/survey/0"}>
                     <Button variant={"secondary"} className="cursor-pointer select-none">
                         <p>Create</p>
                         <PlusIcon />

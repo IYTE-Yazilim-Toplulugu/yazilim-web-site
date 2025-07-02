@@ -35,7 +35,7 @@ async function getSurveys(answeredSurveys: QuestionFill[] | null, is_active: boo
     };
 }
 
-function getRequirementFilters(userMetadata: any): string[] {
+function getRequirementFilters(userMetadata: UserMetadata): string[] {
     const filters = new Set<string>();
     console.log("User metadata", userMetadata);
 
@@ -45,13 +45,11 @@ function getRequirementFilters(userMetadata: any): string[] {
         filters.add('requirements->>type.is.null');
         filters.add('requirements->>type.eq.0');
         filters.add('requirements->>type.eq.1');
-        console.log("Student filters added");
     }
     if (userMetadata.isSpecial) {
         filters.add('requirements->>type.is.null');
         filters.add('requirements->>type.eq.0');
         filters.add('requirements->>type.eq.2');
-        console.log("Special filters added");
     }
     if (userMetadata.isAdmin) {
         filters.add('requirements->>type.is.null');
@@ -59,7 +57,6 @@ function getRequirementFilters(userMetadata: any): string[] {
         filters.add('requirements->>type.eq.1');
         filters.add('requirements->>type.eq.2');
         filters.add('requirements->>type.eq.3');
-        console.log("Admin filters added");
     }
 
     return Array.from(filters);

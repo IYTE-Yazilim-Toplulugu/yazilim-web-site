@@ -64,7 +64,7 @@ export default function SurveyPage() {
 
     const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null, user: User) => {
         try {
-            getSurveys(answeredSurveys, true, userInfo)
+            getSurveys(answeredSurveys, true, user)
                 .then(x => {
                     if (x.data) {
                         setSurveyData(x.data);

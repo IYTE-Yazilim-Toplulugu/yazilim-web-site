@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function YazilimBlankPage({ content = "SUCH A BLANK PAGE", emoji }: { content?: string, emoji?: string }) {
     return (
-        <div className="min-h-screen w-full bg-gradient-to-br relative">
+        <div className="h-screen w-full bg-gradient-to-br relative">
             {/* Animated background elements */}
             <div className="fixed inset-0 pointer-events-none z-10">
                 <div className="absolute top-[10%] left-[10%] text-4xl font-bold text-orange-500 opacity-10 animate-pulse">
@@ -14,6 +14,9 @@ export default function YazilimBlankPage({ content = "SUCH A BLANK PAGE", emoji 
                 <div className="absolute bottom-[30%] left-[20%] text-4xl font-bold text-orange-500 opacity-10 animate-pulse delay-1000">
                     {'{/}'}
                 </div>
+                <div className="absolute top-[40%] left-[15%] text-4xl font-bold text-orange-500 opacity-10 animate-bounce">
+                    {'{/}'}
+                </div>
                 <div className="absolute bottom-[20%] right-[10%] text-4xl font-bold text-orange-500 opacity-10 animate-bounce delay-2000">
                     {'{/}'}
                 </div>
@@ -21,12 +24,12 @@ export default function YazilimBlankPage({ content = "SUCH A BLANK PAGE", emoji 
 
             <div className="relative z-20 flex flex-col min-h-screen">
                 {/* Header */}
-                <header className="p-8 text-center bg-black/30 backdrop-blur-md ">
+                <header className="p-8 text-center">
                     <div className="text-6xl md:text-7xl font-bold text-orange-500 mb-4 animate-pulse drop-shadow-lg">
                         {'{/}'}
                     </div>
                     <div className="flex flex-row items-center justify-center space-x-2">
-                        <h1 className="my-16 text-3xl md:text-4xl font-light tracking-wider mb-2 bg-gradient-to-r from-white to-orange-500 bg-clip-text text-transparent">{content}</h1>
+                        <h1 className={`my-16 text-3xl md:text-4xl font-light tracking-wider mb-2 bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent`}>{content}</h1>
                         <h1 className="my-16 text-nowrap text-3xl md:text-4xl font-light tracking-wider mb-2 ">{emoji}</h1>
                     </div>
                     {/* <p className="text-lg md:text-xl text-gray-300 font-light tracking-wide"> */}

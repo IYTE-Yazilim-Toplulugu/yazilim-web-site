@@ -41,7 +41,7 @@ const navItems: NavItem[] = [
     {
         icon: <MessageCircleQuestionIcon />,
         name: "Surveys",
-        path: "/admin/survey/all",
+        path: "/admin/survey",
     },
     {
         icon: <Rss />,
@@ -105,54 +105,26 @@ const AppSidebar: React.FC = () => {
     const renderMenuItems = (
         navItems: NavItem[]
     ) => (
-        <ul className={`flex flex-col gap-4 ${ isExpanded || isHovered || isMobileOpen ? '' : 'items-center' }`}>
+        <ul className={`flex flex-col gap-4 ${isExpanded || isHovered || isMobileOpen ? '' : 'items-center'}`}>
             {navItems.map((nav, index) => {
                 const isActive = nav.path ? checkActive(nav.path) : false;
                 return (
-                <li key={nav.name}>
-                    {nav.subItems ? (
-                        <button
-                            onClick={() => handleSubmenuToggle(index)}
-                            className={`menu-item flex flex-row gap-4 justify-center ${openSubmenu?.index === index
-                                ? "menu-item-active"
-                                : "menu-item-inactive"
-                                } cursor-pointer ${!isExpanded && !isHovered
-                                    ? "lg:justify-center"
-                                    : "lg:justify-start"
-                                }`}
-                        >
-                            <span
-                                className={` ${openSubmenu?.index === index
-                                    ? "menu-item-icon-active"
-                                    : "menu-item-icon-inactive"
-                                    }`}
-                            >
-                                {nav.icon}
-                            </span>
-                            {(isExpanded || isHovered || isMobileOpen) && (
-                                <span className={`menu-item-text`}>{nav.name}</span>
-                            )}
-                            {(isExpanded || isHovered || isMobileOpen) && (
-                                <ChevronDownIcon
-                                    className={`ml-auto w-5 h-5 transition-transform duration-200  ${
-                                        openSubmenu?.index === index
-                                        ? "rotate-180 text-brand-500"
-                                        : ""
-                                        }`}
-                                />
-                            )}
-                        </button>
-                    ) : (
-                        nav.path && (
-                            <Link
-                                href={nav.path}
-                                className={`${isActive ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'} p-3 rounded-xl hover:opacity-70 flex flex-row gap-4 ${isActive ? "menu-item-active" : "menu-item-inactive"
+                    <li key={nav.name}>
+                        {nav.subItems ? (
+                            <button
+                                onClick={() => handleSubmenuToggle(index)}
+                                className={`menu-item flex flex-row gap-4 justify-center ${openSubmenu?.index === index
+                                    ? "menu-item-active"
+                                    : "menu-item-inactive"
+                                    } cursor-pointer ${!isExpanded && !isHovered
+                                        ? "lg:justify-center"
+                                        : "lg:justify-start"
                                     }`}
                             >
                                 <span
-                                    className={`${isActive
-                                        ? "text-white"
-                                        : ""
+                                    className={` ${openSubmenu?.index === index
+                                        ? "menu-item-icon-active"
+                                        : "menu-item-icon-inactive"
                                         }`}
                                 >
                                     {nav.icon}
@@ -160,55 +132,84 @@ const AppSidebar: React.FC = () => {
                                 {(isExpanded || isHovered || isMobileOpen) && (
                                     <span className={`menu-item-text`}>{nav.name}</span>
                                 )}
-                            </Link>
-                        )
-                    )}
-                    {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
-                        <div
-                            ref={(el) => {
-                                subMenuRefs.current[`nav-${index}`] = el;
-                            }}
-                            className="overflow-hidden transition-all duration-300"
-                            style={{
-                                height:
-                                    openSubmenu?.index === index
-                                        ? `${subMenuHeight[`nav-${index}`]}px`
-                                        : "0px",
-                            }}
-                        >
-                            <ul className="mt-2 space-y-1 ml-9">
-                                {nav.subItems.map((subItem) => {
-                                    const isActive = checkActive(subItem.path);
-                                    return (
-                                    <li key={subItem.name}>
-                                        <Link
-                                            href={subItem.path}
-                                            className={`menu-dropdown-item ${isActive
-                                                ? "menu-dropdown-item-active"
-                                                : "menu-dropdown-item-inactive"
-                                                }`}
-                                        >
-                                            {subItem.name}
-                                            <span className="flex items-center gap-1 ml-auto">
-                                                {subItem.new && (
-                                                    <span
-                                                        className={`ml-auto ${isActive
-                                                            ? "menu-dropdown-badge-active"
-                                                            : "menu-dropdown-badge-inactive"
-                                                            } menu-dropdown-badge `}
-                                                    >
-                                                        new
+                                {(isExpanded || isHovered || isMobileOpen) && (
+                                    <ChevronDownIcon
+                                        className={`ml-auto w-5 h-5 transition-transform duration-200  ${openSubmenu?.index === index
+                                                ? "rotate-180 text-brand-500"
+                                                : ""
+                                            }`}
+                                    />
+                                )}
+                            </button>
+                        ) : (
+                            nav.path && (
+                                <Link
+                                    href={nav.path}
+                                    className={`${isActive ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'} p-3 rounded-xl hover:opacity-70 flex flex-row gap-4 ${isActive ? "menu-item-active" : "menu-item-inactive"
+                                        }`}
+                                >
+                                    <span
+                                        className={`${isActive
+                                            ? "text-white"
+                                            : ""
+                                            }`}
+                                    >
+                                        {nav.icon}
+                                    </span>
+                                    {(isExpanded || isHovered || isMobileOpen) && (
+                                        <span className={`menu-item-text`}>{nav.name}</span>
+                                    )}
+                                </Link>
+                            )
+                        )}
+                        {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
+                            <div
+                                ref={(el) => {
+                                    subMenuRefs.current[`nav-${index}`] = el;
+                                }}
+                                className="overflow-hidden transition-all duration-300"
+                                style={{
+                                    height:
+                                        openSubmenu?.index === index
+                                            ? `${subMenuHeight[`nav-${index}`]}px`
+                                            : "0px",
+                                }}
+                            >
+                                <ul className="mt-2 space-y-1 ml-9">
+                                    {nav.subItems.map((subItem) => {
+                                        const isActive = checkActive(subItem.path);
+                                        return (
+                                            <li key={subItem.name}>
+                                                <Link
+                                                    href={subItem.path}
+                                                    className={`menu-dropdown-item ${isActive
+                                                        ? "menu-dropdown-item-active"
+                                                        : "menu-dropdown-item-inactive"
+                                                        }`}
+                                                >
+                                                    {subItem.name}
+                                                    <span className="flex items-center gap-1 ml-auto">
+                                                        {subItem.new && (
+                                                            <span
+                                                                className={`ml-auto ${isActive
+                                                                    ? "menu-dropdown-badge-active"
+                                                                    : "menu-dropdown-badge-inactive"
+                                                                    } menu-dropdown-badge `}
+                                                            >
+                                                                new
+                                                            </span>
+                                                        )}
                                                     </span>
-                                                )}
-                                            </span>
-                                        </Link>
-                                    </li>
-                                );})}
-                            </ul>
-                        </div>
-                    )}
-                </li>
-            );})}
+                                                </Link>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
+                        )}
+                    </li>
+                );
+            })}
         </ul>
     );
 
@@ -230,7 +231,7 @@ const AppSidebar: React.FC = () => {
             if (nav.subItems) {
                 nav.subItems.forEach((subItem) => {
                     if (checkActive(subItem.path)) {
-                        setOpenSubmenu({index: index});
+                        setOpenSubmenu({ index: index });
                         submenuMatched = true;
                     }
                 });
@@ -293,8 +294,8 @@ const AppSidebar: React.FC = () => {
                             width={48}
                         />
                         <span className={"text-gray-800 dark:text-gray-200 text-xl"}>
-                                Software Society
-                            </span>
+                            Software Society
+                        </span>
                     </div>
                 ) : (
                     <YazilimIcon

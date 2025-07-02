@@ -11,25 +11,7 @@ import { Search } from "lucide-react";
 import Input from "@/components/admin/form/input/InputField";
 import { toast } from "@/hooks/use-toast";
 import { UserInfo } from "@/types/types_user";
-
-async function handleDelete(id: string, name: string) {
-    if (!confirm(`Are you sure you want to delete ${name}?`))
-        return;
-
-    const error = await UserDeleteServer(id);
-
-    if (!error) {
-        toast({
-            variant: "default",
-            description: "Success",
-        });
-    }
-    else {
-        console.error(error);
-        // @ts-ignore
-        handleErrorCode(error.code);
-    }
-}
+import handleErrorCode from "@/components/handle-error-code";
 
 export default function UsersAll() {
     const [users, setUsers] = useState<UserInfo[]>();
@@ -39,11 +21,35 @@ export default function UsersAll() {
     const [queryTemp, setQueryTemp] = useState<string>();
 
     useEffect(() => {
+        fetchUsers();
+    }, [page, query]);
+    const fetchUsers = async () => {
+
         UsersAllServer(page, query).then(r => {
             setUsers(r.data ?? []);
             setPageCount(r.pageCount);
         });
-    }, [page, query]);
+    }
+
+    async function handleDelete(id: string, name: string) {
+        if (!confirm(`Are you sure you want to delete ${name}?`))
+            return;
+
+        const error = await UserDeleteServer(id);
+
+        if (!error) {
+            toast({
+                variant: "default",
+                description: "Success",
+            });
+            fetchUsers();
+        }
+        else {
+            console.error(error);
+            // @ts-ignore
+            handleErrorCode(error.code);
+        }
+    }
 
     return (
         <div>
@@ -79,9 +85,9 @@ export default function UsersAll() {
                                 <TableCell>{u.full_name}</TableCell>
                                 <TableCell>{u.email}</TableCell>
                                 <TableCell>{u.phone}</TableCell>
-                                <TableCell>{u.is_special ? "+" : "-"}</TableCell>
-                                <TableCell>{u.is_student ? "+" : "-"}</TableCell>
-                                <TableCell>{u.from_iztech ? "+" : "-"}</TableCell>
+                                <TableCell className="text-xl">{u.is_special ? "+" : "-"}</TableCell>
+                                <TableCell className="text-xl">{u.is_student ? "+" : "-"}</TableCell>
+                                <TableCell className="text-xl">{u.from_iztech ? "+" : "-"}</TableCell>
                                 <TableCell>{new Date(u.created_at).toLocaleString()}</TableCell>
                                 <TableCell><Link className={"!text-blue"} href={"/admin/user/" + u.id}>Details</Link></TableCell>
                                 <TableCell><Button variant={"outline"} className={"cursor-pointer text-red"} onClick={async () => await handleDelete(u.id, u.full_name)}>Delete</Button></TableCell>

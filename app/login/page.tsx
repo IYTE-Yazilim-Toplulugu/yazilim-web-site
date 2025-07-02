@@ -34,7 +34,7 @@ export default function Login() {
 
     return (
         <div>
-            <iframe className="w-dvw h-dvh" src={"http://localhost:3001/login" + (msg != null ? "?msg=" + msg : "")}>
+            <iframe className="w-dvw h-dvh" src={"http://192.168.1.10:3001/login" + (msg != null ? "?msg=" + msg : "")}>
 
             </iframe>
         </div>
