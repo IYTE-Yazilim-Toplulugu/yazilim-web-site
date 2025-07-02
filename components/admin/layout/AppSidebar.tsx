@@ -146,7 +146,7 @@ const AppSidebar: React.FC = () => {
                         nav.path && (
                             <Link
                                 href={nav.path}
-                                className={`${isActive ? 'bg-blue-400 text-white' : 'text-gray-600 dark:text-gray-300'} p-3 rounded-xl hover:opacity-70 flex flex-row gap-4 ${isActive ? "menu-item-active" : "menu-item-inactive"
+                                className={`${isActive ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'} p-3 rounded-xl hover:opacity-70 flex flex-row gap-4 ${isActive ? "menu-item-active" : "menu-item-inactive"
                                     }`}
                             >
                                 <span
