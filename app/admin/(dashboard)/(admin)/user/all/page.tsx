@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import UsersAllServer from "@/app/admin/dashboard/(admin)/user/all/(server)/users_all";
+import UsersAllServer from "@/app/admin/(dashboard)/(admin)/user/all/(server)/users_all";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/admin/ui/table";
 import Button from "@/components/admin/ui/button/Button";
 import Link from "next/link";
-import UserDeleteServer from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_delete";
+import UserDeleteServer from "@/app/admin/(dashboard)/(admin)/user/[id]/(server)/user_delete";
 import Pagination from "@/components/admin/tables/Pagination";
 import { Search } from "lucide-react";
 import Input from "@/components/admin/form/input/InputField";

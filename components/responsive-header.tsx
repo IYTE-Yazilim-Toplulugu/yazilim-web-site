@@ -289,7 +289,7 @@ export default function ResponsiveHeader() {
                                     </Link>
                                 )}
                                 {userInfo?.user_metadata.isAdmin && (
-                                    <Link href="/admin/dashboard">
+                                    <Link href="/admin">
                                         <div className="p-1
                                         relative transition-colors hover:text-primary w-fit 
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
