@@ -1,5 +1,4 @@
 'use client'
-
 import Input from "@/components/admin/form/input/InputField";
 import Select from "@/components/admin/form/Select";
 import UserDetailServer, { Department } from "@/app/admin/(dashboard)/(admin)/user/[id]/(server)/user_detail";
@@ -130,6 +129,7 @@ export default function UserDetail() {
 
                         <div className={"flex w-[100%]"}>
                             <div className={"gap-2 flex items-center"}>
+
                                 <Link type={"button"} href={"/admin/user/all"}>
                                     Back
                                 </Link>

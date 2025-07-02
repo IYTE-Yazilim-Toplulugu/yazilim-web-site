@@ -12,7 +12,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { ArrowDown, ExternalLink } from "lucide-react"
 import { useIsClient } from "@/hooks/use-is-client"
 import Link from "next/link"
-import HandleIcons from "./handle-icons"
+import { HandleIcons } from "./handle-icons"
 import { HomeHeroConfig } from "@/types/types_config";
 
 

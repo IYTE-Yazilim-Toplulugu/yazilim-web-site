@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, Circle, X } from 'lucide-react';
-import Image from 'next/image';
 
 import { SurveyData } from '@/lib/pseudo';
 import { SectionHeader } from '@/components/ui/section-container';
@@ -13,16 +12,20 @@ import Loading from '@/components/loading';
 import DatePicker from '@/components/datepicker';
 import { Dropdown } from '@/components/dropdown';
 import handleErrorCode from '@/components/handle-error-code';
+import { HandleIcon } from '@/components/handle-icons';
 import { toast } from '@/hooks/use-toast';
 import { getUser, getUserIp } from '@/utils/user_client_util';
-import { QuestionFill, AnswerHandlerProps, Question } from '@/types/types';
-import { getSurveys, postSurveyAnswer, getAnsweredSurveys } from '@/utils/survey_client_util';
+import { QuestionFill, AnswerHandlerProps, Question, Survey } from '@/types/types';
+import { getSurveys, postSurveyAnswer, getAnsweredSurveys, getSurveyImagePath } from '@/utils/survey_client_util';
+import YazilimBlankPage from '@/components/blank-page';
+import Image from 'next/image';
+import { User } from '@supabase/supabase-js';
 
-export default function Survey() {
+export default function SurveyPage() {
     const containerRef = useRef(null);
     // const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
-    const [surveyData, setSurveyData] = useState(SurveyData); // Survey GET Response
+    const [surveyData, setSurveyData] = useState<Survey[]>(SurveyData); // Survey GET Response
     const [surveyFill, setSurveyFill] = useState<QuestionFill[]>([]); // Survey Request array
 
     // Handler variables
@@ -35,32 +38,35 @@ export default function Survey() {
     const [userInfo, setUserInfo] = useState<any>(null);
 
 
-    // Data fetching
     useEffect(() => {
         getUser()
             .then((user) => {
-                setUserInfo(user)
-                return user?.id
+                setUserInfo(user);
+                return user;
             })
-            .then((userId) => {
-                return userId ? getAnsweredSurveyData(userId) : null
+            .then((user) => {
+                if (!user?.id) return null;
+                return getAnsweredSurveyData(user.id).then((data) => ({
+                    user,
+                    data,
+                }));
             })
-            .then((data) => {
-                // @ts-ignore
-                return fetchSurveyData(data);
+            .then((result) => {
+                if (!result) return;
+                const { user, data } = result;
+                return fetchSurveyData(data ?? null, user);
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
                 handleErrorCode(error.code);
-            })
-
+            });
     }, [focusedId, userInfo?.id]);
 
-    const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null) => {
+    const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null, user: User) => {
         try {
-            getSurveys(answeredSurveys, true)
+            getSurveys(answeredSurveys, true, userInfo)
                 .then(x => {
-                    if (x.data && x.data.length > 0) {
+                    if (x.data) {
                         setSurveyData(x.data);
                     } else {
                         console.error("Error fetching survey data:", x.error);
@@ -264,11 +270,11 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             case 1: // single_choice
                 return (
                     <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {options?.map((option) => {
+                        {options?.map((option, i) => {
                             const isSelected = isAnswered(question_id, option);
                             return (
                                 <div
-                                    key={option}
+                                    key={i}
                                     onClick={() => {
                                         !isSelected
                                             ? addAnswer({
@@ -402,11 +408,11 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             case 4: // multiple_choice
                 return (
                     <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {options?.map((option) => {
+                        {options?.map((option, i) => {
                             const isSelected = isAnswered(question_id, option);
                             return (
                                 <div
-                                    key={option}
+                                    key={i}
                                     onClick={() => {
                                         !isSelected
                                             ? addMultipleAnswer({
@@ -533,12 +539,12 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                 </Button>
                             }
                         >
-                            {options?.map((option) => {
+                            {options?.map((option, i) => {
                                 const isSelected = isAnswered(question_id, option);
 
                                 return (
                                     <div
-                                        key={option}
+                                        key={i}
                                         onClick={() => {
                                             !isSelected ?
                                                 addAnswer({
@@ -563,27 +569,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
         }
     }
 
-    // 0: yazilim, 1: user, 2: feature, 3: event, 4: feedback, 5: design, 6: code
-    // there will be some emojis or icons for each survey
-    const HandleIcon = (icon: number) => {
-        switch (icon) {
-            case 1:
-                return <p className='text-xl'>👨</p>
-            case 2:
-                return <p className='text-xl'>🧠</p>
-            case 3:
-                return <p className='text-xl'>🎫</p>
-            case 4:
-                return <p className='text-xl'>📝</p>
-            case 5:
-                return <p className='text-xl'>🎨</p>
-            case 6:
-                return <p className='text-xl'>💻</p>
-            default:
-                return <p ><Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={16} height={16} />
-                </p>
-        }
-    }
+
 
     const handleSubmit = async (survey_content: any) => {
         setLoading(true);
@@ -595,7 +581,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
     const validateSurvey = (survey_content: any) => {
         const newErrors: Record<number, string> = {};
 
-        survey_content.questions.forEach((question: Question) => {
+        survey_content.questions && survey_content.questions.forEach((question: Question) => {
             const isAnswered = surveyFill.some((item) => item.question_id === question.id);
 
             if (question.required && !isAnswered) {
@@ -694,7 +680,10 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             </SectionHeader>
 
             <section ref={containerRef} className={`flex flex-wrap justify-center items-center ${focusedId ? "blur-sm pointer-events-none" : ""}`}>
-                {surveyData.map((survey: any) => (
+                {surveyData.length === 0 && (
+                    <YazilimBlankPage content="No Surveys Found For You" emoji='😭' />
+                )}
+                {surveyData && surveyData.length > 0 && surveyData.map((survey: any) => (
                     <motion.div key={survey.id}
                         layoutId={`survey-${survey.id}`}
                         onClick={() => setFocusedId(survey.id)}
@@ -738,11 +727,19 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                             <h2 className="text-bite-tongue text-2xl font-bold">
                                 {currentSurvey.title}
                             </h2>
+                            {currentSurvey.image_path && (
+                                <Image
+                                    src={`${getSurveyImagePath(currentSurvey.image_path)}`}
+                                    alt={currentSurvey.title}
+                                    width={1280} height={720}
+                                    className="aspect-auto object-cover rounded-lg my-4"
+                                ></Image>
+                            )}
                             <p className=" mt-4 text-lg">
                                 {currentSurvey.description}
                             </p>
-                            {currentSurvey.questions.map((question: any) => (
-                                <div key={question.id} className='relative py-4 sm:p-4'>
+                            {currentSurvey.questions && currentSurvey.questions.map((question: any, id) => (
+                                <div key={id} className='relative py-4 sm:p-4'>
                                     <div className='absolute -left-4 sm:left-0'>
                                         {question.required && "*"}
                                     </div>

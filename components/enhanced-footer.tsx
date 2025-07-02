@@ -13,10 +13,10 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import Link from "next/link"
-import HandleIcons from "@/components/handle-icons"
+import { HandleIcons } from "@/components/handle-icons"
 import { createClient } from "@/lib/supabase/client"
 import handleErrorCode from "./handle-error-code"
-import {HomeFooterConfig} from "@/types/types_config";
+import { HomeFooterConfig } from "@/types/types_config";
 
 // Form validation schema
 const subscribeSchema = z.object({

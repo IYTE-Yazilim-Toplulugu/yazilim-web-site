@@ -8,8 +8,7 @@ import RecentOrders from "@/components/admin/ecommerce/RecentOrders";
 import DemographicCard from "@/components/admin/ecommerce/DemographicCard";
 
 export const metadata: Metadata = {
-    title:
-        "Society Dashboard",
+    title:"Society Dashboard",
     description: "Society Admin Panel Dashboard",
 };
 
