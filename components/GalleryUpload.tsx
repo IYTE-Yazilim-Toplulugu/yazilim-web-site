@@ -5,7 +5,7 @@ import { SectionHeader } from './ui/section-container';
 import {GalleryImage} from "@/types/types_gallery";
 import {getUser} from "@/utils/user_client_util";
 import {toast} from "@/hooks/use-toast";
-import GalleryUploadServer from "@/app/admin/dashboard/(admin)/gallery/(server)/gallery_upload";
+import GalleryUploadServer from "@/app/admin/(dashboard)/(admin)/gallery/(server)/gallery_upload";
 
 interface GalleryUploadProps {
     onUpload: (image: GalleryImage) => void;

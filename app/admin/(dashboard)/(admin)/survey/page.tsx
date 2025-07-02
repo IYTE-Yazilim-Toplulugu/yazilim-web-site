@@ -27,7 +27,6 @@ export default function AdminSurveysPage() {
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState<string>();
     const [queryTemp, setQueryTemp] = useState<string>();
-
     // Sorting state
     const [sortKey, setSortKey] = useState<"id" | "title" | "icon" | "description" | "is_active" | "is_anonym" | "created_at">("id");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");

@@ -44,12 +44,15 @@ async function submitDelete(id: string) {
             variant: "default",
             description: "Success",
         });
-        redirect('/admin/dashboard/user/all');
+        redirect('/admin/user/all');
     }
     else {
         console.log(error);
-        // @ts-ignore
-        handleErrorCode(error.code);
+        toast({
+            variant: "default",
+            description: "See console.",
+            title: "Failed"
+        });
     }
 }
 
@@ -126,7 +129,8 @@ export default function UserDetail() {
 
                         <div className={"flex w-[100%]"}>
                             <div className={"gap-2 flex items-center"}>
-                                <Link type={"button"} href={"/admin/dashboard/user/all"}>
+
+                                <Link type={"button"} href={"/admin/user/all"}>
                                     Back
                                 </Link>
                             </div>

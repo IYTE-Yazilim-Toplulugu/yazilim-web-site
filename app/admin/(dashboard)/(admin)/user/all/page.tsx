@@ -83,7 +83,7 @@ export default function UsersAll() {
                                 <TableCell>{u.is_student ? "+" : "-"}</TableCell>
                                 <TableCell>{u.from_iztech ? "+" : "-"}</TableCell>
                                 <TableCell>{new Date(u.created_at).toLocaleString()}</TableCell>
-                                <TableCell><Link className={"!text-blue"} href={"/admin/dashboard/user/" + u.id}>Details</Link></TableCell>
+                                <TableCell><Link className={"!text-blue"} href={"/admin/user/" + u.id}>Details</Link></TableCell>
                                 <TableCell><Button variant={"outline"} className={"cursor-pointer text-red"} onClick={async () => await handleDelete(u.id, u.full_name)}>Delete</Button></TableCell>
                             </TableRow>
                         ))
