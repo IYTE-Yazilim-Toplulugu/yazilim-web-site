@@ -1,5 +1,5 @@
 "use client";
-import { redirect, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { Survey } from "@/types/types";
 import { useEffect, useState } from "react";
 import SurveyGet from "./(server)/survey_get";
@@ -17,6 +17,7 @@ import SurveyDelete from "./(server)/survey_delete";
 import { MessageCircleQuestionIcon } from "lucide-react";
 import { HandleIcon } from "@/components/handle-icons";
 import SurveyCreate from "./(server)/survey_create";
+import imageUpload from "./(server)/survey_image_upload";
 
 export default function AdminSurveyPage() {
     const id = Number(useParams().id);
@@ -111,6 +112,40 @@ export default function AdminSurveyPage() {
         }
     }
 
+    const uploadSurveyImage = async (file: File | null) => {
+        if (!file) {
+            console.error("No file selected for upload.");
+            toast({
+                title: "Upload Image Error",
+                description: "Please select an image to upload.",
+                variant: "destructive",
+            })
+            return
+        }
+
+        const res = await imageUpload(file);
+
+        if (res.error) {
+            console.error("Error uploading image:", res.error);
+            // @ts-ignore
+            handleErrorCode(res.error.cause);
+            return
+        }
+
+        // @ts-ignore
+        setSurvey(prevSurvey => {
+            return {
+                ...prevSurvey,
+                image_path: res.filepath
+            }
+        })
+        toast({
+            title: "Image uploaded successfully",
+            description: "The image has been uploaded successfully.",
+            variant: "success",
+        })
+    }
+
     const handleChangeEvent = (event: any) => handleChange(event.target.name, event.target.value);
     const handleChange = (key: string, value: any) => {
         // @ts-ignore
@@ -169,8 +204,18 @@ export default function AdminSurveyPage() {
                         <Label htmlFor={"description"}>Description (text)</Label>
                         <Input type={"text"} name={"description"} onChange={handleChangeEvent} defaultValue={survey?.description} placeholder={"Description"} />
 
-                        <Label htmlFor={"image-path"}>Image Path (e.g image.png)</Label>
-                        <Input type={"text"} name={"image_path"} onChange={handleChangeEvent} defaultValue={survey?.image_path} />
+                        <div className="flex flex-row gap-4">
+                            <Label htmlFor={"image-path"}>Image Path (e.g image.png)</Label>
+                            <input type="file" accept="image/*"
+                                name="image_path"
+                                onChange={e => uploadSurveyImage(e.target.files?.[0] ?? null)}
+                                className="cursor-pointer file:cursor-pointer file:rounded-md file:border-0
+                                file:bg-bite-tongue file:px-4 file:py-2 file:text-sm file:font-semibold
+                                file:text-background hover:file:bg-copper-coin transition-colors duration-200
+                                text-transparent"
+                            />
+                        </div>
+                        <input type={"text"} name={"image_path"} placeholder="No files found" onChange={handleChangeEvent} value={survey?.image_path} />
 
                         <div className={"relative group flex gap-2"}>
                             <Label htmlFor={"questions"}>Questions</Label>
@@ -196,6 +241,8 @@ placeholder - text[63]?,
                         <textarea name={"questions"}
                             onChange={handleChangeJSON}
                             defaultValue={survey?.questions ? JSON.stringify(survey.questions, null, 4) : ""}
+                            className="w-full p-2 dark:bg-gray-900 rounded-md border border-gray-700 shadow-sm outline-none"
+                            placeholder="Type questions in JSON format"
                             rows={10}
                         />
 
@@ -212,7 +259,7 @@ placeholder - text[63]?,
                                 top-full rounded-lg whitespace-pre-wrap
                                 bg-card text-foreground border border-gray-500
                                 shadow-lg z-40 animate-fadeIn">{`requirements - array[object]
-type - int // 0: public, 1: student, 2: special, 3: admin,
+type - int // 0: public to authed users, 1: student, 2: special, 3: admin, leave empty for anonymous users
 events - array[int],
 
 --- Requirements in JSON format, e.g. {\"type\": 0, \"events\": [1, 2]} ---`}</p>
@@ -220,6 +267,8 @@ events - array[int],
                         <textarea name={"requirements"}
                             onChange={handleChangeJSON}
                             defaultValue={survey?.requirements ? JSON.stringify(survey.requirements, null, 4) : ""}
+                            className="w-full p-2 dark:bg-gray-900 rounded-md border border-gray-700 shadow-sm outline-none"
+                            placeholder="Type requirements in JSON format"
                             rows={5}
                         />
 

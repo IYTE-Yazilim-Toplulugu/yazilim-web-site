@@ -19,6 +19,7 @@ import { QuestionFill, AnswerHandlerProps, Question, Survey } from '@/types/type
 import { getSurveys, postSurveyAnswer, getAnsweredSurveys, getSurveyImagePath } from '@/utils/survey_client_util';
 import YazilimBlankPage from '@/components/blank-page';
 import Image from 'next/image';
+import { User } from '@supabase/supabase-js';
 
 export default function SurveyPage() {
     const containerRef = useRef(null);
@@ -40,26 +41,30 @@ export default function SurveyPage() {
     useEffect(() => {
         getUser()
             .then((user) => {
-                setUserInfo(user)
-                return user?.id
+                setUserInfo(user);
+                return user;
             })
-            .then((userId) => {
-                return userId ? getAnsweredSurveyData(userId) : null
+            .then((user) => {
+                if (!user?.id) return null;
+                return getAnsweredSurveyData(user.id).then((data) => ({
+                    user,
+                    data,
+                }));
             })
-            .then((data) => {
-                // @ts-ignore
-                return fetchSurveyData(data ?? null);
+            .then((result) => {
+                if (!result) return;
+                const { user, data } = result;
+                return fetchSurveyData(data ?? null, user);
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
                 handleErrorCode(error.code);
-            })
-
+            });
     }, [focusedId, userInfo?.id]);
 
-    const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null) => {
+    const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null, user: User) => {
         try {
-            getSurveys(answeredSurveys, true)
+            getSurveys(answeredSurveys, true, userInfo)
                 .then(x => {
                     if (x.data) {
                         setSurveyData(x.data);
@@ -733,8 +738,8 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                             <p className=" mt-4 text-lg">
                                 {currentSurvey.description}
                             </p>
-                            {currentSurvey.questions && currentSurvey.questions.map((question: any) => (
-                                <div key={question.id} className='relative py-4 sm:p-4'>
+                            {currentSurvey.questions && currentSurvey.questions.map((question: any, id) => (
+                                <div key={id} className='relative py-4 sm:p-4'>
                                     <div className='absolute -left-4 sm:left-0'>
                                         {question.required && "*"}
                                     </div>

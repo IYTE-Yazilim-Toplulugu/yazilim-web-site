@@ -114,6 +114,24 @@ export async function deleteSurvey(id: number) {
     return { "success": true };
 }
 
+export async function uploadImage(file: File) {
+    const ext = file.name.split('.').pop();
+    const fileName = `${(Math.random() + 1) * (10 ** 16)}.${ext}`;
+    const filePath = `${fileName}`;
+
+    const { error } = await supabase.storage
+        .from("survey-images")
+        .upload(filePath, file);
+
+    if (error) {
+        return { "filepath": null, "error": error };
+    }
+    return {
+        "filepath": filePath,
+        "error": null,
+    }
+}
+
 
 
 
