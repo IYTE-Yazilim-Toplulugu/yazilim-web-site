@@ -1,5 +1,5 @@
 import supabase from "@/lib/supabase/supabase";
-import {GalleryImage} from "@/types/types_gallery";
+import { GalleryImage } from "@/types/types_gallery";
 
 const bucketId = 'gallery-images';
 
@@ -16,9 +16,9 @@ export type ImageUploadResult = {
     data: any | undefined
 };
 
-export async function uploadImage({ file, title, description, uploaderId }: ImageUploadInfo): Promise<ImageUploadResult>{
+export async function uploadImage({ file, title, description, uploaderId }: ImageUploadInfo): Promise<ImageUploadResult> {
     const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
+    const fileName = `${(Math.random() + 1) * (10 ** 10)}.${fileExt}`;
     const filePath = `${fileName}`;
 
     // Upload file to storage
@@ -54,7 +54,7 @@ export type ImageDeleteErrorResult = {
     error: Error | undefined
 };
 
-export async function deleteImage(id: number) : Promise<ImageDeleteErrorResult | undefined>{
+export async function deleteImage(id: number): Promise<ImageDeleteErrorResult | undefined> {
     const { data, error: errorGetImage } = await supabase
         .from('gallery')
         .select<"file_path", { file_path: string }>()
@@ -72,7 +72,7 @@ export async function deleteImage(id: number) : Promise<ImageDeleteErrorResult |
 
     if (errorStorageRemove) return { errorType: 'storage', error: errorStorageRemove };
 
-    const {error: errorDelete } = await supabase.from('gallery')
+    const { error: errorDelete } = await supabase.from('gallery')
         .delete()
         .filter('id', 'eq', id);
 

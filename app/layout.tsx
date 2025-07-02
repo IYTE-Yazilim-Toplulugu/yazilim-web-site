@@ -5,7 +5,6 @@ import "./globals.css";
 import ResponsiveHeader from "@/components/responsive-header";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
-import ClientDiagnosticWrapper from "@/components/client-diagnostic-wrapper";
 import ScrollProgress from "@/components/scroll-progress";
 import FloatingNav from "@/components/floating-nav";
 
@@ -49,9 +48,7 @@ export default function RootLayout({
 
                     {children}
 
-                    {/* For Test */}
                     <Toaster />
-                    <ClientDiagnosticWrapper />
                 </ThemeProvider>
             </body>
         </html>

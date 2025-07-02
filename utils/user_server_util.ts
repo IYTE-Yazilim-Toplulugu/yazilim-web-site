@@ -76,7 +76,7 @@ export async function getUser(id: string) {
             .filter("id", "eq", id);
 
         if (error)
-            console.log(error);
+            console.error(error);
 
         return data && data.length >= 1 ? data.at(0) : null;
     }

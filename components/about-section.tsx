@@ -8,8 +8,8 @@ import { Download, Award, Briefcase, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import HandleIcons from "./handle-icons"
-import {HomeAboutUsConfig} from "@/types/types_config";
+import { HandleIcons } from "./handle-icons"
+import { HomeAboutUsConfig } from "@/types/types_config";
 
 export default function AboutSection({ home_about_us }: { home_about_us?: HomeAboutUsConfig }) {
     return (
