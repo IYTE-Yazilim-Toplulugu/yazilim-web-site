@@ -2,7 +2,7 @@
 import { toast } from "@/hooks/use-toast"
 
 
-const handleErrorCode = (code: string) => {
+const handleErrorCode = (code: string | null) => {
     switch (code) {
         case '404':
             toast({

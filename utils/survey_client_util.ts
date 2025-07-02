@@ -24,6 +24,13 @@ async function getSurveys(answeredSurveys: QuestionFill[] | null, is_active: boo
     };
 }
 
+export function getSurveyImagePath(image_path: string) {
+    return createClient().storage
+        .from('survey-images')
+        .getPublicUrl(image_path)
+        .data.publicUrl;
+}
+
 async function postSurveyAnswer(
     userId: string,
     surveyId: number | null,

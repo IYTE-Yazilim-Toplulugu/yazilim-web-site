@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IYTE YAZILIM SOCIETY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            color: #ff6b35;
+            opacity: 0.1;
+            font-size: 2rem;
+            font-weight: bold;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 4s; }
+        .floating-element:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 6s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Header */
+        header {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #ffffff, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Main content area */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-placeholder {
+            text-align: center;
+            max-width: 800px;
+            padding: 3rem;
+            border: 2px dashed rgba(255, 107, 53, 0.3);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(5px);
+        }
+
+        .placeholder-text {
+            font-size: 1.5rem;
+            color: #999999;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .coming-soon {
+            font-size: 1rem;
+            color: #ff6b35;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-text {
+            color: #888888;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .content-placeholder {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .placeholder-text {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Glowing border effect */
+        .glow-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.4), transparent);
+            animation: slide 3s infinite;
+        }
+
+        @keyframes slide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Animated background elements -->
+        <div class="bg-elements">
+            <div class="floating-element">{/}</div>
+            <div class="floating-element">{/}</div>
+            <div class="floating-element">{/}</div>
+            <div class="floating-element">{/}</div>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <div class="logo">{/}</div>
+            <h1 class="title">IYTE YAZILIM SOCIETY</h1>
+            <p class="subtitle">İzmir Yüksek Teknoloji Enstitüsü</p>
+        </header>
+
+        <!-- Main content -->
+        <main>
+            <div class="content-placeholder glow-border">
+                <p class="placeholder-text">Bu alan içeriğiniz için hazır</p>
+                <p class="coming-soon">Yakında Daha Fazlası...</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p class="footer-text">© 2025 IYTE YAZILIM SOCIETY. Tüm hakları saklıdır.</p>
+        </footer>
+    </div>
+</body>
+</html>

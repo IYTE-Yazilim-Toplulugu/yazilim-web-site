@@ -1,5 +1,4 @@
 'use client'
-
 import Input from "@/components/admin/form/input/InputField";
 import Select from "@/components/admin/form/Select";
 import UserDetailServer, { Department } from "@/app/admin/dashboard/(admin)/user/[id]/(server)/user_detail";
@@ -49,11 +48,8 @@ async function submitDelete(id: string) {
     }
     else {
         console.log(error);
-        toast({
-            variant: "default",
-            description: "See console.",
-            title: "Failed"
-        });
+        // @ts-ignore
+        handleErrorCode(error.code);
     }
 }
 

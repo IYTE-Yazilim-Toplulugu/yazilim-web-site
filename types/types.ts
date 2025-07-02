@@ -11,6 +11,17 @@ export interface QuestionFill {
     answer: string | number | boolean | (string | number | boolean)[] | null;
 }
 
+export interface SurveyAnswers {
+    id: number;
+    user_id: number; // UUID format
+    survey_id: number;
+    answered_at: string; // ISO datetime string (2025-06-15T10:00:00)
+    answers: {
+        question_id: number; // UUID format
+        answer: string | number | boolean | (string | number | boolean)[] | null;
+    }[];
+}
+
 export type AnswerHandlerProps = {
     survey_id: number,
     question_id: number,
@@ -33,12 +44,16 @@ export type Event = {
 export interface Survey {
     id: number;
     title: string;
-    icon: string;
+    icon: number;
     description: string;
-    release_date: string; // ISO datetime string (ör: 2025-06-15T10:00:00)
-    requirements?: { // WTF is that bro
-        type: number; // 0: public, 1: private, 2: members only
+    image_path: string; // URL format (https://example.com/image.jpg)
+    created_at: string; // ISO datetime string (2025-06-15T10:00:00)
+    requirements?: {
+        type: number; // 0: public, 1: student, 2: special, 3: admin, 4: student_or_special
+        events: number[] // filled with event id
     } | null;
+    is_active: boolean;
+    is_anonym: boolean;
     questions: Question[];
 }
 
