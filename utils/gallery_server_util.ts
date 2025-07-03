@@ -2,6 +2,7 @@ import supabase from "@/lib/supabase/supabase";
 import { GalleryImage } from "@/types/types_gallery";
 
 const bucketId = 'gallery-images';
+const pageSize = 10;
 
 export type ImageUploadInfo = {
     file: File,
@@ -34,7 +35,8 @@ export async function uploadImage({ file, title, description, uploaderId }: Imag
         file_path: filePath,
         uploader_id: uploaderId,
         id: undefined,
-        uploaded_at: undefined
+        uploaded_at: undefined,
+        uploader_name: undefined
     };
 
     // Create gallery entry
@@ -47,6 +49,36 @@ export async function uploadImage({ file, title, description, uploaderId }: Imag
     data.uploaded_at = new Date(Date.now()).toISOString();
 
     return { error: undefined, errorType: undefined, data: data };
+}
+
+export async function getGalleryImages(page: number, query?: string){
+    page--; if (page < 0) page = 0; const index = pageSize * page;
+
+    let q = supabase
+        .from("full_gallery")
+        .select<"*", GalleryImage>("*", {
+            count: "exact"
+        });
+
+    if (query && query.length > 0) {
+        if (!query.startsWith("%") && !query.endsWith("%"))
+            query = `%${query}%`;
+        q = q.ilike('search_impl', query);
+    }
+
+    const { data, error, count } = await q
+        .order("uploaded_at", {
+            ascending: false
+        })
+        .range(index, index + pageSize - 1);
+
+    if (error)
+        console.error(error);
+
+    return {
+        data: data,
+        pageCount: !count ? 1 : Math.ceil(count / pageSize)
+    };
 }
 
 export type ImageDeleteErrorResult = {

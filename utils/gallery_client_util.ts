@@ -7,7 +7,7 @@ export async function getGalleryImages(page: number){
     page--; if (page < 0) page = 0; const index = pageSize * page;
 
     const { data, error } = await createClient()
-        .from('gallery')
+        .from('gallery_images')
         .select<"*", GalleryImage>()
         .order('uploaded_at', { ascending: false })
         .range(index, index + pageSize - 1);

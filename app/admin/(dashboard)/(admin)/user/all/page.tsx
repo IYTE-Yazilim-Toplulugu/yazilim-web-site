@@ -21,28 +21,24 @@ export default function UsersAll() {
     const [queryTemp, setQueryTemp] = useState<string>();
 
     useEffect(() => {
-        fetchUsers();
-    }, [page, query]);
-    const fetchUsers = async () => {
-
         UsersAllServer(page, query).then(r => {
             setUsers(r.data ?? []);
             setPageCount(r.pageCount);
         });
-    }
+    }, [page, query]);
 
     async function handleDelete(id: string, name: string) {
         if (!confirm(`Are you sure you want to delete ${name}?`))
             return;
 
-        const error = await UserDeleteServer(id);
+        const { data: { user }, error } = await UserDeleteServer(id);
 
         if (!error) {
             toast({
                 variant: "default",
                 description: "Success",
             });
-            fetchUsers();
+            setUsers(users?.filter(x => x.id !== user?.id));
         }
         else {
             console.error(error);

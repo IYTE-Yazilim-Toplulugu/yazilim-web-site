@@ -15,6 +15,7 @@ import { HandleIcon } from "@/components/handle-icons";
 import { handleQuestionType, handleSurveyType } from "@/components/handle-types";
 import { getSurveyImagePath } from "@/utils/survey_client_util";
 import Loading from "@/components/loading";
+import {redirect} from "next/navigation";
 
 
 export default function AdminSurveysPage() {
@@ -327,20 +328,8 @@ export default function AdminSurveysPage() {
                     </Table>
                 </div>
             </div>
-            <div className={"relative w-full flex flex-wrap items-center justify-center gap-4"}>
-                <Link href={"/admin/survey/0"}>
-                    <Button variant={"secondary"} className="cursor-pointer select-none">
-                        <p>Create</p>
-                        <PlusIcon />
-                    </Button>
-                </Link>
-                <div>
-                    <Pagination currentPage={page} totalPages={pageCount} onPageChange={setPage} />
-                </div>
-                <Button variant={"secondary"} className="cursor-pointer select-none"
-                    onClick={() => { fetchSurveys(page, query) }}>
-                    <RefreshCwIcon />
-                </Button>
+            <div className={"mt-4 w-full flex gap-2 justify-center"}>
+                <Pagination onCreateClick={() => redirect('/admin/survey/0')} currentPage={page} totalPages={pageCount} onRefreshClick={async () => await fetchSurveys(page, query)} onPageChange={setPage} />
             </div>
         </div >
     )

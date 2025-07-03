@@ -1,7 +1,8 @@
-import { createServer } from "@/lib/supabase/server";
+import {createServer} from "@/lib/supabase/server";
 import supabase from "@/lib/supabase/supabase";
-import { AuthError } from "@supabase/auth-js";
-import { UserInfo } from "@/types/types_user";
+import {AuthError, UserResponse} from "@supabase/auth-js";
+import {UserInfo} from "@/types/types_user";
+import {undefined} from "zod";
 
 const pageSize = 50;
 
@@ -90,12 +91,7 @@ export async function getUser(id: string) {
 }
 
 export async function getUsers(page: number, query?: string) {
-    page--;
-
-    if (page < 0)
-        page = 0;
-
-    const index = page * pageSize;
+    page--; if (page < 0) page = 0; const index = page * pageSize;
 
     let q = supabase
         .from("full_users")
@@ -124,17 +120,16 @@ export async function getUsers(page: number, query?: string) {
     };
 }
 
-export async function deleteUser(id: string) {
+export async function deleteUser(id: string): Promise<UserResponse> {
     try {
-        const { error } = await supabase.auth.admin.deleteUser(id, false);
-        return { error };
+        return await supabase.auth.admin.deleteUser(id, false);
     }
     catch (err) {
         if (err instanceof Error && !err.message.includes("UUID")) { // Except Invalid UUID Error
             console.log(err);
         }
 
-        return new AuthError("UUID was invalid.");
+        return { data: { user: null }, error: new AuthError("UUID was invalid.") };
     }
 }
 

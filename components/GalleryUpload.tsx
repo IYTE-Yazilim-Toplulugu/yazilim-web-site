@@ -8,11 +8,15 @@ import { toast } from "@/hooks/use-toast";
 import GalleryUploadServer from "@/app/admin/(dashboard)/(admin)/gallery/(server)/gallery_upload";
 
 interface GalleryUploadProps {
+    className?: string;
     onUpload: (image: GalleryImage) => void;
+    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const GalleryUpload: React.FC<GalleryUploadProps> = ({
-    onUpload
+    onUpload,
+    className,
+    onClick
 }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -60,7 +64,7 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
     };
 
     return (
-        <div className="max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg">
+        <div onClick={onClick} className={className + " max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg"}>
             <SectionHeader titleClassName="p-1 text-2xl font-bold" title='Upload Image' />
             <form onSubmit={handleSubmit} className="space-y-4 ">
                 <div>
