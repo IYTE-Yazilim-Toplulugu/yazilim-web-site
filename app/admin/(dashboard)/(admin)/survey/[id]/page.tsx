@@ -23,6 +23,7 @@ export default function AdminSurveyPage() {
     const id = Number(useParams().id);
     const [survey, setSurvey] = useState<Survey | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Record<string, string> | null>(null);
 
     useEffect(() => {
         id != 0 ? fetchSurvey() : setLoading(false);
@@ -59,7 +60,8 @@ export default function AdminSurveyPage() {
                 description: "The survey has been updated in the database.",
                 variant: "success",
             })
-            SurveyGet(id)
+            console.log("Survey updated successfully:", data);
+            setSurvey(data);
             return
         }
         console.error("Error updating survey:", error);
@@ -161,17 +163,44 @@ export default function AdminSurveyPage() {
 
     const handleChangeJSON = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         try {
-            const parsed = JSON.parse(e.target.value);
-            setSurvey(prevSurvey => {
-                if (!prevSurvey) return null;
+            if (e.target.value != "") {
+                const parsed = JSON.parse(e.target.value);
+                setSurvey(prevSurvey => {
+                    if (!prevSurvey) return null;
 
-                return {
-                    ...prevSurvey,
-                    [e.target.name]: parsed,
-                };
-            });
+                    return {
+                        ...prevSurvey,
+                        [e.target.name]: parsed,
+                    };
+                });
+            }
+            switch (e.target.name) {
+                case "questions":
+                    setError(prevError => ({
+                        ...prevError,
+                        questions: ""
+                    }));
+                    break;
+                case "requirements":
+                    setError(prevError => ({
+                        ...prevError,
+                        requirements: ""
+                    }))
+            }
         } catch {
-            // handle JSON parse error if you want
+            switch (e.target.name) {
+                case "questions":
+                    setError(prevError => ({
+                        ...prevError,
+                        questions: "Invalid JSON format. Please check your input."
+                    }));
+                    break
+                case "requirements":
+                    setError(prevError => ({
+                        ...prevError,
+                        requirements: "Invalid JSON format. Please check your input."
+                    }))
+            }
         }
     };
 
@@ -229,10 +258,10 @@ export default function AdminSurveyPage() {
                                 bg-card text-foreground border border-gray-500
                                 shadow-lg z-40 animate-fadeIn">
                                 {`questions - json (array)
-id - int,
-type - int // 0: yes_no, 1: single_choice, 2: number, 3: text, 4: multiple_choice, 5: rating, 6: checkbox, 7: date, 8: dropdown,
-required - boolean,
-question - text[400],
+* id - int,
+* type - int // 0: yes_no, 1: single_choice, 2: number, 3: text, 4: multiple_choice, 5: rating, 6: checkbox, 7: date, 8: dropdown,
+* required - boolean,
+* question - text[400],
 options - array[object]? (string or number)[],
 placeholder - text[63]?,
 
@@ -245,9 +274,10 @@ placeholder - text[63]?,
                             placeholder="Type questions in JSON format"
                             rows={10}
                         />
+                        {error && (<p className="text-destructive">{error["questions"]}</p>)}
 
-                        {/* 0: public, 1: student, 2: special, 3: admin, 4: student_or_special */}
-                        {/* filled with event id */}
+                        {// type - int // 0: public to authed users, 1: student, 2: special, 3: student or special, 4: admin, leave empty for anonymous users}
+                            /* filled with event id */}
                         <div className={"relative group flex gap-2"}>
                             <Label htmlFor={"requirements"}>Requirements</Label>
                             <span className="peer text-gray-500">
@@ -259,8 +289,8 @@ placeholder - text[63]?,
                                 top-full rounded-lg whitespace-pre-wrap
                                 bg-card text-foreground border border-gray-500
                                 shadow-lg z-40 animate-fadeIn">{`requirements - array[object]
-type - int // 0: public to authed users, 1: student, 2: special, 3: admin, leave empty for anonymous users
-events - array[int],
+type - int // 0: public to authed users, 1: student, 2: special, 3: student or special, 4: admin, leave empty for anonymous users
+events - array[int] // check related event id on events table for now
 
 --- Requirements in JSON format, e.g. {\"type\": 0, \"events\": [1, 2]} ---`}</p>
                         </div>
@@ -271,6 +301,7 @@ events - array[int],
                             placeholder="Type requirements in JSON format"
                             rows={5}
                         />
+                        {error && (<p className="text-destructive">{error["requirements"]}</p>)}
 
                         <Label htmlFor={"created-at"}>Created At</Label>
                         <Input disabled name={"created_at"} onChange={handleChangeEvent} defaultValue={survey?.created_at} />
@@ -283,12 +314,12 @@ events - array[int],
 
                         <div className={"flex w-[100%]"}>
                             <div className={"gap-2 flex items-center"}>
-                                <Link href={"/admin/dashboard/survey"}>
+                                <Link href={"/admin/survey"}>
                                     <Button variant={"outline"} className="cursor-pointer">
                                         Back
                                     </Button>
                                 </Link>
-                                {id != 0 && <Link href={"/admin/dashboard/survey/0"}>
+                                {id != 0 && <Link href={"/admin/survey/0"}>
                                     <Button variant={"outline"} className="cursor-pointer">
                                         Create
                                     </Button>
@@ -305,8 +336,8 @@ events - array[int],
                         </div>
                     </div>
                 </Form>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 
 }

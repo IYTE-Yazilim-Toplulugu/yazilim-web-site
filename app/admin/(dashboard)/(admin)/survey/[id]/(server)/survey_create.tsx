@@ -1,3 +1,4 @@
+'use server';
 import { Survey } from "@/types/types";
 import { createSurvey } from "@/utils/survey_server_util";
 

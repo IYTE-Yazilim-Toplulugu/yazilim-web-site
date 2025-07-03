@@ -16,10 +16,11 @@ import { HandleIcon } from '@/components/handle-icons';
 import { toast } from '@/hooks/use-toast';
 import { getUser, getUserIp } from '@/utils/user_client_util';
 import { QuestionFill, AnswerHandlerProps, Question, Survey } from '@/types/types';
-import { getSurveys, postSurveyAnswer, getAnsweredSurveys, getSurveyImagePath } from '@/utils/survey_client_util';
+import { postSurveyAnswer, getAnsweredSurveys, getSurveyImagePath } from '@/utils/survey_client_util';
 import YazilimBlankPage from '@/components/blank-page';
 import Image from 'next/image';
 import { User } from '@supabase/supabase-js';
+import surveysGet from './(server)/surveys_get';
 
 export default function SurveyPage() {
     const containerRef = useRef(null);
@@ -44,38 +45,39 @@ export default function SurveyPage() {
                 setUserInfo(user);
                 return user;
             })
-            .then((user) => {
-                if (!user?.id) return null;
+            .then((user): Promise<{ user: User | null; data: QuestionFill[] | null }> => {
+                if (!user) {
+                    return Promise.resolve({ user: null, data: null });
+                }
+
                 return getAnsweredSurveyData(user.id).then((data) => ({
                     user,
-                    data,
+                    data: data ?? null
                 }));
             })
             .then((result) => {
-                if (!result) return;
-                const { user, data } = result;
-                return fetchSurveyData(data ?? null, user);
+                return fetchSurveyData(result);
             })
             .catch((error) => {
-                console.error("Error fetching user data:", error);
+                console.error("Error fetching forms data:", error);
                 handleErrorCode(error.code);
             });
-    }, [focusedId, userInfo?.id]);
+    }, [focusedId]);
 
-    const fetchSurveyData = async (answeredSurveys: QuestionFill[] | null, user: User) => {
+    const fetchSurveyData = async (result: { user: User | null, data: QuestionFill[] | null }) => {
         try {
-            getSurveys(answeredSurveys, true, user)
+            surveysGet(result?.data, true, result?.user)
                 .then(x => {
                     if (x.data) {
                         setSurveyData(x.data);
                     } else {
-                        console.error("Error fetching survey data:", x.error);
+                        console.error("Error fetching forms data:", x.error);
                         handleErrorCode(x.error?.code || "");
                     }
                 })
                 .then(() => setLoading(false))
         } catch (error) {
-            console.error("Unexpected error while fetching survey data:", error);
+            console.error("Unexpected error while fetching forms data:", error);
         }
     }
 
@@ -87,12 +89,12 @@ export default function SurveyPage() {
             postSurveyAnswer(userInfo?.id, focusedId, answers, ip)
                 .then(x => {
                     if (x.error) {
-                        console.error("Error submitting survey answers:", x.error);
+                        console.error("Error submitting form answers:", x.error);
                         handleErrorCode(x.error.code);
                     } else {
                         toast({
                             title: "Success",
-                            description: "Your survey answers have been submitted successfully.",
+                            description: "Your form answers have been submitted successfully.",
                             variant: "success",
                         })
                         setFocusedId(null);
@@ -102,14 +104,16 @@ export default function SurveyPage() {
             console.error("Unexpected Error", error);
             toast({
                 title: "Unexpected Error",
-                description: "An unexpected error occurred while submitting your survey answers. Please try again later.",
+                description: "An unexpected error occurred while submitting your form answers. Please try again later.",
                 variant: "destructive",
             })
         }
     }
 
-    const getAnsweredSurveyData = async (userId: string) => {
+    const getAnsweredSurveyData = async (userId: string | null) => {
         try {
+            if (!userId) return null;
+
             return getAnsweredSurveys(userId)
                 .then(x => {
                     if (x.data && x.data.length > 0) {
@@ -117,16 +121,16 @@ export default function SurveyPage() {
                         return x.data;
                     }
                     if (x.error) {
-                        console.error("Error fetching survey answers:", x.error);
+                        console.error("Error fetching form answers:", x.error);
                         handleErrorCode(x.error.code);
                     }
                     return null;
                 })
         } catch (error) {
-            console.error("Unexpected error while fetching answered surveys:", error);
+            console.error("Unexpected error while fetching answered form:", error);
             toast({
                 title: "Unexpected Error",
-                description: "Unexpected error while fetching survey data",
+                description: "Unexpected error while fetching form data",
                 variant: "destructive",
             })
         }
@@ -670,7 +674,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             transition={{ duration: 0.5 }}
             className='mt-16'
         >
-            <SectionHeader title='Surveys' titleClassName='mt-4 bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget' decorative={false} >
+            <SectionHeader title='Forms' titleClassName='mt-4 bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget' decorative={false} >
                 <motion.span
                     className="absolute -bottom-2 left-2 h-1 bg-primary rounded-l-full bg-gradient-to-r from-golden-nugget to-background to-99%"
                     initial={{ width: 0 }}
@@ -681,7 +685,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
 
             <section ref={containerRef} className={`flex flex-wrap justify-center items-center ${focusedId ? "blur-sm pointer-events-none" : ""}`}>
                 {surveyData.length === 0 && (
-                    <YazilimBlankPage content="No Surveys Found For You" emoji='😭' />
+                    <YazilimBlankPage content="No Forms Found For You" emoji='😭' />
                 )}
                 {surveyData && surveyData.length > 0 && surveyData.map((survey: any) => (
                     <motion.div key={survey.id}

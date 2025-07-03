@@ -1,9 +1,9 @@
-import {GalleryImage} from "@/types/types_gallery";
-import {createClient} from "@/lib/supabase/client";
+import { GalleryImage } from "@/types/types_gallery";
+import { createClient } from "@/lib/supabase/client";
 
 const pageSize = 6;
 
-export async function getGalleryImages(page: number){
+export async function getGalleryImages(page: number) {
     page--; if (page < 0) page = 0; const index = pageSize * page;
 
     const { data, error } = await createClient()
@@ -18,7 +18,7 @@ export async function getGalleryImages(page: number){
     };
 }
 
-export function getImagePath(image: GalleryImage){
+export function getImagePath(image: GalleryImage) {
     return createClient().storage
         .from('gallery-images')
         .getPublicUrl(image.file_path)

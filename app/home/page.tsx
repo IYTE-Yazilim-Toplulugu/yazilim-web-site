@@ -52,6 +52,17 @@ export default function Home() {
         });
     }, [])
 
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.location.hash) {
+            setTimeout(() => {
+                const el = document.querySelector(window.location.hash);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 300); // Delay to wait for DOM load
+        }
+    }, []);
+
 
     if (loading) {
         return <Loading />
@@ -66,39 +77,41 @@ export default function Home() {
                 </Suspense>
             </ErrorBoundary>
 
-            <ErrorBoundary fallback={<SectionFallback title="Events" />}>
-                <Suspense fallback={<LoadingSection name="Events" />}>
-                    <SectionContainer id="events" className="relative overflow-hidden">
+            <ErrorBoundary fallback={<SectionFallback title="Announcements" />}>
+                <Suspense fallback={<LoadingSection name="Announcements" />}>
+                    <SectionContainer id="announcements" className="relative overflow-hidden">
                         <ScrollReveal delay={0.2} >
-                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-destructive'>Etkinlikler</h1>
+                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-destructive'>Announcements</h1>
                             <div className='m-8 md:m-24'>
                                 <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
                                     {SwiperData.map((item, index) => (
-                                        <div key={index} className="keen-slider__slide rounded-2xl h-fit bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive">
-                                            <Link href={"/event/" + item.slug} >
-                                                <Image
-                                                    src={item.image}
-                                                    alt={`Slide ${index + 1}`}
-                                                    width={1000} height={500}
-                                                    className="rounded-lg object-cover aspect-[2] w-full h-full"
-                                                />
-                                                <div className='m-8 flex flex-col text-center items-center space-y-4'>
-                                                    <p className='text-2xl font-bold'>{item.title}</p>
-                                                    <p className='text-lg font-semibold'>{item.description}</p>
-                                                </div>
-                                            </Link>
+                                        <div key={index} className="keen-slider__slide rounded-2xl
+                                            h-fit bg-muted transition-colors
+                                            duration-300 ease-in-out hover:text-white hover:bg-destructive">
+                                            {/* <Link href={"/event/" + item.slug} > */}
+                                            <Image
+                                                src={item.image}
+                                                alt={`Slide ${index + 1}`}
+                                                width={1000} height={500}
+                                                className="rounded-lg object-cover aspect-[2] w-full h-full"
+                                            />
+                                            <div className='m-8 flex flex-col text-center items-center space-y-4'>
+                                                <p className='text-2xl font-bold'>{item.title}</p>
+                                                <p className='text-lg font-semibold'>{item.description}</p>
+                                            </div>
+                                            {/* </Link> */}
                                         </div>
                                     ))}
-                                    <div className="keen-slider__slide rounded-2xl aspect-[1.6] w-full h-full bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive flex items-center justify-center">
-                                        <div className="text-center space-y-4">
-                                            <p className="text-4xl font-bold">Can't find what you are looking for?</p>
-                                            <Link href="/events">
-                                                <p className="text-2xl font-semibold hover:underline hover:underline-offset-2">
-                                                    See all events
-                                                </p>
-                                            </Link>
-                                        </div>
-                                    </div>
+                                    {/* <div className="keen-slider__slide rounded-2xl aspect-[1.6] w-full h-full bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive flex items-center justify-center"> */}
+                                    {/*     <div className="text-center space-y-4"> */}
+                                    {/*         <p className="text-4xl font-bold">Can't find what you are looking for?</p> */}
+                                    {/*         <Link href="/events"> */}
+                                    {/*             <p className="text-2xl font-semibold hover:underline hover:underline-offset-2"> */}
+                                    {/*                 See all events */}
+                                    {/*             </p> */}
+                                    {/*         </Link> */}
+                                    {/*     </div> */}
+                                    {/* </div> */}
                                 </FreeSwiper>
                             </div>
                         </ScrollReveal>
@@ -121,7 +134,6 @@ export default function Home() {
                                 </motion.div>
                             </div>
                         )}
-
                     </SectionContainer>
                 </Suspense>
             </ErrorBoundary>

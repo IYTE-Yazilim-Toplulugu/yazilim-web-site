@@ -35,6 +35,8 @@ export function handleSurveyType(surveyType: number) {
         case 2:
             return "Specials";
         case 3:
+            return "Students and Specials";
+        case 4:
             return "Admins";
     }
 }

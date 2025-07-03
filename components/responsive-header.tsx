@@ -37,8 +37,6 @@ export default function ResponsiveHeader() {
         getUser().then(x => setUserInfo(x)) // or default user info
     }, []);
 
-    console.log("userInfo", userInfo)
-
     const NavItem = ({ href,
         pathname,
         children,
@@ -108,15 +106,14 @@ export default function ResponsiveHeader() {
     const navItems = [
         { name: "Home", href: "/home" },
         { name: "About Us", href: "/home#about" },
-        { name: "Events", href: "/home#events" },
+        { name: "Events", href: "/event" },
         { name: "Blogs", href: "/blog" },
-        { name: "Surveys", href: "/survey" },
-        { name: "Announcements", href: "/home#events" },
+        { name: "Forms", href: "/form" },
+        { name: "Announcements", href: "/home#announcements" },
         { name: "Gallery", href: "/gallery" },
         { name: "Contact", href: "/contact" },
     ]
 
-    // If not mounted yet, render a simpler version to avoid hydration issues
     if (!isMounted) {
         return (
             <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">

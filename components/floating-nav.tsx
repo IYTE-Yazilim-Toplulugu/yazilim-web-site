@@ -18,10 +18,10 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: "Home", href: "/home", icon: <Home className="h-[18px] w-[18px]" /> },
     { name: "About Us", href: "/home#about", icon: <Code className="h-[18px] w-[18px]" /> },
-    { name: "Events", href: "/home#events", icon: <Ticket className="h-[18px] w-[18px]" /> },
+    { name: "Events", href: "/event", icon: <Ticket className="h-[18px] w-[18px]" /> },
     { name: "Blogs", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
-    { name: "Surveys", href: "/survey", icon: <Scroll className="h-[18px] w-[18px]" /> },
-    { name: "Announcements", href: "/home#events", icon: <Megaphone className="h-[18px] w-[18px]" /> },
+    { name: "Forms", href: "/form", icon: <Scroll className="h-[18px] w-[18px]" /> },
+    { name: "Announcements", href: "/home#announcements", icon: <Megaphone className="h-[18px] w-[18px]" /> },
     { name: "Gallery", href: "/gallery", icon: <Image className="h-[18px] w-[18px]" /> },
     { name: "Contact", href: "/contact", icon: <Send className="h-[18px] w-[18px]" /> },
 

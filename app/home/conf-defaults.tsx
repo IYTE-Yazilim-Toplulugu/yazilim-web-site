@@ -1,4 +1,4 @@
-import {Configuration} from "@/types/types_config";
+import { Configuration } from "@/types/types_config";
 
 
 const ConfigurationDefaults: Configuration = [
@@ -100,12 +100,12 @@ const ConfigurationDefaults: Configuration = [
             },
             quick_links: [
                 { title: "Home", url: "/" },
-                { title: "Events", url: "/events" },
+                { title: "Events", url: "/event" },
                 { title: "Blogs", url: "/blogs" },
                 { title: "Gallery", url: "/gallery" },
-                { title: "About Us", url: "/about" },
-                { title: "Announcements", url: "/announcements" },
-                { title: "Surveys", url: "/surveys" },
+                { title: "About Us", url: "/home#about" },
+                { title: "Announcements", url: "/home#announcements" },
+                { title: "Forms", url: "/form" },
                 { title: "Contact", url: "/contact" },
             ],
             // ==== icon: 4: mail, 7: phone, 8: location, 9: calendar ====

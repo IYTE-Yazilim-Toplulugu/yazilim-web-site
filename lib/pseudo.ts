@@ -1,4 +1,4 @@
-import { Survey } from "@/types/types";
+import { Event, Survey } from "@/types/types";
 
 // an example for test responses
 export const Test = {
@@ -90,9 +90,12 @@ export const SurveyData: Survey[] =
         {
             "id": 13123123123,
             "title": "User Experience Survey",
-            "icon": "user",
+            "icon": 1,
             "description": "Help us improve the design and usability of our website.",
-            "release_date": "2023-10-01",
+            "created_at": "2023-10-01",
+            "image_path": "https://example.com/survey-image.jpg",
+            "is_active": true,
+            "is_anonym": false,
             "requirements": null,
             "questions": [
                 {
@@ -128,9 +131,12 @@ export const SurveyData: Survey[] =
         {
             "id": 1312312312312,
             "title": "Hackathon 2025 Feedback",
-            "icon": "event",
+            "icon": 2,
             "description": "We’d love to hear what you thought of our latest event.",
-            "release_date": "2023-10-10",
+            "created_at": "2023-10-10",
+            "image_path": "https://example.com/hackathon-feedback.jpg",
+            "is_active": true,
+            "is_anonym": true,
             "questions": [
                 {
                     "id": 1584,
@@ -164,9 +170,12 @@ export const SurveyData: Survey[] =
         {
             "id": 1312323421,
             "title": "Feature Request",
-            "icon": "feature",
+            "icon": 4,
             "description": "Let us know what new features you'd love to see.",
-            "release_date": "2023-10-15",
+            "created_at": "2023-10-15",
+            "image_path": "https://example.com/feature-request.jpg",
+            "is_active": true,
+            "is_anonym": false,
             "questions": [
                 {
                     "id": 11231,
@@ -192,44 +201,6 @@ export const SurveyData: Survey[] =
         }
     ]
 
-// This is an example for answered survey POST request
-const SurveyRequest = [
-    {
-        "id": 13123123123,
-        "title": "User Experience Survey",
-        "description": "Help us improve the design and usability of our website.",
-        "questions": [
-            {
-                "id": "q1",
-                "type": "rating",
-                "question": "How would you rate your overall experience?",
-                "options": [1, 2, 3, 4, 5],
-                "answer": 4
-            },
-            {
-                "id": "q2",
-                "type": "multiple_choice",
-                "question": "What device do you use the most to visit our site?",
-                "options": ["Desktop", "Tablet", "Mobile"],
-                "answer": "Desktop"
-            },
-            {
-                "id": "q3",
-                "type": "checkbox",
-                "question": "Which of these features do you find helpful?",
-                "options": ["Events", "Projects", "Blog Posts", "Job Board", "Downloads"],
-                "answer": ["Events", "Blog Posts"]
-            },
-            {
-                "id": "q4",
-                "type": "text",
-                "question": "Any suggestions for improvement?",
-                "answer": "The site is great, but I would love to see more tutorials."
-            }
-        ]
-    }
-]
-
 export const StatsPOSTData = [
     { id: 1, answer: 'Evet' },
     { id: 2, answer: 'Hayır' },
@@ -240,7 +211,7 @@ export const StatsPOSTData = [
     { id: 7, answer: 'Evet' },
 ];
 
-export const EventsData = [
+export const EventsData: Event[] = [
     {
         id: 1,
         title: "Tech Conference 2025",

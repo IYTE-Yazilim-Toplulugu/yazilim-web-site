@@ -1,8 +1,9 @@
-// import { createServer } from "@/lib/supabase/server";
+'use server';
 import supabase from "@/lib/supabase/supabase";
-import { Survey } from "@/types/types";
+import { QuestionFill, Survey } from "@/types/types";
+import { User, UserMetadata } from "@supabase/supabase-js";
 
-export async function getSurveys(page: number, query?: string) {
+export async function getSurveysAdmin(page: number, query?: string) {
     page--;
     if (page < 0) page = 0;
 
@@ -32,6 +33,65 @@ export async function getSurveys(page: number, query?: string) {
         pageCount: !count ? 1 : Math.ceil(count / 10),
         error: null
     };
+}
+
+export async function getSurveys(answeredSurveys: QuestionFill[] | null, is_active: boolean, user: User | null) {
+    let query = supabase
+        .from("surveys")
+        .select<"*", Survey>();
+
+    if (is_active) {
+        query = query.eq("is_active", true);
+    }
+    const userInfo = user?.user_metadata ?? null
+
+    const filters = getRequirementFilters(userInfo);
+    if (filters.length > 0) {
+        query = query.or(filters.join(','));
+    }
+
+    if (answeredSurveys && answeredSurveys.length > 0) {
+        const ids = answeredSurveys.map(s => s.survey_id).join(",");
+        query = query.not("id", "in", `(${ids})`);
+    }
+
+    const { data, error } = await query;
+    return {
+        data: data || [],
+        error
+    };
+}
+
+function getRequirementFilters(userMetadata: UserMetadata | null): string[] {
+    const filters = new Set<string>();
+
+    const isStudent = userMetadata?.isStudent;
+    const isAdmin = userMetadata?.isAdmin;
+    const isSpecial = userMetadata?.isSpecial;
+
+    filters.add("requirements->>type.is.null");
+    if (!userMetadata) return Array.from(filters);
+
+    [0, 1, 2, 3, 4].forEach(page => {
+        let b = false;
+
+        if (isAdmin || page == 0) {
+            b = true;
+        }
+        if (!b && isStudent && (page == 1 || page == 3)) {
+            b = true;
+        }
+        if (!b && isSpecial && (page == 2 || page == 3)) {
+            b = true;
+        }
+        if (b) {
+            filters.add(
+                `requirements->>type.eq.${page}`
+            );
+        }
+    });
+
+    return Array.from(filters);
 }
 
 export async function getSurveyAnswers(surveys: Survey[]) {

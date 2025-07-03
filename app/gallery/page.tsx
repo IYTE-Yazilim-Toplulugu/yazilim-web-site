@@ -1,10 +1,11 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Loading from '@/components/loading';
-import {getGalleryImages, getImagePath} from "@/utils/gallery_client_util";
-import {GalleryImage} from "@/types/types_gallery";
+import { getGalleryImages, getImagePath } from "@/utils/gallery_client_util";
+import { GalleryImage } from "@/types/types_gallery";
+import handleErrorCode from '@/components/handle-error-code';
 
 export default function GalleryPage() {
     const [images, setImages] = useState<GalleryImage[]>([]);
@@ -14,8 +15,8 @@ export default function GalleryPage() {
 
     const [page, setPage] = useState(1);
 
-    async function loadImages(_page: number) {
-        const a = await getGalleryImages(_page);
+    async function loadImages(page: number) {
+        const a = await getGalleryImages(page);
         const data = a.data ?? [];
         const success = data.length > 0;
         if (success) {
@@ -24,6 +25,7 @@ export default function GalleryPage() {
 
         if (a.error) {
             console.error("Error while getting gallery images.", a.error);
+            handleErrorCode(a.error.code)
         }
         setLoading(false);
         return success;
@@ -31,7 +33,7 @@ export default function GalleryPage() {
 
     useEffect(() => {
         loadImages(page).then();
-    }, [ page ]);
+    }, [page]);
 
     const handleImageClick = (image: GalleryImage) => {
         setSelectedImage(image);
@@ -62,7 +64,7 @@ export default function GalleryPage() {
 
     if (loading) {
         return (
-            <Loading/>
+            <Loading />
         )
     }
 
@@ -97,7 +99,7 @@ export default function GalleryPage() {
             {/* Modal */}
             {modalOpen && selectedImage && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
-                     onClick={handleCloseModal}>
+                    onClick={handleCloseModal}>
                     <div className="relative max-w-3xl w-full mx-4" onClick={e => e.stopPropagation()}>
                         <button
                             className="absolute top-2 right-2 text-white text-2xl font-bold bg-black bg-opacity-50 rounded-full px-3 py-1 hover:bg-opacity-80"

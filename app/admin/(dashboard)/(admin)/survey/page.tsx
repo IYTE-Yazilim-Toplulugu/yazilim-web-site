@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import SurveysAll, { SurveyAnswersAll } from "./(server)/surveys_get";
 import { Survey, SurveyAnswers } from "@/types/types";
 import Input from "@/components/admin/form/input/InputField";
-import { Button } from "@/components/ui/button";
-import { PlusIcon, RefreshCwIcon, Search } from "lucide-react";
+import FcButton from "@/components/admin/ui/button/Button";
+import { BookTextIcon, FileCheckIcon, Search, X } from "lucide-react";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/admin/ui/table";
 import Pagination from "@/components/admin/tables/Pagination";
 import Link from "next/link";
@@ -15,19 +15,25 @@ import { HandleIcon } from "@/components/handle-icons";
 import { handleQuestionType, handleSurveyType } from "@/components/handle-types";
 import { getSurveyImagePath } from "@/utils/survey_client_util";
 import Loading from "@/components/loading";
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 
 export default function AdminSurveysPage() {
     // Data handling state
     const [surveys, setSurveys] = useState<Survey[]>();
     const [answers, setAnswers] = useState<SurveyAnswers[]>([]);
+    const [selectedAnswers, setSelectedAnswers] = useState<number | null>(null);
+    const [userAnswers, setUserAnswers] = useState<number | null>(null);
 
     // Pagination and search state
     const [pageCount, setPageCount] = useState<number>(1);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState<string>();
     const [queryTemp, setQueryTemp] = useState<string>();
+
     // Sorting state
     const [sortKey, setSortKey] = useState<"id" | "title" | "icon" | "description" | "is_active" | "is_anonym" | "created_at">("id");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -54,7 +60,6 @@ export default function AdminSurveysPage() {
     const fetchAnswers = async () => {
         if (surveys && surveys.length > 0) {
             const res = await SurveyAnswersAll(surveys);
-            console.log("Survey answers fetched:", res);
             if (res.error) {
                 console.error("Error fetching survey answers:", res.error);
                 handleErrorCode(res.error.code);
@@ -120,9 +125,9 @@ export default function AdminSurveysPage() {
                     }
                     onChange={(e) => setQueryTemp(e.target.value)}
                 />
-                <Button className={"cursor-pointer"} onClick={() => setQuery(queryTemp)}>
+                <FcButton className={"cursor-pointer"} onClick={() => setQuery(queryTemp)}>
                     <Search />
-                </Button >
+                </FcButton>
             </div >
 
             <div className="overflow-x-auto w-full h-[70vh]">
@@ -134,35 +139,35 @@ export default function AdminSurveysPage() {
                         }
                     }}
                 >
-                    <Table className={"m-4 p-4 rounded-2xl border border-gray-500"}>
+                    <Table className={"m-4 p-4 rounded-2xl border border-gray-700"}>
                         <TableHeader>
-                            <TableRow className={"font-bold text-center divide-x"}>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                            <TableRow className={"font-bold text-center divide-x divide-gray-700"}>
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("id")}>* ID {sortKey === "id" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("title")}>* TITLE {sortKey === "title" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("icon")}>ICON {sortKey === "icon" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("description")}>DESCRIPTION {sortKey === "description" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500">Questions</TableCell>
-                                <TableCell className="p-4 border border-gray-500">IMAGE</TableCell>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                                <TableCell className="p-4 border border-gray-700">Questions</TableCell>
+                                <TableCell className="p-4 border border-gray-700">IMAGE</TableCell>
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("is_active")}>* IS ACTIVE {sortKey === "is_active" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("is_anonym")}>* IS ANONYM {sortKey === "is_anonym" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500">TYPE</TableCell>
-                                <TableCell className="p-4 border border-gray-500">EVENTS</TableCell>
-                                <TableCell className="p-4 border border-gray-500">ANSWERS</TableCell>
-                                <TableCell className="p-4 border border-gray-500 cursor-pointer select-none"
+                                <TableCell className="p-4 border border-gray-700">TYPE</TableCell>
+                                <TableCell className="p-4 border border-gray-700">EVENTS</TableCell>
+                                <TableCell className="p-4 border border-gray-700">ANSWERS</TableCell>
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("created_at")}>* CREATED AT {sortKey === "created_at" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
-                                <TableCell className="p-4 border border-gray-500">{""}</TableCell>
-                                <TableCell className="p-4 border border-gray-500">{""}</TableCell>
+                                <TableCell className="p-4 border border-gray-700">{""}</TableCell>
+                                <TableCell className="p-4 border border-gray-700">{""}</TableCell>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {sortedSurveys?.map(u => (
-                                <TableRow key={u.id} className={"divide-x divide-gray-500 border border-gray-500"}>
+                                <TableRow key={u.id} className={"divide-x divide-gray-700 border border-gray-700"}>
                                     <TableCell className="p-4 text-center">{u.id}</TableCell>
                                     <TableCell className="p-4 relative group">
                                         <span className="peer">
@@ -172,7 +177,7 @@ export default function AdminSurveysPage() {
                                             {u.title.length > 16 && (
                                             peer-hover:delay-500
                                             max-w-xs w-max top-full rounded-lg text-wrap
-                                            bg-card text-foreground border border-gray-500
+                                            bg-card text-foreground border border-gray-700
                                             shadow-lg z-40 animate-fadeIn">
                                             {u.title}
                                         </div>
@@ -181,7 +186,7 @@ export default function AdminSurveysPage() {
                                         <span className="peer">{u.icon}</span>
                                         <div className="mt-1 absolute top-8 left-1/2 -translate-x-1/2
                                             w-7 h-7 text-center items-center justify-center rounded-full
-                                            hidden group-hover:block bg-card text-foreground border border-gray-500">
+                                            hidden group-hover:block bg-card text-foreground border border-gray-700">
                                             {HandleIcon(u.icon)}
                                         </div>
                                     </TableCell>
@@ -193,7 +198,7 @@ export default function AdminSurveysPage() {
                                             <div className="p-2 mt-1 absolute left-1/2 -translate-x-1/2 hidden group-hover:block
                                             peer-hover:delay-500
                                             w-full top-full rounded-lg text-wrap
-                                            bg-card text-foreground border border-gray-500
+                                            bg-card text-foreground border border-gray-700
                                             shadow-lg z-40 animate-fadeIn">
                                                 {u.description}
                                             </div>
@@ -216,7 +221,7 @@ export default function AdminSurveysPage() {
                                                     : u.questions.length === 2 ? "grid-cols-1 md:grid-cols-2 w-[60vw] sm:w-[40vw]" : "grid-cols-1 w-[60vw]  md:w-[40vw] lg:w-[20vw]"}
                                         gap-4 max-h-[60vh] overflow-auto
                                         top-full rounded-lg whitespace-pre-wrap
-                                        bg-card text-foreground border border-gray-500
+                                        bg-card text-foreground border border-gray-700
                                         shadow-lg z-40 animate-fadeIn`}
                                         >
                                             {u.questions.map((q, i) => (
@@ -248,65 +253,166 @@ export default function AdminSurveysPage() {
                                         </div>)}
                                     </TableCell>
                                     <TableCell className={`${u.image_path && "hover:bg-sidebar-ring hover:text-background cursor-pointer"} dark:hover:text-primary`}>
-                                        <Link href={u.image_path ? getSurveyImagePath(u.image_path) : ""}
-                                            target="_blank" className="p-4 text-center">
-                                            {u.image_path}
-                                        </Link>
+                                        {u.image_path && <Link href={getSurveyImagePath(u.image_path)}
+                                            target="_blank" className="p-4 flex items-center justify-center">
+                                            <Image src={getSurveyImagePath(u.image_path)}
+                                                alt={`image-${u.image_path}`}
+                                                width={80} height={45}
+                                                className="object-cover aspect-video"
+                                            />
+                                        </Link>}
                                     </TableCell>
                                     <TableCell className={`p-4 text-center ${u.is_active ? "text-success-400" : "text-destructive"}`}>{u.is_active.toString()}</TableCell>
                                     <TableCell className={`p-4 text-center ${u.is_anonym ? "text-success-400" : "text-destructive"}`}>{u.is_anonym.toString()}</TableCell>
                                     <TableCell className={`p-4 text-center ${!u.requirements?.type && "text-destructive"}`}>{u.requirements?.type ? `${u.requirements.type} • Open for ${handleSurveyType(u.requirements.type)}` : "None"}</TableCell>
                                     <TableCell className={`p-4 text-center text-nowrap ${!u.requirements?.events && "text-destructive"}`}>{u.requirements?.events ? `[${u.requirements.events?.join(", ")}]` : "None"}</TableCell>
-                                    <TableCell className="p-4 text-center flex flex-row justify-center">
-                                        {answers.some(s => s.survey_id === u.id) ? answers.filter(s => s.survey_id === u.id)?.map((answerData, index) => (
-                                            <div key={index} className="relative group">
-                                                <span className="peer">
-                                                    {`user_id:${answerData.user_id.toString().substring(0, 10)}... answer:${answerData.answers[0]?.answer?.toString().substring(0, 16)}...`}
-                                                </span>
-                                                <div
-                                                    className={`p-4 mt-1 absolute left-1/2 -translate-x-1/2 hidden
-                                                    group-hover:grid 
-                                                        ${answerData.answers.length > 2 ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-[60vw]"
-                                                            : answerData.answers.length === 2 ? "grid-cols-1 md:grid-cols-2 w-[60vw] sm:w-[40vw]"
-                                                                : "grid-cols-1 w-[60vw]  md:w-[40vw] lg:w-[20vw]"}  
-                                                    gap-4
-                                                    max-h-[60vh] overflow-auto
-                                                    top-full rounded-lg whitespace-pre-wrap
-                                                    bg-card text-foreground border border-gray-500
-                                                    shadow-lg z-40 animate-fadeIn`}
+
+
+                                    <TableCell>
+                                        {answers.some(answer => answer.survey_id === u.id) && (
+                                            <motion.div layoutId={selectedAnswers?.toString()}
+                                                className="p-4 w-full h-full flex justify-center items-center
+                                                text-brand-500 hover:bg-brand-500 cursor-pointer"
+                                                onClick={() => setSelectedAnswers(u.id)}>
+                                                <BookTextIcon />
+                                            </motion.div>
+
+                                        )}
+                                        <AnimatePresence>
+                                            {selectedAnswers === u.id && (
+                                                <motion.section
+                                                    key="overlay"
+                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    animate={{ opacity: selectedAnswers === u.id ? 1 : 0, scale: selectedAnswers === u.id ? 1 : 0.95 }}
+                                                    exit={{ opacity: 0, scale: 0.95 }}
+                                                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                    onClick={() => setSelectedAnswers(null)}
+                                                    className={`fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50`}
+
                                                 >
-                                                    {"User: " + answerData.user_id}
-                                                    {answerData.answers.map((a, i) => {
-                                                        const q = u.questions.find(question => question.id === a.question_id);
+                                                    <Button
+                                                        variant="outline"
+                                                        size="icon"
+                                                        onClick={() => setSelectedAnswers(null)}
+                                                        aria-label="Close preview"
+                                                        className="group fixed top-20 right-4 
+                                                        text-muted-foreground hover:text-primary hover:bg-bite-tongue 
+                                                        focus:outline-none focus:ring-2 focus:ring-offset-2
+                                                        focus:ring-offset-background focus:ring-bite-tongue rounded-full z-50"
+                                                    >
+                                                        <X className="transition-transform duration-800 group-hover:rotate-[180deg]" />
+                                                    </Button>
+                                                    <motion.section
+                                                        layoutId={selectedAnswers.toString()}
+                                                        className="m-8 p-10 relative w-full h-4/5
+                                                        bg-muted rounded-2xl shadow-2xl
+                                                        overflow-y-auto overflow-x-auto scrollbar
+                                                        scrollbar-track-bite-tongue scrollbar-thumb-bite-tongue z-30"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        {(() => {
+                                                            const surveyAnswers = answers.filter(answer => answer.survey_id === u.id);
 
-                                                        if (!q) return null;
+                                                            return (
+                                                                <Table>
+                                                                    <TableHeader>
+                                                                        <TableRow className="font-bold text-center">
+                                                                            <TableCell className="p-4">ID</TableCell>
+                                                                            <TableCell className="p-4">User ID</TableCell>
+                                                                            <TableCell className="p-4">Survey ID</TableCell>
+                                                                            <TableCell className="p-4">Answers</TableCell>
+                                                                            <TableCell className="p-4">ANSWERED AT</TableCell>
+                                                                        </TableRow>
+                                                                    </TableHeader>
+                                                                    <TableBody>
+                                                                        {surveyAnswers.length > 0 && surveyAnswers.map((answerData, index) => (
+                                                                            <TableRow key={index} className="text-center">
+                                                                                <TableCell className="p-4">{answerData.id}</TableCell>
+                                                                                <TableCell className="p-4">{answerData.user_id}</TableCell>
+                                                                                <TableCell className="p-4">{answerData.survey_id}</TableCell>
+                                                                                <TableCell className="flex justify-center items-center">
+                                                                                    <motion.div layoutId={userAnswers?.toString()}
+                                                                                        className="p-4 cursor-pointer" onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            setUserAnswers(answerData.id)
+                                                                                        }}>
+                                                                                        <FileCheckIcon />
+                                                                                    </motion.div>
+                                                                                    <AnimatePresence>
+                                                                                        {userAnswers === answerData.id && (
+                                                                                            <motion.section
+                                                                                                key="overlay"
+                                                                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                                                                animate={{ opacity: selectedAnswers === u.id ? 1 : 0, scale: selectedAnswers === u.id ? 1 : 0.95 }}
+                                                                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                                                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                                                                onClick={(e) => {
+                                                                                                    e.stopPropagation();
+                                                                                                    setUserAnswers(null)
+                                                                                                }}
+                                                                                                className={`fixed inset-0 bg-black/40 backdrop-blur-md
+                                                                                                flex items-center justify-center z-50`}
+                                                                                            >
+                                                                                                <Button
+                                                                                                    variant="outline"
+                                                                                                    size="icon"
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation();
+                                                                                                        setUserAnswers(null)
+                                                                                                    }}
+                                                                                                    aria-label="Close preview"
+                                                                                                    className="group fixed top-20 right-4
+                                                                                                    text-muted-foreground hover:text-primary hover:bg-bite-tongue
+                                                                                                    focus:outline-none focus:ring-2 focus:ring-offset-2
+                                                                                                    focus:ring-offset-background focus:ring-bite-tongue rounded-full z-50"
+                                                                                                >
+                                                                                                    <X className="transition-transform duration-800 group-hover:rotate-[180deg]" />
+                                                                                                </Button>
+                                                                                                <motion.section
+                                                                                                    layoutId={userAnswers.toString()}
+                                                                                                    className="m-8 p-10 relative w-1/2 h-3/5
+                                                                                                    bg-muted rounded-2xl shadow-2xl
+                                                                                                    overflow-y-auto overflow-x-auto scrollbar
+                                                                                                    scrollbar-track-bite-tongue scrollbar-thumb-bite-tongue z-30"
+                                                                                                    onClick={(e) => e.stopPropagation()}
+                                                                                                >
+                                                                                                    <Table>
+                                                                                                        <TableHeader>
+                                                                                                            <TableRow className="font-bold text-center">
+                                                                                                                <TableCell>Question Id</TableCell>
+                                                                                                                <TableCell>Answer</TableCell>
+                                                                                                            </TableRow>
+                                                                                                        </TableHeader>
+                                                                                                        <TableBody>
+                                                                                                            {answerData.answers && answerData.answers.length > 0
+                                                                                                                && answerData.answers.map((answers, i) => (
+                                                                                                                    <TableRow key={i} className="text-center">
+                                                                                                                        <TableCell className="p-4">{answers.question_id}</TableCell>
+                                                                                                                        <TableCell className="p-4">
+                                                                                                                            {answers.answer?.toString()}
+                                                                                                                        </TableCell>
+                                                                                                                    </TableRow>
+                                                                                                                ))}
+                                                                                                        </TableBody>
+                                                                                                    </Table>
+                                                                                                </motion.section>
+                                                                                            </motion.section>
+                                                                                        )}
+                                                                                    </AnimatePresence>
+                                                                                </TableCell>
+                                                                                <TableCell className="p-4">{answerData.answered_at}</TableCell>
+                                                                            </TableRow>
 
-                                                        return (
-                                                            <div
-                                                                key={i}
-                                                                className="w-full p-3 border border-border rounded-md shadow-sm bg-muted"
-                                                            >
-                                                                <h2 className="text-lg font-semibold text-bite-tongue underline mb-1">
-                                                                    {i + 1} • <span className="text-sm font-normal">question_id: {q.id}</span>
-                                                                </h2>
-                                                                <p>
-                                                                    required:{" "}
-                                                                    <span className={q.required ? "text-success-500" : "text-destructive"}>
-                                                                        {`${q.required}`}
-                                                                    </span>
-                                                                </p>
-                                                                <p>
-                                                                    question: <span className="text-brand-400">{q.question}</span>
-                                                                </p>
-                                                                <p>options: [{q.options?.join(", ") || "None"}]</p>
-                                                                <p>
-                                                                    <strong>Answer:</strong> {a.answer ?? <em className="text-destructive">No answer</em>}
-                                                                </p>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>)) : <p className="flex text-center items-center justify-center text-destructive">None</p>}
+                                                                        ))}
+                                                                    </TableBody>
+                                                                </Table>
+
+                                                            );
+                                                        })()}
+                                                    </motion.section>
+                                                </motion.section>
+                                            )}
+                                        </AnimatePresence>
                                     </TableCell>
                                     <TableCell className="p-4">{new Date(u.created_at).toLocaleString()}</TableCell>
                                     <TableCell className="
