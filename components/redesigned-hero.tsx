@@ -285,7 +285,7 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
                                 variant="ghost"
                                 size="icon"
                                 className="rounded-full border border-primary/20 backdrop-blur-sm hover:bg-white/10 transition-colors"
-                                onClick={() => document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })}
+                                onClick={() => document.getElementById("announcements")?.scrollIntoView({ behavior: "smooth" })}
                             >
                                 <ArrowDown className="h-4 w-4" />
                             </Button>

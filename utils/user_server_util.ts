@@ -1,8 +1,8 @@
-import {createServer} from "@/lib/supabase/server";
+import { createServer } from "@/lib/supabase/server";
 import supabase from "@/lib/supabase/supabase";
-import {AuthError, UserResponse} from "@supabase/auth-js";
-import {UserInfo} from "@/types/types_user";
-import {undefined} from "zod";
+import { AuthError, UserResponse } from "@supabase/auth-js";
+import { UserInfo } from "@/types/types_user";
+import { undefined } from "zod";
 
 const pageSize = 50;
 
@@ -78,6 +78,8 @@ export async function getUser(id: string) {
 
         if (error)
             console.error(error);
+
+        console.log("getUser", data?.at(0));
 
         return data && data.length >= 1 ? data.at(0) : null;
     }

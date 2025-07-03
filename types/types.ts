@@ -74,13 +74,6 @@ export interface NavbarProps {
     className?: string;
 }
 
-export type blog = {
 
-    id: number;
-    slug: string;
-    title: string;
-    content: string;
-    cover_image_url: string;
-}
 
 export type HexColor = `#${string}`;

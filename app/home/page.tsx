@@ -20,6 +20,9 @@ import Loading from '@/components/loading';
 import ConfigurationDefaults from './conf-defaults';
 import { getConfigurations } from "@/utils/config_client_util";
 import { Configuration } from "@/types/types_config";
+import { Announcement } from '@/types/types_announcement';
+import { getAnnouncementImagePath, getAnnouncements } from '@/utils/announcement_client_util';
+import handleErrorCode from '@/components/handle-error-code';
 
 
 // Simple loading component
@@ -37,19 +40,30 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
 
     const [homeData, setHomeData] = useState<Configuration>(ConfigurationDefaults);
+    const [announcementData, setAnnouncementData] = useState<Announcement[]>();
 
     // Data fetching
     useEffect(() => {
         getConfigurations(["home_hero", "home_about_us", "home_footer"]).then(x => {
             if (x.data && x.data.length > 0) {
-                console.log("Fetched Home page data:", x.data);
                 setHomeData(x.data);
             }
             else {
                 console.error("Error fetching Home page data:", x.error);
+                handleErrorCode(x.error?.code || null);
             }
             setLoading(false);
         });
+
+        getAnnouncements().then(x => {
+            if (x.data && x.data.length > 0) {
+                setAnnouncementData(x.data);
+            } else {
+                console.error("Error fetching announcements:", x.error);
+                handleErrorCode(x.error?.code || null);
+            }
+            setLoading(false);
+        })
     }, [])
 
     useEffect(() => {
@@ -84,24 +98,24 @@ export default function Home() {
                             <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-destructive'>Announcements</h1>
                             <div className='m-8 md:m-24'>
                                 <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
-                                    {SwiperData.map((item, index) => (
+                                    {announcementData && announcementData.map((announcement, index) => (
                                         <div key={index} className="keen-slider__slide rounded-2xl
                                             h-fit bg-muted transition-colors
                                             duration-300 ease-in-out hover:text-white hover:bg-destructive">
-                                            {/* <Link href={"/event/" + item.slug} > */}
                                             <Image
-                                                src={item.image}
-                                                alt={`Slide ${index + 1}`}
+                                                src={getAnnouncementImagePath(announcement.image_path) || "/images/yazilim.png"}
+                                                alt={`${announcement.title}`}
                                                 width={1000} height={500}
-                                                className="rounded-lg object-cover aspect-[2] w-full h-full"
+                                                className="rounded-lg object-cover aspect-video w-full h-full"
                                             />
                                             <div className='m-8 flex flex-col text-center items-center space-y-4'>
-                                                <p className='text-2xl font-bold'>{item.title}</p>
-                                                <p className='text-lg font-semibold'>{item.description}</p>
+                                                <p className='text-2xl font-bold'>{announcement.title}</p>
+                                                <p className='text-lg font-semibold'>{announcement.description}</p>
                                             </div>
-                                            {/* </Link> */}
                                         </div>
                                     ))}
+
+
                                     {/* <div className="keen-slider__slide rounded-2xl aspect-[1.6] w-full h-full bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive flex items-center justify-center"> */}
                                     {/*     <div className="text-center space-y-4"> */}
                                     {/*         <p className="text-4xl font-bold">Can't find what you are looking for?</p> */}
@@ -112,6 +126,8 @@ export default function Home() {
                                     {/*         </Link> */}
                                     {/*     </div> */}
                                     {/* </div> */}
+
+
                                 </FreeSwiper>
                             </div>
                         </ScrollReveal>

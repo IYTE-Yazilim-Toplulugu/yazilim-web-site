@@ -259,6 +259,7 @@ const config = {
     plugins: [
         require("tailwindcss-animate"),
         require("tailwind-scrollbar"),
+        require('@tailwindcss/typography'),
 
         // ADMIN PANEL PLUGIN
         plugin(function ({ addUtilities, addComponents, addBase, theme }) {

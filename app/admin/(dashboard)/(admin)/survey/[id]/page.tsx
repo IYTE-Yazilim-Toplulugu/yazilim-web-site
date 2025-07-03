@@ -173,7 +173,14 @@ export default function AdminSurveyPage() {
                         [e.target.name]: parsed,
                     };
                 });
+            } else {
+                // @ts-ignore
+                setSurvey(prevSurvey => ({
+                    ...prevSurvey,
+                    [e.target.name]: "",
+                }))
             }
+
             switch (e.target.name) {
                 case "questions":
                     setError(prevError => ({

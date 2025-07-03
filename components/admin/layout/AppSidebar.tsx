@@ -46,7 +46,7 @@ const navItems: NavItem[] = [
     {
         icon: <Rss />,
         name: "Blogs",
-        path: "/admin/blog/all",
+        path: "/admin/blog",
     },
     {
         icon: <CalenderIcon />,
@@ -56,7 +56,7 @@ const navItems: NavItem[] = [
     {
         icon: <MegaphoneIcon />,
         name: "Announcements",
-        path: "/admin/announcement/all",
+        path: "/admin/announcement",
     },
     {
         icon: <GalleryVerticalIcon />,
@@ -135,8 +135,8 @@ const AppSidebar: React.FC = () => {
                                 {(isExpanded || isHovered || isMobileOpen) && (
                                     <ChevronDownIcon
                                         className={`ml-auto w-5 h-5 transition-transform duration-200  ${openSubmenu?.index === index
-                                                ? "rotate-180 text-brand-500"
-                                                : ""
+                                            ? "rotate-180 text-brand-500"
+                                            : ""
                                             }`}
                                     />
                                 )}
@@ -145,7 +145,7 @@ const AppSidebar: React.FC = () => {
                             nav.path && (
                                 <Link
                                     href={nav.path}
-                                    className={`${isActive ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'} p-3 rounded-xl hover:opacity-70 flex flex-row gap-4 ${isActive ? "menu-item-active" : "menu-item-inactive"
+                                    className={`${isActive ? 'bg-bite-tongue text-white' : 'text-gray-600 dark:text-gray-300'} p-3 rounded-xl hover:opacity-70 flex flex-row gap-4 ${isActive ? "menu-item-active" : "menu-item-inactive"
                                         }`}
                                 >
                                     <span
