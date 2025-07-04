@@ -105,9 +105,9 @@ export default function BlogPage() {
                 </div>
                 <BlogMarkdown content={blogData?.content || ""} />
 
+                <p className="text-sm text-muted-foreground mx-8 mt-4">Tags: {blogData?.tags.join(", ")}</p>
 
-                <p className="absolute text-sm bottom-4 right-4 text-muted-foreground mx-8">Tags: {blogData?.tags.join(", ")}</p>
-                <div className="flex justify-between items-start mt-8">
+                <div className="flex justify-between items-start mt-4">
                     <Link href={`/blog/${id - 1}`} className="text-start">
                         {previousBlog && <p className="text-sm">See Previous Blog</p>}
                         <p>{previousBlog && previousBlog.title}</p>

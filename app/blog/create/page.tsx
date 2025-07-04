@@ -102,7 +102,7 @@ export default function CreateBlogPage() {
                 <Link href="/blog">
                     <Button variant={"secondary"} className="absolute left-0 -top-8
                     bg-bite-tongue hover:bg-happy-hearts cursor-pointer
-                    shadow-sm shadow-black/30 z-50"><ArrowLeft /></Button>
+                    shadow-sm shadow-black/30 z-30"><ArrowLeft /></Button>
                 </Link>
                 <div>
                     <Label htmlFor="blog-title" className="text-lg font-bold mb-4">Blog Title</Label>
