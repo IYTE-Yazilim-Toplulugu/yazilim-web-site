@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 
 
-export async function getBlogs(is_published: boolean, query?: string) {
+export async function getBlogs(is_published: boolean) {
 
     const { data, error } = await createClient()
         .from("blogs")
@@ -42,12 +42,12 @@ export async function createBlog(
         .from("blogs")
         .insert({
             author_id: author.id,
+            author_name: author.user_metadata.full_name,
             title: title,
             content: content,
             tags: tags,
             cover_image_url: cover_image_url,
             is_published: true,
-            published_at: new Date().toISOString()
         })
         .select("*");
 
@@ -57,7 +57,8 @@ export async function createBlog(
     };
 }
 
-export function getBlogImagePath(image_path: string) {
+export function getBlogImagePath(image_path: string | null) {
+    if (!image_path) return "";
     return createClient().storage
         .from('blog-images')
         .getPublicUrl(image_path)

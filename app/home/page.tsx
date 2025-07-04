@@ -95,40 +95,40 @@ export default function Home() {
                 <Suspense fallback={<LoadingSection name="Announcements" />}>
                     <SectionContainer id="announcements" className="relative overflow-hidden">
                         <ScrollReveal delay={0.2} >
-                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-destructive'>Announcements</h1>
+                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-bite-tongue'>Announcements</h1>
                             <div className='m-8 md:m-24'>
-                                <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
-                                    {announcementData && announcementData.map((announcement, index) => (
-                                        <div key={index} className="keen-slider__slide rounded-2xl
-                                            h-fit bg-muted transition-colors
-                                            duration-300 ease-in-out hover:text-white hover:bg-destructive">
-                                            <Image
-                                                src={getAnnouncementImagePath(announcement.image_path) || "/images/yazilim.png"}
-                                                alt={`${announcement.title}`}
-                                                width={1000} height={500}
-                                                className="rounded-lg object-cover aspect-video w-full h-full"
-                                            />
-                                            <div className='m-8 flex flex-col text-center items-center space-y-4'>
-                                                <p className='text-2xl font-bold'>{announcement.title}</p>
-                                                <p className='text-lg font-semibold'>{announcement.description}</p>
+                                {announcementData && (
+                                    <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
+                                        {announcementData.map((announcement, index) => (
+                                            <div key={index} className="keen-slider__slide rounded-2xl
+                                            h-fit bg-bite-tongue dark:bg-card transition-colors
+                                            border-2 border-border
+                                            duration-300 ease-in-out text-background dark:text-primary">
+                                                <Image
+                                                    src={getAnnouncementImagePath(announcement.image_path) || "/images/yazilim.png"}
+                                                    alt={`${announcement.title}`}
+                                                    width={1000} height={500}
+                                                    className="rounded-lg object-cover aspect-video w-full h-full"
+                                                />
+                                                <div className='m-8  flex flex-col text-center items-center space-y-4'>
+                                                    <p className='text-2xl font-bold'>{announcement.title}</p>
+                                                    <p className='text-lg font-semibold'>{announcement.description}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
 
 
-                                    {/* <div className="keen-slider__slide rounded-2xl aspect-[1.6] w-full h-full bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive flex items-center justify-center"> */}
-                                    {/*     <div className="text-center space-y-4"> */}
-                                    {/*         <p className="text-4xl font-bold">Can't find what you are looking for?</p> */}
-                                    {/*         <Link href="/events"> */}
-                                    {/*             <p className="text-2xl font-semibold hover:underline hover:underline-offset-2"> */}
-                                    {/*                 See all events */}
-                                    {/*             </p> */}
-                                    {/*         </Link> */}
-                                    {/*     </div> */}
-                                    {/* </div> */}
-
-
-                                </FreeSwiper>
+                                        {/*     <div className="text-center space-y-4"> */}
+                                        {/* <div className="keen-slider__slide rounded-2xl aspect-[1.6] w-full h-full bg-muted transition-colors duration-300 ease-in-out hover:text-white hover:bg-destructive flex items-center justify-center"> */}
+                                        {/*         <p className="text-4xl font-bold">Can't find what you are looking for?</p> */}
+                                        {/*         <Link href="/events"> */}
+                                        {/*             <p className="text-2xl font-semibold hover:underline hover:underline-offset-2"> */}
+                                        {/*                 See all events */}
+                                        {/*             </p> */}
+                                        {/*         </Link> */}
+                                        {/*     </div> */}
+                                        {/* </div> */}
+                                    </FreeSwiper>)}
                             </div>
                         </ScrollReveal>
                         {/* Scroll indicator */}

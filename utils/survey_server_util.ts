@@ -62,6 +62,17 @@ export async function getSurveys(answeredSurveys: QuestionFill[] | null, is_acti
     };
 }
 
+export async function getFormCount() {
+    const { count, error } = await supabase
+        .from("survey_answers")
+        .select("*", { count: "exact", head: true }); // `head: true` means return only headers, not data
+
+    if (error) {
+        return 0;
+    }
+    return count || 0;
+}
+
 function getRequirementFilters(userMetadata: UserMetadata | null): string[] {
     const filters = new Set<string>();
 

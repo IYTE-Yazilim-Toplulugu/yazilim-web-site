@@ -1,6 +1,7 @@
 export interface Blog {
     id: number;
     author_id: string; // UUID format
+    author_name: string; // Author's name
     title: string;
     content: string;
     tags: string[];

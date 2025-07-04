@@ -5,6 +5,7 @@ import { useSidebar } from "../context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import YazilimIcon from "@/components/yazilim_icon";
 
 const AppHeader: React.FC = () => {
     const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -82,21 +83,13 @@ const AppHeader: React.FC = () => {
                         {/* Cross Icon */}
                     </button>
 
-                    <Link href="/" className="lg:hidden">
-                        <Image
-                            width={154}
-                            height={32}
-                            className="dark:hidden"
-                            src="@/components/admin/images/logo/logo.svg"
-                            alt="Logo"
-                        />
-                        <Image
-                            width={154}
-                            height={32}
-                            className="hidden dark:block"
-                            src="@/components/admin/images/logo/logo-dark.svg"
-                            alt="Logo"
-                        />
+                    <Link href="/admin" className="lg:hidden">
+                        <div className={"flex items-center gap-4 overflow-hidden"}>
+                            <YazilimIcon
+                                className={" dark:fill-white"}
+                                width={48}
+                            />
+                        </div>
                     </Link>
 
                     <button

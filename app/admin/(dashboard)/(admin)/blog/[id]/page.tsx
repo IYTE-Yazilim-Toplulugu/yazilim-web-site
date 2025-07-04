@@ -18,6 +18,7 @@ import BlogDelete from "./(server)/blog_delete";
 import BlogImageUpload from "./(server)/blog_image_upload";
 import { MessageCircleQuestionIcon } from "lucide-react";
 import { getUser } from "@/utils/user_client_util";
+import { useTheme } from "next-themes";
 
 export default function AdminBlogPage() {
     const id = Number(useParams().id);
@@ -25,6 +26,7 @@ export default function AdminBlogPage() {
     const [blog, setBlog] = useState<Blog | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Record<string, string> | null>(null);
+    const { theme } = useTheme();
 
     useEffect(() => {
         id != 0 ? fetchBlog() : setLoading(false);
@@ -239,7 +241,10 @@ export default function AdminBlogPage() {
                                 ...prev,
                                 content: e || ""
                             }));
-                        }} />
+                        }}
+                            data-color-mode={theme === "light" ? "light" : "dark"} preview="edit"
+                            height={512}
+                        />
 
                         <div className={"relative group flex gap-2"}>
                             <Label htmlFor={"tags"}>Tags</Label>

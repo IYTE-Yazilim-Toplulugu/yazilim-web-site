@@ -2,17 +2,18 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Loading from "@/components/loading";
-import { Blog } from "@/types/types";
+import { Blog } from "@/types/types_blog";
 import { useParams } from "next/navigation";
 import { getBlog, getBlogImagePath } from "@/utils/blog_client_util";
 import handleErrorCode from "@/components/handle-error-code";
-import Markdown from "react-markdown";
+import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import { useIsMobile } from "@/components/ui/use-mobile";
 import MarkdownComponents from "@/components/markdown";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import BlogMarkdown from "@/components/blog-markdown";
 
 
 export default function BlogPage() {
@@ -23,6 +24,8 @@ export default function BlogPage() {
 
     const [loading, setLoading] = useState<boolean>(true);
     const isMobile = useIsMobile()
+
+    console.log("BlogPage", blogData?.content);
 
     useEffect(() => {
         if (id) {
@@ -80,7 +83,7 @@ export default function BlogPage() {
                 </Link>
                 <div className="relative">
                     <Image
-                        src={getBlogImagePath(blogData.cover_image_url) || "/images/yazilim.png"}
+                        src={getBlogImagePath(blogData?.cover_image_url || null) || "/images/yazilim.png"}
                         width={1280}
                         height={720}
                         alt="Blog Cover"
@@ -100,14 +103,10 @@ export default function BlogPage() {
                         {new Date(blogData?.published_at).toLocaleDateString('tr-TR')}
                     </p>
                 </div>
-                <div className="md:m-4 mb-32 prose prose-lg max-w-none break-words text-primary prose-pre:overflow-x-auto overflow-x-auto">
-                    {/* @ts-ignore */}
-                    <Markdown components={MarkdownComponents}>
-                        {blogData?.content || ''}
-                    </Markdown>
-                </div>
+                <BlogMarkdown content={blogData?.content || ""} />
 
-                {/*<p className="absolute text-sm bottom-4 right-4 text-muted-foreground mx-8">Tags: {blogData?.tags.join(", ")}</p>*/}
+
+                <p className="absolute text-sm bottom-4 right-4 text-muted-foreground mx-8">Tags: {blogData?.tags.join(", ")}</p>
                 <div className="flex justify-between items-start mt-8">
                     <Link href={`/blog/${id - 1}`} className="text-start">
                         {previousBlog && <p className="text-sm">See Previous Blog</p>}

@@ -2,7 +2,6 @@ import { createServer } from "@/lib/supabase/server";
 import supabase from "@/lib/supabase/supabase";
 import { AuthError, UserResponse } from "@supabase/auth-js";
 import { UserInfo } from "@/types/types_user";
-import { undefined } from "zod";
 
 const pageSize = 50;
 
@@ -90,6 +89,19 @@ export async function getUser(id: string) {
 
         return null;
     }
+}
+
+export async function getUserCount() {
+    const { count, error } = await supabase
+        .from("user_infos")
+        .select("*", { count: "exact", head: true }); // `head: true` means return only headers, not data
+
+    if (error) {
+        console.error("Error fetching user count:", error);
+        return 0;
+    }
+
+    return count || 0;
 }
 
 export async function getUsers(page: number, query?: string) {

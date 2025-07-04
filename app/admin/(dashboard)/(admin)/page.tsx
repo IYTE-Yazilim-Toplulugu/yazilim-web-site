@@ -8,7 +8,7 @@ import RecentOrders from "@/components/admin/ecommerce/RecentOrders";
 import DemographicCard from "@/components/admin/ecommerce/DemographicCard";
 
 export const metadata: Metadata = {
-    title:"Society Dashboard",
+    title: "Society Dashboard",
     description: "Society Admin Panel Dashboard",
 };
 
@@ -17,25 +17,24 @@ export default function Ecommerce() {
         <div className="grid grid-cols-12 gap-4 md:gap-6 mt-20">
             <div className="col-span-12 space-y-6 xl:col-span-7">
                 <EcommerceMetrics />
-
-                <MonthlySalesChart />
+                {/* <MonthlySalesChart /> */}
             </div>
 
-            <div className="col-span-12 xl:col-span-5">
-                <MonthlyTarget />
-            </div>
-
-            <div className="col-span-12">
-                <StatisticsChart />
-            </div>
-
-            <div className="col-span-12 xl:col-span-5">
-                <DemographicCard />
-            </div>
-
-            <div className="col-span-12 xl:col-span-7">
-                <RecentOrders />
-            </div>
+            {/* <div className="col-span-12 xl:col-span-5"> */}
+            {/*     <MonthlyTarget /> */}
+            {/* </div> */}
+            {/**/}
+            {/* <div className="col-span-12"> */}
+            {/*     <StatisticsChart /> */}
+            {/* </div> */}
+            {/**/}
+            {/* <div className="col-span-12 xl:col-span-5"> */}
+            {/*     <DemographicCard /> */}
+            {/* </div> */}
+            {/**/}
+            {/* <div className="col-span-12 xl:col-span-7"> */}
+            {/*     <RecentOrders /> */}
+            {/* </div> */}
         </div>
     );
 }

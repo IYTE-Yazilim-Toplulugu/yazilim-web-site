@@ -40,7 +40,7 @@ const navItems: NavItem[] = [
     },
     {
         icon: <MessageCircleQuestionIcon />,
-        name: "Surveys",
+        name: "Forms",
         path: "/admin/survey",
     },
     {
@@ -51,7 +51,7 @@ const navItems: NavItem[] = [
     {
         icon: <CalenderIcon />,
         name: "Events",
-        path: "/admin/event/all",
+        path: "/admin/event",
     },
     {
         icon: <MegaphoneIcon />,
@@ -288,12 +288,12 @@ const AppSidebar: React.FC = () => {
                     }`}
             >
                 {isExpanded || isHovered || isMobileOpen ? (
-                    <div className={"flex items-center gap-4"}>
+                    <div className={"flex items-center gap-4 overflow-hidden"}>
                         <YazilimIcon
                             className={" dark:fill-white"}
                             width={48}
                         />
-                        <span className={"text-gray-800 dark:text-gray-200 text-xl"}>
+                        <span className={"text-gray-800 dark:text-gray-200 text-xl text-nowrap"}>
                             Software Society
                         </span>
                     </div>
@@ -320,7 +320,7 @@ const AppSidebar: React.FC = () => {
                                     <HorizontaLDots />
                                 )}
                             </h2>
-                            {renderMenuItems(navItems)}
+                            <div className="overflow-y-auto">{renderMenuItems(navItems)}</div>
                         </div>
                     </div>
                 </nav>

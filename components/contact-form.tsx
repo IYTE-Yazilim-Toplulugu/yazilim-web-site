@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,6 +17,7 @@ import ContactSubmitServer from "@/app/contact/(server)/contact_submit";
 import { getConfigurations } from "@/utils/config_client_util";
 import { ContactConfig, GeneralContactConfig } from "@/types/types_config";
 import Link from "next/link";
+import handleErrorCode from "./handle-error-code"
 
 // Form validation schema
 const formSchema = z.object({
@@ -37,20 +38,20 @@ const formSchema = z.object({
 export default function ContactForm() {
     const { toast } = useToast()
     const isMobile = useIsMobile()
-    const [ isSubmitting, setIsSubmitting ] = useState(false)
-    const [ isSubmitted, setIsSubmitted ] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmitted, setIsSubmitted] = useState(false)
 
-    const [ pageConfig, setPageConfig ] = useState<ContactConfig>()
-    const [ contactConfig, setContactConfig ] = useState<GeneralContactConfig>()
+    const [pageConfig, setPageConfig] = useState<ContactConfig>()
+    const [contactConfig, setContactConfig] = useState<GeneralContactConfig>()
 
     useEffect(() => {
         getConfigurations(["general_contact", "contact"]).then(a => {
-           if (a.data && a.data.length > 0){
+            if (a.data && a.data.length > 0) {
                 setContactConfig(a.data.find(x => x.key === 'general_contact')?.value);
                 setPageConfig(a.data.find(x => x.key === 'contact')?.value);
-           }
+            }
         });
-    }, [ window.location ]);
+    }, []);
 
     // Initialize form
     const form = useForm<z.infer<typeof formSchema>>({
@@ -72,7 +73,7 @@ export default function ContactForm() {
             created_at: undefined
         });
 
-        if (!error){
+        if (!error) {
             toast({
                 title: "Message sent!",
                 description: "Thank you for your message. We will get back to you soon.",
@@ -80,20 +81,15 @@ export default function ContactForm() {
 
             setIsSubmitted(true);
         }
-        else{
+        else {
             console.log(error);
-            toast({
-                title: "Failed to send",
-                description: "There was a problem sending your message.",
-                variant: "destructive",
-            });
+            handleErrorCode(error.code);
         }
-
         setIsSubmitting(false);
     }
 
     return (
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="m-4 grid md:grid-cols-2 gap-8">
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -105,7 +101,7 @@ export default function ContactForm() {
                     : <h1 className="text-2xl font-bold mb-6">{pageConfig?.title}</h1>
                 }
                 <p className="text-muted-foreground mb-6">
-                    { pageConfig?.description }
+                    {pageConfig?.description}
                 </p>
 
                 <div className="space-y-4 mb-6">

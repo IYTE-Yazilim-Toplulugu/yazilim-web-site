@@ -1,57 +1,80 @@
 "use client";
-import React from "react";
-import Badge from "../ui/badge/Badge";
+import { useEffect } from "react";
 import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from "@/components/admin/icons";
-import Link from "next/link";
+import { useState } from "react";
+import MetricItem from "./metric-item";
+import getCounts from "@/app/admin/(dashboard)/(admin)/(server)/counts_get";
+
+
 
 export const EcommerceMetrics = () => {
+    const [userCount, setUserCount] = useState(0);
+    const [diff, setDiff] = useState<{
+        userCount?: { diff: number; date: string; count: number };
+        formCount?: { diff: number; date: string; count: number };
+    }>({});
+    const [formCount, setFormCount] = useState(0);
+
+    useEffect(() => {
+        const fetchCounts = async () => {
+            const data = await getCounts(); // returns { userCount, formCount }
+            setUserCount(data.userCount);
+            setFormCount(data.formCount);
+
+            const today = new Date().toISOString().split("T")[0];
+
+            const metrics = [
+                { key: "dailyUserCount", name: "userCount", current: data.userCount },
+                { key: "dailyFormCount", name: "formCount", current: data.formCount },
+            ];
+
+            metrics.forEach(({ key, name, current }) => {
+                const stored = localStorage.getItem(key);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    const { date: prevDate, count: prevCount } = parsed;
+
+                    if (prevDate !== today) {
+                        const diff = ((current - prevCount) / (prevCount || 1)) * 100;
+
+                        setDiff(prev => ({
+                            ...prev,
+                            [name]: {
+                                diff: diff.toFixed(1), // optional rounding
+                                date: today,
+                                count: current,
+                            },
+                        }));
+
+                        localStorage.setItem(
+                            key,
+                            JSON.stringify({ name, date: today, count: current })
+                        );
+                    }
+                } else {
+                    // First-time store
+                    localStorage.setItem(
+                        key,
+                        JSON.stringify({ name, date: today, count: current })
+                    );
+                }
+            });
+        };
+
+        fetchCounts();
+    }, []);
+
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
-            {/* <!-- Metric Item Start --> */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-                    <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
-                </div>
+            <MetricItem count={userCount || 0} title="Users" link="/admin/user/all"
+                icon={<GroupIcon className="text-gray-800 dark:text-white/90" />}
+                badgeColor="success" badgeIcon={
+                    <ArrowUpIcon className="text-success-500" />
+                } badgeText={`${diff?.userCount?.diff && diff.userCount.diff > 0 ? "+" : "-"}${diff.userCount?.diff ?? "0"}%`} />
 
-                <div className="flex items-end justify-between mt-5">
-                    <div>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                            Users
-                        </span>
-                        <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                            3,782
-                        </h4>
-                    </div>
-                    <Badge color="success">
-                        <ArrowUpIcon />
-                        11.01%
-                    </Badge>
-                </div>
-            </div>
-            {/* <!-- Metric Item End --> */}
-
-            {/* <!-- Metric Item Start --> */}
-            <Link href="/admin/survey" className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-                    <BoxIconLine className="text-gray-800 dark:text-white/90" />
-                </div>
-                <div className="flex items-end justify-between mt-5">
-                    <div>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                            Surveys
-                        </span>
-                        <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                            5,359
-                        </h4>
-                    </div>
-
-                    <Badge color="error">
-                        <ArrowDownIcon className="text-error-500" />
-                        9.05%
-                    </Badge>
-                </div>
-            </Link>
-            {/* <!-- Metric Item End --> */}
+            <MetricItem icon={<BoxIconLine className="text-gray-800 dark:text-white/90" />}
+                count={formCount || 0} title="Forms" link="/admin/survey" badgeColor="warning"
+                badgeIcon={<ArrowDownIcon className="text-warning-500" />} badgeText={`${diff?.formCount?.diff && diff.formCount.diff > 0 ? "+" : "-"}${diff.formCount?.diff ?? "0"}%`} />
         </div>
     );
 };
