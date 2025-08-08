@@ -39,7 +39,7 @@ export default function Home() {
     const isClient = useIsClient()
     const [loading, setLoading] = useState(true);
 
-    const [homeData, setHomeData] = useState<Configuration>(ConfigurationDefaults);
+    const [homeData, setHomeData] = useState<Configuration[]>(ConfigurationDefaults);
     const [announcementData, setAnnouncementData] = useState<Announcement[]>();
 
     // Data fetching

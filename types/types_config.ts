@@ -85,10 +85,8 @@ export type ContactConfig = {
     description: string
 };
 
-export interface Object {
+export type Configuration = {
     id: number;
     key: string;
     value: any;
-}
-
-export type Configuration = Object;
+};

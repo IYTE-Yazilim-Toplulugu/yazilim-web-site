@@ -1,8 +1,8 @@
 import { Configuration } from "@/types/types_config";
 
-
-const ConfigurationDefaults: Configuration = [
+const ConfigurationDefaults: Configuration[] = [
     {
+        id: 0,
         key: "home_hero",
         value: {
             up_header: {
@@ -29,6 +29,7 @@ const ConfigurationDefaults: Configuration = [
         }
     },
     {
+        id: 1,
         key: "home_about_us",
         value: {
             title: "About Us",
@@ -86,6 +87,7 @@ const ConfigurationDefaults: Configuration = [
         }
     },
     {
+        id: 2,
         key: "home_footer",
         value: {
             left_content: {

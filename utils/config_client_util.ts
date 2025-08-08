@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 
-import { Objects } from "@/types/types_config";
+import { Configuration } from "@/types/types_config";
 
 export async function getConfiguration<T>(key: string){
     const { data, error } = await createClient()
@@ -17,7 +17,7 @@ export async function getConfiguration<T>(key: string){
 export async function getConfigurations(keys: string[]){
     const { data, error } = await createClient()
         .from("configuration")
-        .select<"*", Objects>()
+        .select<"*", Configuration>()
         .or(keys.map(a => "key.eq." + a).join(","));
 
     return {

@@ -2,10 +2,10 @@
 
 import { handleAuthMessage } from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import {Suspense, useEffect} from "react";
 import { getUser } from "@/utils/user_client_util";
 
-export default function RegisterPage() {
+const _Register = function () {
 
     const params = useSearchParams();
     const msg = params.get("msg");
@@ -27,3 +27,7 @@ export default function RegisterPage() {
         </div>
     );
 }
+
+const Register = () => (<Suspense><_Register></_Register></Suspense>)
+
+export default Register;

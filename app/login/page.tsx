@@ -2,12 +2,12 @@
 
 import { handleAuthMessage } from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {Suspense, useEffect, useState} from "react";
 import { getUser } from "@/utils/user_client_util";
 import Loading from "@/components/loading";
 
 
-export default function Login() {
+const _Login = function () {
     const params = useSearchParams();
     const msg = params.get("msg");
     const rel = params.get("reload");
@@ -40,3 +40,7 @@ export default function Login() {
         </div>
     )
 }
+
+const Login = () => (<Suspense><_Login></_Login></Suspense>)
+
+export default Login;

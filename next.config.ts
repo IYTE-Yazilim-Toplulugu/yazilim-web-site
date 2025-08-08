@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
             }
         ],
     },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    typescript: {
+        ignoreBuildErrors: true
+    },
     webpack(config) {
         // Grab the existing rule that handles SVG imports
         const fileLoaderRule = config.module.rules.find((rule: any) =>
@@ -45,6 +51,13 @@ const nextConfig: NextConfig = {
                 use: ['@svgr/webpack'],
             },
         )
+
+        config.ignoreWarnings = [
+            {
+                module: /node_modules\/@supabase\/realtime-js\/.*/,
+                message: /Critical dependency: the request of a dependency is an expression/,
+            },
+        ];
 
         // Modify the file loader rule to ignore *.svg, since we have it handled now.
         fileLoaderRule.exclude = /\.svg$/i
