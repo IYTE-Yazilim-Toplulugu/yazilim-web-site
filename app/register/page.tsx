@@ -2,7 +2,7 @@
 
 import { handleAuthMessage } from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
-import {Suspense, useEffect} from "react";
+import { Suspense, useEffect } from "react";
 import { getUser } from "@/utils/user_client_util";
 
 const _Register = function () {
@@ -21,7 +21,7 @@ const _Register = function () {
 
     return (
         <div>
-            <iframe className="w-dvw h-dvh" src={"http://192.168.1.9:3001/register" + (msg != null ? "?msg=" + msg : "")}>
+            <iframe className="w-dvw h-dvh" src={"https://yazilim-web-site-kayit.vercel.app/register" + (msg != null ? "?msg=" + msg : "")}>
 
             </iframe>
         </div>

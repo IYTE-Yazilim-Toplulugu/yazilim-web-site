@@ -2,7 +2,7 @@
 
 import { handleAuthMessage } from "@/lib/auth";
 import { useSearchParams } from "next/navigation";
-import {Suspense, useEffect, useState} from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getUser } from "@/utils/user_client_util";
 import Loading from "@/components/loading";
 
@@ -34,7 +34,7 @@ const _Login = function () {
 
     return (
         <div>
-            <iframe className="w-dvw h-dvh" src={"http://192.168.1.9:3001/login" + (msg != null ? "?msg=" + msg : "")}>
+            <iframe className="w-dvw h-dvh" src={"https://yazilim-web-site-kayit.vercel.app/login" + (msg != null ? "?msg=" + msg : "")}>
 
             </iframe>
         </div>
