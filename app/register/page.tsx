@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     return (
         <div>
-            <iframe className="w-dvw h-dvh" src={"http://192.168.1.10:3001/register" + (msg != null ? "?msg=" + msg : "")}>
+            <iframe className="w-dvw h-dvh" src={"http://192.168.1.9:3001/register" + (msg != null ? "?msg=" + msg : "")}>
 
             </iframe>
         </div>

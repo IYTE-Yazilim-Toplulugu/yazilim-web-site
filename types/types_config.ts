@@ -1,4 +1,4 @@
-import {HexColor} from "@/types/types";
+import { HexColor } from "@/types/types";
 
 export interface HomeHeroConfig {
     up_header: {
@@ -85,9 +85,10 @@ export type ContactConfig = {
     description: string
 };
 
-export interface Objects {
+export interface Object {
+    id: number;
     key: string;
     value: any;
 }
 
-export type Configuration = Objects[];
+export type Configuration = Object;
