@@ -20,22 +20,22 @@ export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
-    const [userInfo, setUserInfo] = useState<User>()
     const mobileMenuRef = useRef<HTMLDivElement>(null)
-    const pathname = usePathname();
+    const pathname = usePathname()
     const isMobile = useIsMobile()
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [fullName, setFullName] = useState("")
 
     useLayoutEffect(() => {
 
         setIsMounted(true)
-
+        getUser().then((user) => {
+            setIsAdmin(user?.user_metadata.isAdmin || false)
+            setFullName(user?.user_metadata.fullName || null)
+        })
     }, [pathname])
 
 
-    useEffect(() => {
-        // @ts-ignore
-        getUser().then(x => setUserInfo(x)) // or default user info
-    }, []);
 
     const NavItem = ({ href,
         pathname,
@@ -147,7 +147,7 @@ export default function ResponsiveHeader() {
         <header
             className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-border transition-all duration-300 ${isScrolled ? "border-b" : "bg-transparent"}`}
         >
-            {!isMobile && userInfo?.user_metadata.isAdmin && (
+            {!isMobile && isAdmin && (
                 <Link href="/admin/">
                     <Button variant="outline" className="m-4 absolute top-16 right-0 z-50 cursor-pointer">
                         Go To Dashboard
@@ -203,21 +203,21 @@ export default function ResponsiveHeader() {
                         className="flex items-center space-x-3"
                     >
                         <Label>
-                            {userInfo?.user_metadata?.fullName}
+                            {fullName}
                         </Label>
 
                         {pathname === '/login' || pathname === '/register' ? null :
                             <div>
                                 {!isMobile && (
                                     <div className="flex items-center space-x-3">
-                                        <Link href={userInfo ? "/logout" : "/login"} >
+                                        <Link href={fullName ? "/logout" : "/login"} >
                                             <Button
                                                 variant="outline"
                                                 size="icon"
                                                 className="p-4 w-fit"
                                                 aria-label="login"
                                             >
-                                                {userInfo ? "Logout" : "Login"}
+                                                {fullName ? "Logout" : "Login"}
                                             </Button>
                                         </Link>
                                         <ThemeChanger />
@@ -275,17 +275,17 @@ export default function ResponsiveHeader() {
                                 transition={{ duration: 0.3, delay: 10 * 0.05 }}
                             >
                                 {isMobile && (
-                                    <Link href={userInfo ? "/logout" : "/login"} >
+                                    <Link href={fullName ? "/logout" : "/login"} >
                                         <div className="p-1 -mt-1.5 mb-2
                                         relative transition-colors hover:text-primary w-fit 
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
                                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                                         >
-                                            {userInfo ? "Logout" : "Login"}
+                                            {fullName ? "Logout" : "Login"}
                                         </div>
                                     </Link>
                                 )}
-                                {userInfo?.user_metadata.isAdmin && (
+                                {isAdmin && (
                                     <Link href="/admin">
                                         <div className="p-1
                                         relative transition-colors hover:text-primary w-fit 

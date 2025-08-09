@@ -25,7 +25,6 @@ export default function BlogPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const isMobile = useIsMobile()
 
-    console.log("BlogPage", blogData?.content);
 
     useEffect(() => {
         if (id) {
@@ -64,7 +63,6 @@ export default function BlogPage() {
         }
     }
 
-    blogData && console.log("blogData", blogData);
 
     if (loading) return (<Loading />);
 

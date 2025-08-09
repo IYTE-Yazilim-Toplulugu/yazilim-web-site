@@ -1,7 +1,7 @@
 import Login from "@/app/server/login";
 import Register from "@/app/server/register";
 
-export function handleAuthMessage(wnd:Window){
+export function handleAuthMessage(wnd: Window) {
     if (typeof window === "undefined")
         return;
     wnd.onmessage = async (e) => {
@@ -12,10 +12,10 @@ export function handleAuthMessage(wnd:Window){
 
         let msg;
 
-        if (data.isRegister ?? true){
+        if (data.isRegister ?? true) {
             msg = await Register(data.body);
         }
-        else{
+        else {
             msg = await Login(data.body);
         }
 
@@ -24,6 +24,6 @@ export function handleAuthMessage(wnd:Window){
         else
             window.location.href = (data.isRegister ?? true ? '/register?msg=' : '/login?msg=') + msg;
 
-        console.log(msg);
+        // console.log(msg);
     };
 }
