@@ -96,7 +96,7 @@ export async function getUserCount() {
         .from("user_infos")
         .select("*", { count: "exact", head: true }); // `head: true` means return only headers, not data
 
-    if (error) {
+    if (!count && error) {
         console.error("Error fetching user count:", error);
         return 0;
     }
