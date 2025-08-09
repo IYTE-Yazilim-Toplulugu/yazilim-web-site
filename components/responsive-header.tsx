@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
 import ThemeChanger from "@/components/themeChanger"
 import { NavbarProps } from "@/types/types"
-import { User } from "@supabase/supabase-js";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ResponsiveHeader() {
