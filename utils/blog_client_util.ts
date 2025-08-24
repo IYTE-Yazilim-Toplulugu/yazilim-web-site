@@ -47,7 +47,7 @@ export async function createBlog(
             content: content,
             tags: tags,
             cover_image_url: cover_image_url,
-            is_published: true,
+            is_published: false,
         })
         .select("*");
 

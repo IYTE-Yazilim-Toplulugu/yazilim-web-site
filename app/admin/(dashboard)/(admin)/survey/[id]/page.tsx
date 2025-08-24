@@ -238,7 +238,7 @@ export default function AdminSurveyPage() {
                             <Input type={"number"} name={"icon"} onChange={handleChangeEvent} defaultValue={survey?.icon} placeholder={"Icon"} />
                         </div>
                         <Label htmlFor={"description"}>Description (text)</Label>
-                        <Input type={"text"} name={"description"} onChange={handleChangeEvent} defaultValue={survey?.description} placeholder={"Description"} />
+                        <textarea name={"description"} onChange={handleChangeEvent} defaultValue={survey?.description} placeholder={"Description"} rows={6} />
 
                         <div className="flex flex-row gap-4">
                             <Label htmlFor={"image-path"}>Image Path (e.g image.png)</Label>

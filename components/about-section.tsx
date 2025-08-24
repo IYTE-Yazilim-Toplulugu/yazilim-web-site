@@ -26,13 +26,13 @@ export default function AboutSection({ home_about_us }: { home_about_us?: HomeAb
             <div className="grid md:grid-cols-2 gap-12 items-center">
                 <ScrollReveal>
                     <div className="relative">
-                        <div className="relative z-10 rounded-lg overflow-hidden border border-white/10 shadow-xl">
+                        <div className="relative rounded-lg overflow-hidden border border-white/10 shadow-xl">
                             <Image
                                 src={home_about_us?.left_content.find(item => item.name === "background")?.image ?? "/images/yazilim.png"}
                                 alt="Yazilim Toplulugu"
-                                width={600}
-                                height={800}
-                                className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
+                                width={900}
+                                height={1200}
+                                className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105 z-0"
                             />
 
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">

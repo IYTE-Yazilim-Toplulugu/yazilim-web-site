@@ -7,4 +7,5 @@ export interface Announcement {
     expires_at: string; // ISO datetime string (e.g., 2025-06-15T10:00:00)
     published_at: string; // ISO datetime string (e.g., 2025-06-15T10:00:00)
     created_at: string; // ISO datetime string (e.g., 2025-06-15T10:00:00)
+    link_url: string;
 }

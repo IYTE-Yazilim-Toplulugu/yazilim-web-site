@@ -174,6 +174,9 @@ export default function AdminSurveyPage() {
                         <Label htmlFor={"title"}>Title (text)</Label>
                         <Input type={"text"} name={"title"} onChange={handleChangeEvent} defaultValue={announcement?.title} />
 
+                        <Label htmlFor={"link_url"}>Link URL (text)</Label>
+                        <Input type={"text"} name={"link_url"} onChange={handleChangeEvent} defaultValue={announcement?.link_url} />
+
                         <Label htmlFor={"icon"}>Event Id</Label>
                         <div className="relative flex items-center">
                             <Input type={"number"} name={"icon"} onChange={handleChangeEvent} defaultValue={announcement?.event_id} placeholder={"Icon"} />

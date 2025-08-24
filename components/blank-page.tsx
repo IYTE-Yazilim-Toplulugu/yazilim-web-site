@@ -28,9 +28,13 @@ export default function YazilimBlankPage({ content = "SUCH A BLANK PAGE", emoji 
                     <div className="text-6xl md:text-7xl font-bold text-orange-500 mb-4 animate-pulse drop-shadow-lg">
                         {'{/}'}
                     </div>
-                    <div className="flex flex-row items-center justify-center space-x-2">
-                        <h1 className={`my-16 text-3xl md:text-4xl font-light tracking-wider mb-2 bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent`}>{content}</h1>
-                        <h1 className="my-16 text-nowrap text-3xl md:text-4xl font-light tracking-wider mb-2 ">{emoji}</h1>
+                    <div className="flex flex-col md:flex-row items-center justify-center md:space-x-2 space-y-2 md:space-y-0">
+                        <h1 className="mt-16 text-3xl md:text-4xl font-light tracking-wider bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent leading-relaxed pb-1">
+                            {content}
+                        </h1>
+                        <h1 className="sm:mt-16 text-3xl md:text-4xl font-light tracking-wider">
+                            {emoji}
+                        </h1>
                     </div>
                     {/* <p className="text-lg md:text-xl text-gray-300 font-light tracking-wide"> */}
                     {/*     İzmir Yüksek Teknoloji Enstitüsü */}

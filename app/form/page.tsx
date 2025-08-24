@@ -684,9 +684,17 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             </SectionHeader>
 
             <section ref={containerRef} className={`flex flex-wrap justify-center items-center ${focusedId ? "blur-sm pointer-events-none" : ""}`}>
-                {surveyData.length === 0 && (
-                    <YazilimBlankPage content="No Forms Found For You" emoji='😭' />
-                )}
+                {surveyData.length === 0 ? (
+                    !userInfo ? (
+                        <YazilimBlankPage
+                            content={`No Forms Found For You.
+Are You Logged In?`}
+                            emoji="😭"
+                        />
+                    ) : (
+                        <YazilimBlankPage content="No Forms Found For You" emoji="😭" />
+                    )
+                ) : null}
                 {surveyData && surveyData.length > 0 && surveyData.map((survey: any) => (
                     <motion.div key={survey.id}
                         layoutId={`survey-${survey.id}`}
@@ -739,7 +747,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                     className="aspect-auto object-cover rounded-lg my-4"
                                 ></Image>
                             )}
-                            <p className=" mt-4 text-lg">
+                            <p className="mt-4 text-lg whitespace-pre-line">
                                 {currentSurvey.description}
                             </p>
                             {currentSurvey.questions && currentSurvey.questions.map((question: any, id) => (

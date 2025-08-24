@@ -58,7 +58,7 @@ export default function CreateBlogPage() {
         }
         toast({
             title: "Blog Created",
-            description: "Your blog has been created successfully.",
+            description: "Your blog has been created successfully. Our team will review it shortly.",
             variant: "success",
         })
         redirect('/blog/' + res.data[0].id);

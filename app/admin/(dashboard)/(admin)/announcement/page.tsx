@@ -28,7 +28,7 @@ export default function AdminAnnouncementsPage() {
     const [queryTemp, setQueryTemp] = useState<string>();
 
     // Sorting state
-    const [sortKey, setSortKey] = useState<"id" | "title" | "event_id" | "description" | "expires_at" | "published_at" | "created_at">("id");
+    const [sortKey, setSortKey] = useState<"id" | "title" | "event_id" | "description" | "expires_at" | "published_at" | "created_at" | "link_url">("id");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -66,7 +66,7 @@ export default function AdminAnnouncementsPage() {
         }
     }
 
-    const handleSort = (key: "id" | "title" | "event_id" | "description" | "expires_at" | "published_at" | "created_at") => {
+    const handleSort = (key: "id" | "title" | "event_id" | "description" | "expires_at" | "published_at" | "created_at" | "link_url") => {
         if (sortKey === key) {
             setSortOrder(sortOrder === "asc" ? "desc" : "asc");
         } else {
@@ -129,6 +129,9 @@ export default function AdminAnnouncementsPage() {
                                 <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("title")}>* TITLE {sortKey === "title" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
                                 <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
+                                    onClick={() => handleSort("link_url")}>* LINK URL {sortKey === "link_url" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
+
+                                <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("expires_at")}>EXPIRES AT {sortKey === "expires_at" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
                                 <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("description")}>DESCRIPTION {sortKey === "description" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
@@ -159,6 +162,7 @@ export default function AdminAnnouncementsPage() {
                                             {u.title}
                                         </div>
                                     </TableCell>
+                                    <TableCell className="p-4">{u.link_url}</TableCell>
                                     <TableCell className="p-4">{new Date(u.expires_at).toLocaleString()}</TableCell>
                                     <TableCell className="p-4 relative group">
                                         <span className="peer">

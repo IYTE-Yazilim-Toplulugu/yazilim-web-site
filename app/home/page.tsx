@@ -100,21 +100,21 @@ export default function Home() {
                                 {announcementData && (
                                     <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>
                                         {announcementData.map((announcement, index) => (
-                                            <div key={index} className="keen-slider__slide rounded-2xl
+                                            <Link href={announcement.link_url ?? ""} key={index} className="keen-slider__slide rounded-2xl
                                             h-fit bg-bite-tongue dark:bg-card transition-colors
                                             border-2 border-border
                                             duration-300 ease-in-out text-background dark:text-primary">
                                                 <Image
                                                     src={getAnnouncementImagePath(announcement.image_path) || "/images/yazilim.png"}
                                                     alt={`${announcement.title}`}
-                                                    width={1000} height={500}
+                                                    width={1920} height={1080}
                                                     className="rounded-lg object-cover aspect-video w-full h-full"
                                                 />
                                                 <div className='m-8  flex flex-col text-center items-center space-y-4'>
                                                     <p className='text-2xl font-bold'>{announcement.title}</p>
                                                     <p className='text-lg font-semibold'>{announcement.description}</p>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         ))}
 
 
