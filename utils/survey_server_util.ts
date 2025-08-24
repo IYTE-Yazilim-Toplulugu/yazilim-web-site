@@ -204,5 +204,28 @@ export async function uploadImage(file: File) {
 }
 
 
+export async function hasSubmittedCheck(surveyId: number | null, ip: string) {
+    const hasSubmitted = await supabase
+        .from("survey_answers")
+        .select("user_ip")
+        .eq("survey_id", surveyId)
+        .eq("user_ip", ip)
 
+    // @ts-ignore
+    if (hasSubmitted.data.length > 0) {
+        return { error: '23505' }
+    }
+    return { error: null }
+}
 
+export async function getAnsweredSurveys(userId: string, ip: string) {
+    const { data, error } = await supabase
+        .from("survey_answers")
+        .select("*")
+        .or(`user_id.eq.${userId},user_ip.eq.${ip}`);
+
+    return {
+        data: data || [],
+        error,
+    };
+}

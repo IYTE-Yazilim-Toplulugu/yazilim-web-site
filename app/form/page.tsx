@@ -16,11 +16,13 @@ import { HandleIcon } from '@/components/handle-icons';
 import { toast } from '@/hooks/use-toast';
 import { getUser, getUserIp } from '@/utils/user_client_util';
 import { QuestionFill, AnswerHandlerProps, Question, Survey } from '@/types/types';
-import { postSurveyAnswer, getAnsweredSurveys, getSurveyImagePath } from '@/utils/survey_client_util';
+import { postSurveyAnswer, getSurveyImagePath } from '@/utils/survey_client_util';
 import YazilimBlankPage from '@/components/blank-page';
 import Image from 'next/image';
 import { User } from '@supabase/supabase-js';
 import surveysGet from './(server)/surveys_get';
+import checkHasSubmitted from './(server)/survey_check';
+import answeredSurveysGet from './(server)/answers_get';
 
 export default function SurveyPage() {
     const containerRef = useRef(null);
@@ -31,7 +33,7 @@ export default function SurveyPage() {
 
     // Handler variables
     const [focusedId, setFocusedId] = useState<number | null>(null);
-    const [_answeredSurveys, setAnsweredSurveys] = useState<QuestionFill[] | null>();
+    const [answeredSurveys, setAnsweredSurveys] = useState<QuestionFill[] | null>();
     const currentSurvey = surveyData.find((s) => s.id === focusedId);
     const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState<Record<number, string>>({});
@@ -86,20 +88,27 @@ export default function SurveyPage() {
             const answers = surveyFill.map(({ survey_id, type, ...rest }) => rest);
             const ip: string = await getUserIp();
 
-            postSurveyAnswer(userInfo?.id, focusedId, answers, ip)
-                .then(x => {
-                    if (x.error) {
-                        console.error("Error submitting form answers:", x.error);
-                        handleErrorCode(x.error.code);
-                    } else {
-                        toast({
-                            title: "Success",
-                            description: "Your form answers have been submitted successfully.",
-                            variant: "success",
-                        })
-                        setFocusedId(null);
-                    }
-                })
+            checkHasSubmitted(focusedId, ip).then((hasSubmitted) => {
+                if (hasSubmitted.error) {
+                    handleErrorCode(hasSubmitted.error)
+                    setFocusedId(null);
+                    return;
+                }
+                postSurveyAnswer(userInfo?.id, focusedId, answers, ip)
+                    .then(x => {
+                        if (x.error) {
+                            console.error("Error submitting form answers:", x.error);
+                            handleErrorCode(x.error.code);
+                        } else {
+                            toast({
+                                title: "Success",
+                                description: "Your form answers have been submitted successfully.",
+                                variant: "success",
+                            })
+                            setFocusedId(null);
+                        }
+                    })
+            })
         } catch (error) {
             console.error("Unexpected Error", error);
             toast({
@@ -110,11 +119,13 @@ export default function SurveyPage() {
         }
     }
 
+    // Not working properly
     const getAnsweredSurveyData = async (userId: string | null) => {
         try {
             if (!userId) return null;
+            const ip: string = await getUserIp();
 
-            return getAnsweredSurveys(userId)
+            return answeredSurveysGet(userId, ip)
                 .then(x => {
                     if (x.data && x.data.length > 0) {
                         setAnsweredSurveys(x.data);
@@ -146,7 +157,7 @@ export default function SurveyPage() {
     }, [focusedId])
 
 
-    const addAnswer = ({ survey_id, question_id, type, answer }: AnswerHandlerProps) => {
+    const addAnswer = ({ survey_id, question_id, question, type, answer }: AnswerHandlerProps) => {
         try {
             if (surveyFill.some((item) => item.question_id === question_id)) {
                 setSurveyFill((prevState) => [...prevState.filter((item) => item.question_id !== question_id)]);
@@ -157,6 +168,7 @@ export default function SurveyPage() {
                     {
                         survey_id: survey_id,
                         question_id: question_id,
+                        question: question,
                         type: type,
                         answer: answer,
                     },
@@ -168,7 +180,7 @@ export default function SurveyPage() {
     }
 
 
-    const addMultipleAnswer = ({ survey_id, question_id, type, answer }: AnswerHandlerProps) => {
+    const addMultipleAnswer = ({ survey_id, question_id, question, type, answer }: AnswerHandlerProps) => {
         setSurveyFill((prevState) => {
             const existing = prevState.find(
                 (item) => item.question_id === question_id
@@ -190,6 +202,7 @@ export default function SurveyPage() {
                     {
                         survey_id,
                         question_id,
+                        question,
                         type,
                         answer: [answer],
                     },
@@ -199,7 +212,7 @@ export default function SurveyPage() {
     };
 
 
-    const removeMultipleAnswer = ({ survey_id, question_id, type, answer }: AnswerHandlerProps) => {
+    const removeMultipleAnswer = ({ question_id, answer }: AnswerHandlerProps) => {
         setSurveyFill((prevState) => {
             return prevState
                 .map((item) => {
@@ -224,7 +237,7 @@ export default function SurveyPage() {
 
     // 0: yes_no, 1: single_choice, 2: number, 3: text, 4: multiple_choice, 5: rating, 6: checkbox, 7: date, 8: dropdown
     // Form Handling
-    const HandleQuestions = (survey_id: number, question_id: number, type: number, options?: (number | string)[], placeholder?: string) => {
+    const HandleQuestions = (survey_id: number, question_id: number, question: string, type: number, options?: (number | string)[], placeholder?: string) => {
         switch (type) {
             case 0: // yes_no
                 return (
@@ -234,6 +247,7 @@ export default function SurveyPage() {
                                 ? addAnswer({
                                     survey_id,
                                     question_id,
+                                    question,
                                     type,
                                     answer: true
                                 })
@@ -254,6 +268,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                 ? addAnswer({
                                     survey_id,
                                     question_id,
+                                    question,
                                     type,
                                     answer: false
                                 })
@@ -284,6 +299,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                             ? addAnswer({
                                                 survey_id,
                                                 question_id,
+                                                question,
                                                 type,
                                                 answer: option
                                             })
@@ -326,6 +342,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                         const updatedAnswer: QuestionFill = {
                             survey_id,
                             question_id,
+                            question,
                             type,
                             answer: numeric,
                         };
@@ -397,6 +414,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                         {
                                             survey_id: survey_id,
                                             question_id: question_id,
+                                            question: question,
                                             type: type,
                                             answer: newNote
                                         }]
@@ -422,11 +440,13 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                             ? addMultipleAnswer({
                                                 survey_id,
                                                 question_id,
+                                                question,
                                                 type, answer: option
                                             })
                                             : removeMultipleAnswer({
                                                 survey_id,
                                                 question_id,
+                                                question,
                                                 type, answer: option
                                             })
                                     }}
@@ -455,6 +475,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                             ? addAnswer({
                                                 survey_id,
                                                 question_id,
+                                                question,
                                                 type,
                                                 answer: id + 1
                                             })
@@ -477,16 +498,6 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
 
 
                     </section>
-                    // broken for now. I can create a new slider for this
-                    // <Slider
-                    //     // @ts-ignore
-                    //     min={1}
-                    //     max={5}
-                    //     step={1}
-                    //     onValueChange={(v) => setRating(v[0])}
-                    //     // @ts-ignore
-                    //     value={options}
-                    // />
                 )
             case 6: // checkbox
                 const isSelected = isAnswered(question_id, true);
@@ -497,6 +508,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                 ? addAnswer({
                                     survey_id,
                                     question_id,
+                                    question,
                                     type,
                                     answer: true
                                 })
@@ -522,6 +534,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                 addAnswer({
                                     survey_id,
                                     question_id,
+                                    question,
                                     type,
                                     answer: currentDateString,
                                 })
@@ -554,6 +567,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                                                 addAnswer({
                                                     survey_id,
                                                     question_id,
+                                                    question,
                                                     type,
                                                     answer: option,
                                                 })
@@ -609,30 +623,6 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             postSurveyData();
         }
     };
-
-
-
-
-
-    // I can use this to get the mouse position and animate the surveys around
-    // useEffect(() => {
-    //     const handleMouseMove = (e: any) => {
-    //         // @ts-ignore
-    //         const { left, top } = containerRef.current.getBoundingClientRect();
-    //         setMouse({ x: e.clientX - left, y: e.clientY - top });
-    //     };
-    //
-    //     const container = containerRef.current;
-    //     // @ts-ignore
-    //     container.addEventListener("mousemove", handleMouseMove);
-    //     // @ts-ignore
-    //     return () => container.removeEventListener("mousemove", handleMouseMove);
-    // }, []);
-    {/* animate={{ */ }
-    {/*     x: (-mouse.x + 60 - index * 20) * 0.05, */ }
-    {/*     y: (-mouse.y + 60 - index * 10) * 0.05, */ }
-    {/* }} */ }
-    {/* transition={{ type: "spring", stiffness: 80, damping: 10 }} */ }
 
     // Style Handler
     const isAnswered = (
@@ -695,20 +685,30 @@ Are You Logged In?`}
                         <YazilimBlankPage content="No Forms Found For You" emoji="😭" />
                     )
                 ) : null}
-                {surveyData && surveyData.length > 0 && surveyData.map((survey: any) => (
-                    <motion.div key={survey.id}
-                        layoutId={`survey-${survey.id}`}
-                        onClick={() => setFocusedId(survey.id)}
-                        className="container m-4 w-2/5 min-w-96 items-center justify-center border border-border rounded-lg shadow-md overflow-hidden"
-                    >
-                        <section className='p-4 flex flex-row gap-4 items-center bg-copper-coin/50 justify-between cursor-pointer' onClick={() => setFocusedId(survey.id)}>
-                            <div className='flex flex-row gap-4 items-center'>
-                                {HandleIcon(survey.icon)}
-                                <p className='text-lg font-semibold'>{survey.title}</p>
-                            </div>
-                        </section>
-                    </motion.div>
-                ))}
+                {surveyData && surveyData.length > 0 && surveyData.map((survey: any) => {
+                    if (answeredSurveys?.includes(survey)) return null;
+
+                    return (
+                        <motion.div
+                            key={survey.id}
+                            layoutId={`survey-${survey.id}`}
+                            onClick={() => setFocusedId(survey.id)}
+                            className="container m-4 w-2/5 min-w-96
+                            items-center justify-center border border-border
+                            rounded-lg shadow-md overflow-hidden"
+                        >
+                            <section
+                                className="p-4 flex flex-row gap-4 items-center bg-copper-coin/50 justify-between cursor-pointer"
+                                onClick={() => setFocusedId(survey.id)}
+                            >
+                                <div className="flex flex-row gap-4 items-center">
+                                    {HandleIcon(survey.icon)}
+                                    <p className="text-lg font-semibold">{survey.title}</p>
+                                </div>
+                            </section>
+                        </motion.div>
+                    );
+                })}
             </section >
             <AnimatePresence>
                 {focusedId && currentSurvey && (
@@ -758,6 +758,7 @@ Are You Logged In?`}
                                     <p className='font-semibold'>{question.question} {handleQuestionType(question.type)}</p>
                                     {HandleQuestions(currentSurvey.id,
                                         question.id,
+                                        question.question,
                                         question.type,
                                         question.options,
                                         question.placeholder

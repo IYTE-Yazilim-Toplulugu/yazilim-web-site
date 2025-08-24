@@ -7,6 +7,7 @@ export interface StatsResponse {
 export interface QuestionFill {
     survey_id: number;
     question_id: number;
+    question: string,
     type: number;
     answer: string | number | boolean | (string | number | boolean)[] | null;
 }
@@ -18,6 +19,7 @@ export interface SurveyAnswers {
     answered_at: string; // ISO datetime string (2025-06-15T10:00:00)
     answers: {
         question_id: number; // UUID format
+        question: string;
         answer: string | number | boolean | (string | number | boolean)[] | null;
     }[];
 }
@@ -25,6 +27,7 @@ export interface SurveyAnswers {
 export type AnswerHandlerProps = {
     survey_id: number,
     question_id: number,
+    question: string,
     type: number,
     answer: string | number | boolean
 }

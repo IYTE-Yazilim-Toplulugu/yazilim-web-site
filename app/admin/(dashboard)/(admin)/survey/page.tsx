@@ -121,8 +121,7 @@ export default function AdminSurveysPage() {
                     type={"text"}
                     placeholder={"Search by title..."}
                     defaultValue={queryTemp}
-                    onEnter={() => setQuery(queryTemp)
-                    }
+                    onEnter={() => setQuery(queryTemp)}
                     onChange={(e) => setQueryTemp(e.target.value)}
                 />
                 <FcButton className={"cursor-pointer"} onClick={() => setQuery(queryTemp)}>
@@ -370,7 +369,7 @@ export default function AdminSurveysPage() {
                                                                                                 </Button>
                                                                                                 <motion.section
                                                                                                     layoutId={userAnswers.toString()}
-                                                                                                    className="m-8 p-10 relative w-1/2 h-3/5
+                                                                                                    className="m-8 p-10 relative w-full md:w-2/3 h-3/5
                                                                                                     bg-muted rounded-2xl shadow-2xl
                                                                                                     overflow-y-auto overflow-x-auto scrollbar
                                                                                                     scrollbar-track-bite-tongue scrollbar-thumb-bite-tongue z-30"
@@ -380,19 +379,26 @@ export default function AdminSurveysPage() {
                                                                                                         <TableHeader>
                                                                                                             <TableRow className="font-bold text-center">
                                                                                                                 <TableCell>Question Id</TableCell>
+                                                                                                                <TableCell>Question</TableCell>
                                                                                                                 <TableCell>Answer</TableCell>
                                                                                                             </TableRow>
                                                                                                         </TableHeader>
                                                                                                         <TableBody>
-                                                                                                            {answerData.answers && answerData.answers.length > 0
-                                                                                                                && answerData.answers.map((answers, i) => (
-                                                                                                                    <TableRow key={i} className="text-center">
-                                                                                                                        <TableCell className="p-4">{answers.question_id}</TableCell>
-                                                                                                                        <TableCell className="p-4">
-                                                                                                                            {answers.answer?.toString()}
-                                                                                                                        </TableCell>
-                                                                                                                    </TableRow>
-                                                                                                                ))}
+                                                                                                            {answerData.answers &&
+                                                                                                                answerData.answers.length > 0 &&
+                                                                                                                [...answerData.answers]
+                                                                                                                    .sort((a, b) => a.question_id - b.question_id)
+                                                                                                                    .map((answers) => (
+                                                                                                                        <TableRow key={answers.question_id} className="text-center">
+                                                                                                                            <TableCell className="p-4">
+                                                                                                                                {answers.question_id}
+                                                                                                                            </TableCell>
+                                                                                                                            <TableCell className="p-4">{answers.question}</TableCell>
+                                                                                                                            <TableCell className="p-4">
+                                                                                                                                {answers.answer?.toString()}
+                                                                                                                            </TableCell>
+                                                                                                                        </TableRow>
+                                                                                                                    ))}
                                                                                                         </TableBody>
                                                                                                     </Table>
                                                                                                 </motion.section>

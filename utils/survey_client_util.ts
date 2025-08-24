@@ -9,7 +9,7 @@ export function getSurveyImagePath(image_path: string) {
         .data.publicUrl;
 }
 
-async function postSurveyAnswer(
+export async function postSurveyAnswer(
     userId: string,
     surveyId: number | null,
     answers: any,
@@ -26,17 +26,3 @@ async function postSurveyAnswer(
         })
     return { error };
 }
-
-async function getAnsweredSurveys(userId: string) {
-    const { data, error } = await createClient()
-        .from("survey_answers")
-        .select<"*", QuestionFill>()
-        .eq("user_id", userId)
-
-    return {
-        data: data || [],
-        error
-    }
-}
-
-export { postSurveyAnswer, getAnsweredSurveys };
