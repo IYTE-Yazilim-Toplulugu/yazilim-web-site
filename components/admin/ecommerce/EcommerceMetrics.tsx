@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from "@/components/admin/icons";
 import { useState } from "react";
 import MetricItem from "./metric-item";
-import getCounts from "@/app/admin/(dashboard)/(admin)/(server)/counts_get";
+import GetCounts from "@/app/admin/(dashboard)/(admin)/(server)/counts_get";
 
 
 
@@ -17,7 +17,7 @@ export const EcommerceMetrics = () => {
 
     useEffect(() => {
         const fetchCounts = async () => {
-            const data = await getCounts(); // returns { userCount, formCount }
+            const data = await GetCounts(); // returns { userCount, formCount }
             setUserCount(data.userCount);
             setFormCount(data.formCount);
 
