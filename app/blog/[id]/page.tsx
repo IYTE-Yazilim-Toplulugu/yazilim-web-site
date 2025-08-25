@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Loading from "@/components/loading";
 import { Blog } from "@/types/types_blog";
 import { useParams } from "next/navigation";
-import { getBlog, getBlogImagePath } from "@/utils/blog_client_util";
+import { getBlog, getBlogImagePath, getBlogIDs } from "@/utils/blog_client_util";
 import handleErrorCode from "@/components/handle-error-code";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
@@ -14,11 +14,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import BlogMarkdown from "@/components/blog-markdown";
+import YazilimBlankPage from "@/components/blank-page";
 
 
 export default function BlogPage() {
     const id = Number(useParams().id);
     const [blogData, setBlogData] = useState<Blog | null>(null);
+    const [blogIDs, setBlogIDs] = useState();
     const [previousBlog, setPreviousBlog] = useState<Blog | null>(null);
     const [nextBlog, setNextBlog] = useState<Blog | null>(null);
 
@@ -33,38 +35,40 @@ export default function BlogPage() {
     }, [])
 
     const fetchBlog = async (id: number) => {
-        const res = await getBlog(id)
+        const { current, prev, next, error } = await getBlog(id)
 
-        if (res.error) {
-            console.error("Error fetching blog:", res.error);
-            handleErrorCode(res.error.code);
+        if (error) {
+            console.error("Error fetching blog:", error);
+            handleErrorCode(error.code);
             return null
         }
-        switch (res.data.length) {
-            case 0:
-                break
-            case 1:
-                setBlogData(res.data[0] || {});
-                break
-            default:
-                res.data.forEach((blog: Blog) => {
-                    switch (blog.id) {
-                        case id - 1:
-                            setPreviousBlog(blog);
-                            break
-                        case id + 1:
-                            setNextBlog(blog);
-                            break
-                        case id:
-                            setBlogData(blog);
-                            break
-                    }
-                })
-        }
+
+        setBlogData(current || null);
+        setPreviousBlog(prev || null);
+        setNextBlog(next || null);
     }
 
 
     if (loading) return (<Loading />);
+    if (blogData === null) return (<div className="mt-16">
+        <YazilimBlankPage content="No Blog Found" emoji="😴" />
+        <Link href={"/blog"}>
+            <button
+                className="absolute top-96 left-1/2 transform -translate-x-1/2
+        w-fit h-10 px-3.5 py-2.5
+        gap-2 flex items-center justify-center 
+        rounded-lg border border-gray-300 bg-white 
+        text-gray-700 shadow-theme-xs 
+        hover:bg-gray-50 disabled:opacity-50 
+        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 
+        dark:hover:bg-white/[0.03] text-sm cursor-pointer z-50"
+            >
+                <ArrowLeft />
+                {"Go Back"}
+            </button>
+        </Link>
+
+    </div>)
 
     return (
         <motion.div
@@ -93,12 +97,14 @@ export default function BlogPage() {
                     </h1>}
                 </div>
                 <div className="mb-4 p-2 flex flex-col border-b border-border items-center">
+                    {isMobile && <p className="text-nowrap text-muted-foreground self-start">{blogData?.author_name}</p>}
                     {isMobile && <h1 className="text-xl mb-4 font-bold z-20">
                         {blogData?.title}
                     </h1>}
-                    <p className="text-muted-foreground self-start">
+                    <p className="flex flex-wrap w-full justify-between text-muted-foreground">
                         {/* @ts-ignore */}
-                        {new Date(blogData?.published_at).toLocaleDateString('tr-TR')}
+                        <div className="">{new Date(blogData?.published_at).toLocaleDateString('tr-TR')}</div>
+                        {!isMobile && <p className="text-nowrap">{blogData?.author_name}</p>}
                     </p>
                 </div>
                 <BlogMarkdown content={blogData?.content || ""} />
@@ -106,11 +112,11 @@ export default function BlogPage() {
                 <p className="text-sm text-muted-foreground mx-8 mt-4">Tags: {blogData?.tags.join(", ")}</p>
 
                 <div className="flex justify-between items-start mt-4">
-                    <Link href={`/blog/${id - 1}`} className="text-start">
+                    <Link href={`/blog/${previousBlog?.id}`} className="text-start">
                         {previousBlog && <p className="text-sm">See Previous Blog</p>}
                         <p>{previousBlog && previousBlog.title}</p>
                     </Link>
-                    <Link href={`/blog/${id + 1}`} className="text-end">
+                    <Link href={`/blog/${nextBlog?.id}`} className="text-end">
                         {nextBlog && <p className="text-sm">See Next Blog</p>}
                         <p>{nextBlog && nextBlog.title}</p>
                     </Link>

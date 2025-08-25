@@ -29,7 +29,7 @@ export default function AdminBlogsPage() {
     const [queryTemp, setQueryTemp] = useState<string>();
 
     // Sorting state
-    const [sortKey, setSortKey] = useState<"id" | "author_id" | "title" | "content" | "tags" | "published_at" | "created_at">("id");
+    const [sortKey, setSortKey] = useState<"id" | "author_name" | "title" | "content" | "tags" | "published_at" | "created_at">("id");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -67,7 +67,7 @@ export default function AdminBlogsPage() {
         }
     }
 
-    const handleSort = (key: "id" | "author_id" | "title" | "content" | "tags" | "published_at" | "created_at") => {
+    const handleSort = (key: "id" | "author_name" | "title" | "content" | "tags" | "published_at" | "created_at") => {
         if (sortKey === key) {
             setSortOrder(sortOrder === "asc" ? "desc" : "asc");
         } else {
@@ -125,7 +125,7 @@ export default function AdminBlogsPage() {
                                 <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("id")}>* ID {sortKey === "id" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
                                 <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
-                                    onClick={() => handleSort("author_id")}>* AUTHOR ID{sortKey === "author_id" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
+                                    onClick={() => handleSort("author_name")}>* AUTHOR NAME{sortKey === "author_name" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
 
                                 <TableCell className="p-4 border border-gray-700 cursor-pointer select-none"
                                     onClick={() => handleSort("title")}>* TITLE {sortKey === "title" && (sortOrder === "asc" ? "↑" : "↓")}</TableCell>
@@ -147,7 +147,7 @@ export default function AdminBlogsPage() {
                             {sortedSurveys?.map(u => (
                                 <TableRow key={u.id} className={"divide-x divide-gray-700 border border-gray-700"}>
                                     <TableCell className="p-4 text-center">{u.id}</TableCell>
-                                    <TableCell className="p-4">{u.author_id}</TableCell>
+                                    <TableCell className="p-4">{u.author_name}</TableCell>
                                     <TableCell className="p-4 relative group">
                                         <span className="peer">
                                             {u.title.length > 16 ? u.title.substring(0, 16) + "..." : u.title}

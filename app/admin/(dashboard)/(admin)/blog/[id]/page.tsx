@@ -19,6 +19,7 @@ import BlogImageUpload from "./(server)/blog_image_upload";
 import { MessageCircleQuestionIcon } from "lucide-react";
 import { getUser } from "@/utils/user_client_util";
 import { useTheme } from "next-themes";
+import Checkbox from "@/components/admin/form/input/Checkbox";
 
 export default function AdminBlogPage() {
     const id = Number(useParams().id);
@@ -227,8 +228,11 @@ export default function AdminBlogPage() {
                         <Label htmlFor={"id"}>Id</Label>
                         <Input disabled={true} name={"id"} defaultValue={blog?.id} />
 
-                        <Label htmlFor={"author-id"}>AUTHOR Id</Label>
+                        <Label htmlFor={"author-id"}>Author Id</Label>
                         <Input disabled={true} name={"author_id"} defaultValue={blog?.author_id} />
+
+                        <Label htmlFor={"author-id"}>Author Name</Label>
+                        <Input disabled={true} name={"author_name"} defaultValue={blog?.author_name} />
 
                         <Label htmlFor={"title"}>Title (text)</Label>
                         <Input type={"text"} name={"title"} onChange={handleChangeEvent} defaultValue={blog?.title} />
@@ -289,6 +293,10 @@ export default function AdminBlogPage() {
                         <Label htmlFor={"updated-at"}>UPDATED AT</Label>
                         <Input disabled name={"updated_at"} onChange={handleChangeEvent} defaultValue={blog?.updated_at} />
 
+                        <div className={"flex gap-2 w-[100%] justify-center"}>
+                            <Checkbox label={"Is Published"} onChange={x => handleChange("is_published", x)} checked={blog?.is_published ?? false} />
+                        </div>
+
 
 
                         <div className={"flex w-[100%]"}>
@@ -305,6 +313,11 @@ export default function AdminBlogPage() {
                                 </Link>}
                             </div>
                             <div className={"gap-2 flex justify-end w-[100%]"}>
+                                <Link href={"/blog/" + blog?.id}>
+                                    <Button variant={"outline"} className="cursor-pointer">
+                                        Go To Blog
+                                    </Button>
+                                </Link>
                                 <Button variant={"outline"} className="cursor-pointer" onClick={() => id && deleteBlog()}>
                                     Delete
                                 </Button>

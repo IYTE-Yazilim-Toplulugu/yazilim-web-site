@@ -83,7 +83,7 @@ export default function BlogsPage() {
             </div>
             <div className="m-4 md:m-12 md:mt-8 flex flex-col gap-8">
                 {blogsData.length === 0 && (
-                    <YazilimBlankPage content="No Blogs Found" />
+                    <YazilimBlankPage content="No Blogs Found" emoji="😴" />
                 )}
                 {blogsData && blogsData.length > 0 && (() => {
                     const firstBlog = blogsData[0];

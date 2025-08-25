@@ -3,7 +3,6 @@ import { User } from "@supabase/supabase-js";
 
 
 export async function getBlogs(is_published: boolean) {
-
     const { data, error } = await createClient()
         .from("blogs")
         .select("*")
@@ -16,16 +15,37 @@ export async function getBlogs(is_published: boolean) {
 }
 
 export async function getBlog(id: number) {
-    const ids = [id - 1, id, id + 1];
-    const { data, error } = await createClient()
-        .from("blogs")
-        .select("*")
-        .in("id", ids)
-        .eq("is_published", true);
+    const client = createClient();
+
+    const [current, prev, next] = await Promise.all([
+        client.from("blogs")
+            .select("*")
+            .eq("id", id)
+            .eq("is_published", true)
+            .maybeSingle(),
+
+        client.from("blogs")
+            .select("*")
+            .lt("id", id)
+            .eq("is_published", true)
+            .order("id", { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+
+        client.from("blogs")
+            .select("*")
+            .gt("id", id)
+            .eq("is_published", true)
+            .order("id", { ascending: true })
+            .limit(1)
+            .maybeSingle(),
+    ]);
 
     return {
-        data: data || [],
-        error
+        current: current.data,
+        prev: prev.data,
+        next: next.data,
+        error: current.error || prev.error || next.error,
     };
 }
 
@@ -42,7 +62,7 @@ export async function createBlog(
         .from("blogs")
         .insert({
             author_id: author.id,
-            author_name: author.user_metadata.full_name,
+            author_name: author.user_metadata.fullName,
             title: title,
             content: content,
             tags: tags,
@@ -63,4 +83,17 @@ export function getBlogImagePath(image_path: string | null) {
         .from('blog-images')
         .getPublicUrl(image_path)
         .data.publicUrl;
+}
+
+export async function getBlogIDs() {
+    const { data, error } = await createClient()
+        .from("blogs")
+        .select("id")
+        .order("id", { ascending: true });
+
+
+    return {
+        data: data?.map((row) => row.id) || [],
+        error: error
+    }
 }
