@@ -201,11 +201,13 @@ export default function ResponsiveHeader() {
                         transition={{ duration: 0.3, delay: 0.7 }}
                         className="flex items-center space-x-3"
                     >
-                        <Link href={"/user"}>
-                            <Label className="p-2 hover:bg-bite-tongue/80 rounded-md cursor-pointer">
-                                {fullName}
-                            </Label>
-                        </Link>
+                        {fullName && (
+                            <Link href={"/user"}>
+                                <Label className="p-2 hover:bg-bite-tongue/80 rounded-md cursor-pointer">
+                                    {fullName}
+                                </Label>
+                            </Link>
+                        )}
                         {pathname === '/login' || pathname === '/register' ? null :
                             <div>
                                 {!isMobile && (
