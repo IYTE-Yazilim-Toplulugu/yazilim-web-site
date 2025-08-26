@@ -4,12 +4,10 @@ import { motion } from "framer-motion";
 import Loading from "@/components/loading";
 import { Blog } from "@/types/types_blog";
 import { useParams } from "next/navigation";
-import { getBlog, getBlogImagePath, getBlogIDs } from "@/utils/blog_client_util";
+import { getBlog, getBlogImagePath } from "@/utils/blog_client_util";
 import handleErrorCode from "@/components/handle-error-code";
-import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import { useIsMobile } from "@/components/ui/use-mobile";
-import MarkdownComponents from "@/components/markdown";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -20,7 +18,6 @@ import YazilimBlankPage from "@/components/blank-page";
 export default function BlogPage() {
     const id = Number(useParams().id);
     const [blogData, setBlogData] = useState<Blog | null>(null);
-    const [blogIDs, setBlogIDs] = useState();
     const [previousBlog, setPreviousBlog] = useState<Blog | null>(null);
     const [nextBlog, setNextBlog] = useState<Blog | null>(null);
 

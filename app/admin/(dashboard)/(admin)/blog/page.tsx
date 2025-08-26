@@ -12,7 +12,6 @@ import Loading from "@/components/loading";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Blog } from "@/types/types_blog";
-import blogAuthorGet from "@/app/blog/(server)/blog_user_get";
 import BlogsAll from "./(server)/blogs_get";
 import BlogDelete from "./[id]/(server)/blog_delete";
 import { getBlogImagePath } from "@/utils/blog_client_util";

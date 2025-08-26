@@ -2,20 +2,19 @@
 
 import Input from "@/components/admin/form/input/InputField";
 import Button from "@/components/admin/ui/button/Button";
-import {Search, X} from "lucide-react";
-import {Table, TableBody, TableCell, TableHeader, TableRow} from "@/components/admin/ui/table";
+import { Search, X } from "lucide-react";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/admin/ui/table";
 import Link from "next/link";
 import Pagination from "@/components/admin/tables/Pagination";
-import {useEffect, useState} from "react";
-import {GalleryImage} from "@/types/types_gallery";
-import {getGalleryImages, getImagePath} from "@/utils/gallery_client_util";
+import { useEffect, useState } from "react";
+import { GalleryImage } from "@/types/types_gallery";
+import { getImagePath } from "@/utils/gallery_client_util";
 import Image from "next/image";
-import {AnimatePresence, motion} from "framer-motion";
-import {toast} from "@/hooks/use-toast";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "@/hooks/use-toast";
 import Loading from "@/components/loading";
 import GalleryUpload from "@/components/GalleryUpload";
 import GalleryAllServer from "@/app/admin/(dashboard)/(admin)/gallery/(server)/gallery_all";
-import UserDeleteServer from "@/app/admin/(dashboard)/(admin)/user/[id]/(server)/user_delete";
 import handleErrorCode from "@/components/handle-error-code";
 import GalleryDeleteServer from "@/app/admin/(dashboard)/(admin)/gallery/(server)/gallery_delete";
 
@@ -74,8 +73,8 @@ export default function Gallery() {
                     <Search />
                 </Button>
             </div>
-            { isLoading && (<Loading/>)}
-            { isCreateModalOpen && (
+            {isLoading && (<Loading />)}
+            {isCreateModalOpen && (
                 <AnimatePresence>
                     <motion.section
                         key="overlay2"
@@ -88,7 +87,7 @@ export default function Gallery() {
                         <GalleryUpload className={"w-1/2"} onClick={e => e.stopPropagation()} onUpload={async () => {
                             await fetchImages();
                             setCreateModalOpen(false);
-                        }}/>
+                        }} />
                     </motion.section>
                 </AnimatePresence>
             )}
@@ -138,7 +137,7 @@ export default function Gallery() {
                                                                     <X className="transition-transform duration-800 group-hover:rotate-[180deg]" />
                                                                 </Button>
 
-                                                                <Image src={path} width={1280} height={720} className={"object-cover"} alt={u.file_path}/>
+                                                                <Image src={path} width={1280} height={720} className={"object-cover"} alt={u.file_path} />
                                                                 <p>{u.file_path}</p>
                                                             </motion.section>
                                                         </motion.section>
@@ -146,7 +145,7 @@ export default function Gallery() {
                                                 }
                                             </AnimatePresence>
                                             <motion.div layoutId={strId}>
-                                                <Image title={u.file_path} src={path} width={30} height={30} alt={u.file_path} onClick={() => setOpenedImage(strId)}/>
+                                                <Image title={u.file_path} src={path} width={30} height={30} alt={u.file_path} onClick={() => setOpenedImage(strId)} />
                                             </motion.div>
                                         </div>
 

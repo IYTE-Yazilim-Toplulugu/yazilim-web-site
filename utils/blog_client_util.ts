@@ -84,16 +84,3 @@ export function getBlogImagePath(image_path: string | null) {
         .getPublicUrl(image_path)
         .data.publicUrl;
 }
-
-export async function getBlogIDs() {
-    const { data, error } = await createClient()
-        .from("blogs")
-        .select("id")
-        .order("id", { ascending: true });
-
-
-    return {
-        data: data?.map((row) => row.id) || [],
-        error: error
-    }
-}

@@ -7,7 +7,6 @@ import { ArrowDown, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Suspense } from 'react';
 import FreeSwiper from '@/components/freeSwiper';
-import { SwiperData } from '@/lib/pseudo';
 import Image from 'next/image';
 import Link from 'next/link';
 import AboutSection from '@/components/about-section';
