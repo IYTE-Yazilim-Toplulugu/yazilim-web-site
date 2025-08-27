@@ -13,6 +13,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import BlogMarkdown from "@/components/blog-markdown";
 import YazilimBlankPage from "@/components/blank-page";
+import { useTranslations } from "next-intl";
 
 
 export default function BlogPage() {
@@ -23,6 +24,8 @@ export default function BlogPage() {
 
     const [loading, setLoading] = useState<boolean>(true);
     const isMobile = useIsMobile()
+
+    const t = useTranslations('blogs.read')
 
 
     useEffect(() => {
@@ -61,7 +64,7 @@ export default function BlogPage() {
         dark:hover:bg-white/[0.03] text-sm cursor-pointer z-50"
             >
                 <ArrowLeft />
-                {"Go Back"}
+                {t('go_back')}
             </button>
         </Link>
 
@@ -106,15 +109,15 @@ export default function BlogPage() {
                 </div>
                 <BlogMarkdown content={blogData?.content || ""} />
 
-                <p className="text-sm text-muted-foreground mx-8 mt-4">Tags: {blogData?.tags.join(", ")}</p>
+                <p className="text-sm text-muted-foreground mx-8 mt-4">{t("tags")}: {blogData?.tags.join(", ")}</p>
 
                 <div className="flex justify-between items-start mt-4">
                     <Link href={`/blog/${previousBlog?.id}`} className="text-start">
-                        {previousBlog && <p className="text-sm">See Previous Blog</p>}
+                        {previousBlog && <p className="text-sm">{t('prev_blog')}</p>}
                         <p>{previousBlog && previousBlog.title}</p>
                     </Link>
                     <Link href={`/blog/${nextBlog?.id}`} className="text-end">
-                        {nextBlog && <p className="text-sm">See Next Blog</p>}
+                        {nextBlog && <p className="text-sm">{t('next_blog')}</p>}
                         <p>{nextBlog && nextBlog.title}</p>
                     </Link>
                 </div>

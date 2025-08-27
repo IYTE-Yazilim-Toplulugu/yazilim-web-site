@@ -12,8 +12,10 @@ import { getUser } from "@/utils/user_client_util";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
 import ThemeChanger from "@/components/themeChanger"
+import LanguageSwitcher from "@/components/language-switcher"
 import { NavbarProps } from "@/types/types"
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useTranslations } from "next-intl";
 
 export default function ResponsiveHeader() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -24,6 +26,8 @@ export default function ResponsiveHeader() {
     const isMobile = useIsMobile()
     const [isAdmin, setIsAdmin] = useState(false)
     const [fullName, setFullName] = useState("")
+
+    const t = useTranslations("header");
 
     useLayoutEffect(() => {
 
@@ -103,14 +107,14 @@ export default function ResponsiveHeader() {
 
 
     const navItems = [
-        { name: "Home", href: "/home" },
-        { name: "About Us", href: "/home#about" },
-        { name: "Events", href: "/event" },
-        { name: "Blogs", href: "/blog" },
-        { name: "Forms", href: "/form" },
-        { name: "Announcements", href: "/home#announcements" },
-        { name: "Gallery", href: "/gallery" },
-        { name: "Contact", href: "/contact" },
+        { name: t("tabs.home"), href: "/home" },
+        { name: t("tabs.aboutus"), href: "/home#about" },
+        { name: t("tabs.events"), href: "/event" },
+        { name: t("tabs.blogs"), href: "/blog" },
+        { name: t("tabs.forms"), href: "/form" },
+        { name: t("tabs.announcements"), href: "/home#announcements" },
+        { name: t("tabs.gallery"), href: "/gallery" },
+        { name: t("tabs.contact"), href: "/contact" },
     ]
 
     if (!isMounted) {
@@ -120,7 +124,7 @@ export default function ResponsiveHeader() {
                     <div className="flex items-center gap-4">
                         <div className="font-bold text-xl m-4">YS</div>
                         <div className="hidden md:block">
-                            <div className="font-bold text-destructive">IYTE Yazilim Society</div>
+                            <div className="font-bold text-destructive">İYTE Yazılım Topluluğu</div>
                             <div className="text-xs text-muted-foreground">Software for Everyone</div>
                         </div>
                     </div>
@@ -148,9 +152,7 @@ export default function ResponsiveHeader() {
         >
             {!isMobile && isAdmin && (
                 <Link href="/admin/">
-                    <Button variant="outline" className="m-4 absolute top-16 right-0 z-50 cursor-pointer">
-                        Go To Dashboard
-                    </Button>
+                    <Button variant="outline" className="m-4 absolute top-16 right-0 z-50 cursor-pointer">{t("rside.dashboard")}</Button>
                 </Link>
 
             )}
@@ -169,13 +171,14 @@ export default function ResponsiveHeader() {
                             <div className="absolute -top-1 -left-2 bg-destructive rounded-full h-14 w-14" />
                             <Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={40} height={40} />
                             <div className="hidden lg:block">
-                                <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">IYTE Yazilim Society</div>
-                                <div className="text-xs text-muted-foreground">Software for Everyone</div>
+                                <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">{t("lside.title")}</div>
+                                <div className="text-xs text-muted-foreground">{t("lside.sub")}</div>
                             </div>
                         </div>
                         <div className={`absolute inset-0 -top-8 -left-4 w-40 bg-background blur-xl rounded-md z-0 md:w-64 md:left-0 md:block ${mobileMenuOpen ? "block" : "hidden"}`}></div>
                     </motion.div>
                 </Link>
+
 
                 <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-4 lg:gap-6 text-sm">
                     {navItems.map((item, index) => (
@@ -201,6 +204,7 @@ export default function ResponsiveHeader() {
                         transition={{ duration: 0.3, delay: 0.7 }}
                         className="flex items-center space-x-3"
                     >
+
                         {fullName && (
                             <Link href={"/user"}>
                                 <Label className="p-2 hover:bg-bite-tongue/80 rounded-md cursor-pointer">
@@ -212,6 +216,7 @@ export default function ResponsiveHeader() {
                             <div>
                                 {!isMobile && (
                                     <div className="flex items-center space-x-3">
+                                        {!isScrolled && <LanguageSwitcher />}
                                         <Link href={fullName ? "/logout" : "/login"} >
                                             <Button
                                                 variant="outline"
@@ -219,13 +224,17 @@ export default function ResponsiveHeader() {
                                                 className="p-4 w-fit"
                                                 aria-label="login"
                                             >
-                                                {fullName ? "Logout" : "Login"}
+                                                {fullName ? t("rside.logout") : t("rside.login")}
                                             </Button>
                                         </Link>
                                         <ThemeChanger />
                                     </div>
                                 )}
-                                {isMobile && <ThemeChanger />}
+                                {isMobile && (
+                                    <div className="flex items-center space-x-2">
+                                        <ThemeChanger />
+                                    </div>
+                                )}
                             </div>
                         }
                     </motion.div>
@@ -255,6 +264,9 @@ export default function ResponsiveHeader() {
                         transition={{ duration: 0.3 }}
                         className="lg:hidden border-t overflow-hidden backdrop-blur-md"
                     >
+                        <div className="absolute top-4 right-4">
+                            <LanguageSwitcher />
+                        </div>
                         <div className="flex flex-col space-y-3 p-4">
                             {navItems.map((item, index) => (
                                 <motion.div
@@ -283,7 +295,7 @@ export default function ResponsiveHeader() {
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
                                             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                                         >
-                                            {fullName ? "Logout" : "Login"}
+                                            {fullName ? t("rside.logout") : t("rside.login")}
                                         </div>
                                     </Link>
                                 )}
@@ -292,7 +304,7 @@ export default function ResponsiveHeader() {
                                         <div className="p-1
                                         relative transition-colors hover:text-primary w-fit 
                                         after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
-                                            Go To Dashboard
+                                            {t("rside.dashboard")}
                                         </div>
                                     </Link>
                                 )}

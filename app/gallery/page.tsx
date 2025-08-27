@@ -6,6 +6,7 @@ import Loading from '@/components/loading';
 import { getGalleryImages, getImagePath } from "@/utils/gallery_client_util";
 import { GalleryImage } from "@/types/types_gallery";
 import handleErrorCode from '@/components/handle-error-code';
+import { useTranslations } from 'next-intl';
 
 export default function GalleryPage() {
     const [images, setImages] = useState<GalleryImage[]>([]);
@@ -14,6 +15,8 @@ export default function GalleryPage() {
     const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
     const [page, setPage] = useState(1);
+
+    const t = useTranslations('gallery')
 
     async function loadImages(page: number) {
         const a = await getGalleryImages(page);
@@ -71,7 +74,7 @@ export default function GalleryPage() {
     return (
         <div className="container mx-auto px-4 py-8 pt-24">
             <div className="flex flex-col items-center mb-8">
-                <h1 className="text-4xl text-start self-start font-bold">Gallery</h1>
+                <h1 className="text-4xl text-start self-start font-bold">{t('title')}</h1>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
@@ -89,7 +92,7 @@ export default function GalleryPage() {
                             <h2 className="text-xl font-semibold mb-2">{image.title}</h2>
                             <p className="text-gray-600">{image.description}</p>
                             <p className="text-sm text-gray-500 mt-2">
-                                Uploaded on: {new Date(image.uploaded_at!).toLocaleDateString()}
+                                {t('uploaded')}: {new Date(image.uploaded_at!).toLocaleDateString()}
                             </p>
                         </div>
                     </div>

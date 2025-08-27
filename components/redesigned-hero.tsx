@@ -14,6 +14,7 @@ import { useIsClient } from "@/hooks/use-is-client"
 import Link from "next/link"
 import { HandleIcons } from "./handle-icons"
 import { HomeHeroConfig } from "@/types/types_config";
+import { useTranslations } from "next-intl"
 
 
 export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConfig }) {
@@ -31,6 +32,8 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
     const opacity = useTransform(scrollYProgress, [0.9, 1], [1, 0])
     const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95])
     const y = useTransform(scrollYProgress, [0, 1], [0, 100])
+
+    const t = useTranslations('home.hero')
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!containerRef.current) return
@@ -178,7 +181,7 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
                                     onClick={scrollToEvents}
                                     className="group relative overflow-hidden shadow-lg border-border  transition-all duration-300 bg-transparent hover:bg-happy-hearts/90 hover:shadow-happy-hearts/20 dark:bg-happy-hearts"
                                 >
-                                    <span className="relative z-10">View Events</span>
+                                    <span className="relative z-10">{t('view_events')}</span>
                                     <span className="absolute inset-0 bg-gradient-to-r from-bite-tongue to-destructive opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
                                 </Button>
@@ -190,7 +193,7 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
                                     variant="outline"
                                     className="group relative overflow-hidden bg-transparent border-copper-coin/50 hover:border-copper-coin transition-colors duration-300"
                                 >
-                                    <span className="relative z-10">Contact Us</span>
+                                    <span className="relative z-10">{t('contact_us')}</span>
                                     <span className="absolute inset-0 bg-gradient-to-r from-copper-coin/30 to-golden-nugget/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 </Button>
                             </Link>

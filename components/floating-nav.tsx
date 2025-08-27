@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Home, Code, Send, ChevronUp, Image, Scroll, Ticket, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useTranslations } from "next-intl"
 // import { useToast } from "@/components/ui/use-toast"
 
 interface NavItem {
@@ -15,20 +16,20 @@ interface NavItem {
     icon: React.ReactNode
 }
 
-const navItems: NavItem[] = [
-    { name: "Home", href: "/home", icon: <Home className="h-[18px] w-[18px]" /> },
-    { name: "About Us", href: "/home#about", icon: <Code className="h-[18px] w-[18px]" /> },
-    { name: "Events", href: "/event", icon: <Ticket className="h-[18px] w-[18px]" /> },
-    { name: "Blogs", href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
-    { name: "Forms", href: "/form", icon: <Scroll className="h-[18px] w-[18px]" /> },
-    { name: "Announcements", href: "/home#announcements", icon: <Megaphone className="h-[18px] w-[18px]" /> },
-    { name: "Gallery", href: "/gallery", icon: <Image className="h-[18px] w-[18px]" /> },
-    { name: "Contact", href: "/contact", icon: <Send className="h-[18px] w-[18px]" /> },
 
-
-]
 
 export default function FloatingNav() {
+    const t = useTranslations("header")
+    const navItems: NavItem[] = [
+        { name: t("tabs.home"), href: "/home", icon: <Home className="h-[18px] w-[18px]" /> },
+        { name: t("tabs.aboutus"), href: "/home#about", icon: <Code className="h-[18px] w-[18px]" /> },
+        { name: t('tabs.events'), href: "/event", icon: <Ticket className="h-[18px] w-[18px]" /> },
+        { name: t('tabs.blogs'), href: "/blog", icon: <Code className="h-[18px] w-[18px] rotate-90" /> },
+        { name: t('tabs.forms'), href: "/form", icon: <Scroll className="h-[18px] w-[18px]" /> },
+        { name: t('tabs.announcements'), href: "/home#announcements", icon: <Megaphone className="h-[18px] w-[18px]" /> },
+        { name: t('tabs.gallery'), href: "/gallery", icon: <Image className="h-[18px] w-[18px]" /> },
+        { name: t('tabs.contact'), href: "/contact", icon: <Send className="h-[18px] w-[18px]" /> },
+    ]
     const [activeSection, setActiveSection] = useState("")
     const [isVisible, setIsVisible] = useState(false)
     const [showBackToTop, setShowBackToTop] = useState(false)

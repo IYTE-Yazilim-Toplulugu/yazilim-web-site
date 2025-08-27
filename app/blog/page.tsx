@@ -21,12 +21,15 @@ import YazilimBlankPage from "@/components/blank-page";
 import { SectionHeader } from "@/components/ui/section-container";
 import { motion } from "framer-motion";
 import BlogMarkdown from "@/components/blog-markdown";
+import { useTranslations } from "next-intl";
 
 
 export default function BlogsPage() {
     const [blogsData, setBlogsData] = useState<Blog[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [userData, setUserData] = useState<User>();
+
+    const t = useTranslations('blogs')
 
     useEffect(() => {
         getUser().then((user) => { setUserData(user); })
@@ -56,7 +59,7 @@ export default function BlogsPage() {
             transition={{ duration: 0.5 }}
             className='mt-16'
         >
-            <SectionHeader title='Blogs' titleClassName='mt-4 bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget' decorative={false} >
+            <SectionHeader title={t('title')} titleClassName='mt-4 bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget' decorative={false} >
                 <motion.span
                     className="absolute -bottom-2 left-2 h-1 bg-primary rounded-l-full bg-gradient-to-r from-golden-nugget to-background to-99%"
                     initial={{ width: 0 }}
@@ -76,14 +79,14 @@ export default function BlogsPage() {
         dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 
         dark:hover:bg-white/[0.03] text-sm cursor-pointer"
                     >
-                        {userData ? "Create New" : "Login for Create"}
+                        {userData ? t('create_button.new') : t('create_button.login')}
                         {userData && <PlusIcon />}
                     </button>
                 </Link>
             </div>
             <div className="m-4 md:m-12 md:mt-8 flex flex-col gap-8">
                 {blogsData.length === 0 && (
-                    <YazilimBlankPage content="No Blogs Found" emoji="😴" />
+                    <YazilimBlankPage content={t("not_found")} emoji="😴" />
                 )}
                 {blogsData && blogsData.length > 0 && (() => {
                     const firstBlog = blogsData[0];
@@ -115,7 +118,7 @@ export default function BlogsPage() {
                                         <Button size="sm" variant="primary" type="button"
                                             startIcon={<ExternalLink className="w-4 h-4" />}
                                             className="text-xs bg-bite-tongue cursor-pointer">
-                                            Read more
+                                            {t("read_more")}
                                         </Button>
                                     </Link>
                                 </CardFooter>
@@ -153,7 +156,7 @@ export default function BlogsPage() {
                                         <Button size="sm" variant="primary" type="button"
                                             startIcon={<ExternalLink className="w-4 h-4" />}
                                             className="text-xs bg-bite-tongue cursor-pointer">
-                                            Read more
+                                            {t("read_more")}
                                         </Button>
                                     </Link>
                                 </CardFooter>

@@ -1,0 +1,220 @@
+{
+    "header": {
+        "lside": {
+            "title": "İYTE Software Society",
+            "sub": "Software for everyone"
+        },
+        "tabs": {
+            "home": "Home",
+            "aboutus": "About Us",
+            "events": "Events",
+            "blogs": "Blogs",
+            "forms": "Forms",
+            "announcements": "Announcements",
+            "gallery": "Gallery",
+            "contact": "Contact"
+        },
+        "rside": {
+            "login": "Log In",
+            "logout": "Log Out",
+            "dashboard": "Go to Dashboard",
+            "language_switch": "Switch language"
+        }
+    },
+    "home": {
+        "hero": {
+            "view_events": "View Events",
+            "contact_us": "Contact Us"
+        },
+        "announcements": {
+            "title": "Announcements"
+        },
+        "about_us": {
+            "join_us": "Join Us"
+        },
+        "footer": {
+            "quick_links": "Quick Links",
+            "contact_info": "Contact Info",
+            "newsletter": "Newsletter",
+            "validate": "Please enter a valid email address.",
+            "success": {
+                "title": "Subscribed!",
+                "desc": "You've been added to the newsletter with {data}."
+            },
+            "error": {
+                "title": "Error",
+                "desc": "An unexpected error occurred while subscribing. Please try again later."
+            }
+        }
+    },
+    "events": {
+        "title": "Events",
+        "not_found": "Events are coming soon"
+    },
+    "blogs": {
+        "title": "Blogs",
+        "create_button": {
+            "new": "Create New",
+            "login": "Login for Create"
+        },
+        "read_more": "Read More",
+        "not_found": "No Blogs Found",
+        "create": {
+            "title": "Blog Title",
+            "tags": "Blog Tags",
+            "content": "Blog Content",
+            "separate": "Whitespace separated",
+            "browse": "Browse file..",
+            "image_path": "Image Path (e.g image.png)",
+            "submit": "Submit",
+            "success": {
+                "title": "Blog Created",
+                "desc": "Your blog has been created successfully. Our team will review it shortly."
+            },
+            "error": {
+                "title": "Upload Image Error",
+                "desc": "Please select an image to upload."
+            },
+            "image_success": {
+                "title": "Image uploaded successfully",
+                "desc": "The image has been uploaded successfully."
+            }
+        },
+        "read": {
+            "tags": "Tags",
+            "prev_blog": "See Previous Blog",
+            "next_blog": "See Next Blog",
+            "go_back": "Go Back"
+        }
+    },
+    "forms": {
+        "title": "Forms",
+        "multi_choice": "(multiple choice)",
+        "single_choice": "(single choice)",
+        "submit": "Submit",
+        "validation_error": {
+            "title": "Validation Error",
+            "desc": "Please answer all required questions before submitting."
+        },
+        "submit_success": {
+            "title": "Success",
+            "desc": "Your form answers have been submitted successfully."
+        },
+        "submit_error": {
+            "title": "Unexpected Error",
+            "desc": "An unexpected error occurred while submitting your form answers. Please try again later."
+        },
+        "fetch_error": {
+            "title": "Unexpected Error",
+            "desc": "Unexpected error while fetching form data"
+        }
+    },
+    "gallery": {
+        "title": "Gallery",
+        "uploaded": "Uploaded on"
+    },
+    "contact": {
+        "lside": {
+            "email": "Email",
+            "phone": "Phone",
+            "location": "Location"
+        },
+        "rside": {
+            "name": "Name",
+            "email": "Email",
+            "subject": "Subject",
+            "message": "Message",
+            "send": "Send Message",
+            "sending": "Sending",
+            "placeholder": {
+                "name": "Your name",
+                "email": "Your email",
+                "subject": "Message Subject",
+                "message": "Your message"
+            }
+        },
+        "sent": {
+            "title": "Message Sent!",
+            "desc": "Thank you for reaching out. I'll get back to you as soon as possible.",
+            "another": "Send Another Message"
+        },
+        "schema": {
+            "name": "Name must be at least 2 characters.",
+            "email": "Please enter a valid email address.",
+            "subject": "Subject must be at least 5 characters.",
+            "message": "Message must be at least 10 characters."
+        }
+    },
+    "user": {
+        "title": "Profile",
+        "name": "Full Name",
+        "place": "Place",
+        "email": "E-Mail",
+        "phone": "Phone Number",
+        "school": "School Number",
+        "department": "Department",
+        "is_special": "Orange Tick",
+        "is_student": "Student",
+        "from_iztech": "Is From Iztech",
+        "back": "Back",
+        "save": "Save",
+        "error": {
+            "title": "Not Authenticated",
+            "desc": "Please log in to view your profile."
+        },
+        "success": {
+            "title": "Success",
+            "desc": "User updated successfully."
+        }
+    },
+    "error": {
+        "404": {
+            "title": "Not Found",
+            "description": "Requested resource could not be found."
+        },
+        "23514": {
+            "title": "Validation Error",
+            "description": "The submitted data does not meet validation criteria."
+        },
+        "23503": {
+            "title": "Submission Error",
+            "description": "Invalid reference detected during submission."
+        },
+        "23502": {
+            "title": "Missing Required Data",
+            "description": "Some required fields are missing or incomplete."
+        },
+        "23505": {
+            "title": "Duplicate Entry",
+            "description": "This item has already been submitted."
+        },
+        "22001": {
+            "title": "Input Too Long",
+            "description": "One or more values exceed the allowed length."
+        },
+        "42601": {
+            "title": "Invalid Input Format",
+            "description": "The submitted data has an invalid format."
+        },
+        "42501": {
+            "title": "Access Denied",
+            "description": "You do not have permission to perform this action."
+        },
+        "08006": {
+            "title": "Connection Error",
+            "description": "A network or database connection issue occurred."
+        },
+        "08003": {
+            "title": "Connection Error",
+            "description": "A network or database connection issue occurred."
+        },
+        "08004": {
+            "title": "Connection Error",
+            "description": "A network or database connection issue occurred."
+        },
+        "default": {
+            "title": "Unexpected Error",
+            "description": "An unknown error occurred. Please try again later."
+        }
+    }
+}

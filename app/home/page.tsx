@@ -22,6 +22,7 @@ import { Configuration } from "@/types/types_config";
 import { Announcement } from '@/types/types_announcement';
 import { getAnnouncementImagePath, getAnnouncements } from '@/utils/announcement_client_util';
 import handleErrorCode from '@/components/handle-error-code';
+import { useTranslations } from 'next-intl';
 
 
 // Simple loading component
@@ -40,6 +41,8 @@ export default function Home() {
 
     const [homeData, setHomeData] = useState<Configuration[]>(ConfigurationDefaults);
     const [announcementData, setAnnouncementData] = useState<Announcement[]>();
+
+    const t = useTranslations('home')
 
     // Data fetching
     useEffect(() => {
@@ -94,7 +97,7 @@ export default function Home() {
                 <Suspense fallback={<LoadingSection name="Announcements" />}>
                     <SectionContainer id="announcements" className="relative overflow-hidden">
                         <ScrollReveal delay={0.2} >
-                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-bite-tongue'>Announcements</h1>
+                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-bite-tongue'>{t("announcements.title")}</h1>
                             <div className='m-8 md:m-24'>
                                 {announcementData && (
                                     <FreeSwiper mode="snap" viewCount={1} spaceBetween={32} freeWidth='auto'>

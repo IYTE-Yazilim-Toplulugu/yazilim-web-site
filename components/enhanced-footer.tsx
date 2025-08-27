@@ -17,17 +17,21 @@ import { HandleIcons } from "@/components/handle-icons"
 import { createClient } from "@/lib/supabase/client"
 import handleErrorCode from "./handle-error-code"
 import { HomeFooterConfig } from "@/types/types_config";
+import { useTranslations } from "next-intl"
 
-// Form validation schema
-const subscribeSchema = z.object({
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-})
 
 export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFooterConfig }) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const supabase = createClient()
+
+    const t = useTranslations('home.footer')
+
+    // Form validation schema
+    const subscribeSchema = z.object({
+        email: z.string().email({
+            message: t('validate'),
+        }),
+    })
 
     // Initialize form
     const form = useForm<z.infer<typeof subscribeSchema>>({
@@ -53,16 +57,16 @@ export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFoot
                 handleErrorCode(error.code)
             } else {
                 toast({
-                    title: "Subscribed!",
-                    description: `You've been added to the newsletter with ${data}.`,
+                    title: t('success.title'),
+                    description: t('success.desc', { data: data || "" }),
                     variant: "success",
                 })
             }
         } catch (error) {
             console.error("Unexpected error:", error)
             toast({
-                title: "Error",
-                description: "An unexpected error occurred while subscribing. Please try again later.",
+                title: t('error.title'),
+                description: t('error.desc'),
                 variant: "destructive",
             })
         }
@@ -80,7 +84,6 @@ export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFoot
         window.scrollTo({ top: 0, behavior: "smooth" })
     }
 
-    const currentYear = new Date().getFullYear()
 
 
     return (
@@ -130,7 +133,7 @@ export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFoot
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
-                        <h3 className="font-semibold mb-4">Quick Links</h3>
+                        <h3 className="font-semibold mb-4">{t('quick_links')}</h3>
                         <div className="grid grid-cols-2 gap-y-3 text-nowrap">
                             {home_footer?.quick_links.map((link, index) => (
                                 <Link href={link.url} key={index} className="text-muted-foreground hover:text-primary transition-colors duration-200 inline-block">{link.title}</Link>
@@ -144,7 +147,7 @@ export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFoot
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        <h3 className="font-semibold mb-4">Contact Info</h3>
+                        <h3 className="font-semibold mb-4">{t("contact_info")}</h3>
                         <ul className="space-y-3">
                             {home_footer?.contact_info.map((info, index) => (
                                 <Link key={index} href={info.url ?? ""} className="flex items-center gap-3 text-muted-foreground hover:underline">
@@ -162,7 +165,7 @@ export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFoot
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.3 }}
                     >
-                        <h3 className="font-semibold mb-4">Newsletter</h3>
+                        <h3 className="font-semibold mb-4">{t("newsletter")}</h3>
                         <p className="text-muted-foreground mb-4">{home_footer?.newsletter.description}</p>
 
                         <Form {...form}>

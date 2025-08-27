@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import BlogImageUpload from "../(server)/blog_image_upload";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 
 
 
@@ -26,6 +27,8 @@ export default function CreateBlogPage() {
     const [tags, setTags] = useState<string[]>([]);
     const [imageUrl, setImageUrl] = useState<string>("");
     const { theme } = useTheme()
+
+    const t = useTranslations('blogs.create')
 
     useEffect(() => {
         getUser().then((user) => {
@@ -53,8 +56,8 @@ export default function CreateBlogPage() {
             return
         }
         toast({
-            title: "Blog Created",
-            description: "Your blog has been created successfully. Our team will review it shortly.",
+            title: t('success.title'),
+            description: t('success.desc'),
             variant: "success",
         })
         redirect('/blog');
@@ -64,8 +67,8 @@ export default function CreateBlogPage() {
         if (!file) {
             console.error("No file selected for upload.");
             toast({
-                title: "Upload Image Error",
-                description: "Please select an image to upload.",
+                title: t('error.title'),
+                description: t('error.title'),
                 variant: "destructive",
             })
             return
@@ -82,8 +85,8 @@ export default function CreateBlogPage() {
 
         setImageUrl(res.filepath)
         toast({
-            title: "Image uploaded successfully",
-            description: "The image has been uploaded successfully.",
+            title: t('image_success.title'),
+            description: t('image_success.desc'),
             variant: "success",
         })
 
@@ -101,22 +104,22 @@ export default function CreateBlogPage() {
                     shadow-sm shadow-black/30 z-30"><ArrowLeft /></Button>
                 </Link>
                 <div>
-                    <Label htmlFor="blog-title" className="text-lg font-bold mb-4">Blog Title</Label>
-                    <Input type="text" placeholder="Blog Title"
+                    <Label htmlFor="blog-title" className="text-lg font-bold mb-4">{t('title')}</Label>
+                    <Input type="text" placeholder={t('title')}
                         className="w-full"
                         value={title}
                         onChange={e => e.target.value.length < 64 && setTitle(e.target.value)} />
                 </div>
                 <div>
-                    <Label htmlFor="blog-title" className="flex flex-row items-center gap-2 text-lg font-bold mb-4" >Blog Tags <p className="text-sm text-muted-foreground">(whitespace seperated)</p></Label>
-                    <Input type="text" placeholder="Tags (comma separated)"
+                    <Label htmlFor="blog-title" className="flex flex-row items-center gap-2 text-lg font-bold mb-4" >{t('tags')}<p className="text-sm text-muted-foreground">({t('separate')})</p></Label>
+                    <Input type="text"
                         onChange={e => setTags(e.target.value
                             .split(" "))}
                         value={tags.join(" ")}
                         className="w-full" />
                 </div>
                 <div >
-                    <Label htmlFor="blog-content" className="text-lg font-bold mb-4">Blog Content</Label>
+                    <Label htmlFor="blog-content" className="text-lg font-bold mb-4">{t('content')}</Label>
                     <Editor value={content} height={512}
                         data-color-mode={theme === "light" ? "light" : "dark"} preview="edit"
                         onChange={(e) => setContent(e)} />
@@ -124,7 +127,7 @@ export default function CreateBlogPage() {
 
                 <div className="flex flex-row items-center gap-4 ">
                     <label className="relative inline-block cursor-pointer">
-                        <span className="sr-only">Choose File</span>
+                        <span className="sr-only">{t('browse')}</span>
                         <input
                             type="file"
                             accept="image/*"
@@ -136,17 +139,17 @@ export default function CreateBlogPage() {
                             variant="secondary"
                             className="bg-bite-tongue hover:bg-happy-hearts"
                         >
-                            Browse file..
+                            {t('browse')}
                         </Button>
                     </label>
-                    <Label htmlFor={"image-path"}>{imageUrl ? imageUrl : "Image Path (e.g image.png)"}</Label>
+                    <Label htmlFor={"image-path"}>{imageUrl ? imageUrl : t('image_path')}</Label>
                 </div>
                 {/* <MarkdownEditor /> */}
                 <Button variant="secondary" disabled={!userData}
                     onClick={() => { userData && blogCreate(userData, title, content ?? "", tags, imageUrl, true) }}
                     className="mb-4 mx-4 md:mx-12
                 hover:bg-bite-tongue cursor-pointer">
-                    Submit
+                    {t('submit')}
                 </Button>
             </div>
         </div>

@@ -1,0 +1,220 @@
+{
+    "header": {
+        "lside": {
+            "title": "İYTE Yazılım Topluluğu",
+            "sub": "Software for everyone"
+        },
+        "tabs": {
+            "home": "Ana Sayfa",
+            "aboutus": "Biz Kimiz?",
+            "events": "Etkinlikler",
+            "blogs": "Bloglar",
+            "forms": "Formlar",
+            "announcements": "Duyurular",
+            "gallery": "Anılarımız",
+            "contact": "İletişim"
+        },
+        "rside": {
+            "login": "Giriş Yap",
+            "logout": "Çıkış Yap",
+            "dashboard": "Panele git",
+            "language_switch": "Dil değiştir"
+        }
+    },
+    "home": {
+        "hero": {
+            "view_events": "Etkinlikleri Gör",
+            "contact_us": "Bize Ulaş"
+        },
+        "announcements": {
+            "title": "Duyurular"
+        },
+        "about_us": {
+            "join_us": "Bize Katıl"
+        },
+        "footer": {
+            "quick_links": "Hızlı Linkler",
+            "contact_info": "İletişim Bilgileri",
+            "newsletter": "Bültene Katıl",
+            "validate": "Lütfen geçerli bir e-posta adresi girin.",
+            "success": {
+                "title": "Abone Oldunuz!",
+                "desc": "{data} ile bültenimize eklendiniz."
+            },
+            "error": {
+                "title": "Hata",
+                "desc": "Abone olurken beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+            }
+        }
+    },
+    "events": {
+        "title": "Etkinlikler",
+        "not_found": "Etkinlikler Çok Yakında"
+    },
+    "blogs": {
+        "title": "Bloglar",
+        "create_button": {
+            "new": "Yeni Oluştur",
+            "login": "Oluşturmak İçin Giriş Yap"
+        },
+        "read_more": "Devamını Oku",
+        "not_found": "Henüz Blog Yok",
+        "create": {
+            "title": "Blog Başlığı",
+            "tags": "Blog Etiketleri",
+            "content": "Blog İçeriği",
+            "separate": "Boşluk ile ayır",
+            "browse": "Dosya Seç..",
+            "image_path": "Resim Yolu (örn. resim.png)",
+            "submit": "Gönder",
+            "success": {
+                "title": "Blog Oluşturuldu",
+                "desc": "Blogunuz başarıyla oluşturuldu. Ekibimiz kısa süre içinde inceleyecek."
+            },
+            "error": {
+                "title": "Resim Yükleme Hatası",
+                "desc": "Lütfen yüklemek için bir resim seçin."
+            },
+            "image_success": {
+                "title": "Resim Başarıyla Yüklendi",
+                "desc": "Resim başarıyla yüklendi."
+            }
+        },
+        "read": {
+            "tags": "Etiketler",
+            "prev_blog": "Önceki Blogu Gör",
+            "next_blog": "Sonraki Blogu Gör",
+            "go_back": "Geri Dön"
+        }
+    },
+    "forms": {
+        "title": "Formlar",
+        "multi_choice": "(çoklu seçim)",
+        "single_choice": "(tekli seçim)",
+        "submit": "Gönder",
+        "validation_error": {
+            "title": "Doğrulama Hatası",
+            "desc": "Lütfen formu göndermeden önce tüm zorunlu soruları yanıtlayın."
+        },
+        "submit_success": {
+            "title": "Başarılı",
+            "desc": "Form cevaplarınız başarıyla gönderildi."
+        },
+        "submit_error": {
+            "title": "Beklenmeyen Hata",
+            "desc": "Form cevaplarınız gönderilirken beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+        },
+        "fetch_error": {
+            "title": "Beklenmeyen Hata",
+            "desc": "Form verilerini alırken beklenmeyen bir hata oluştu."
+        }
+    },
+    "gallery": {
+        "title": "Anılarımız",
+        "uploaded": "Yüklenme Tarihi"
+    },
+    "contact": {
+        "lside": {
+            "email": "E-Posta",
+            "phone": "Telefon",
+            "location": "Konum"
+        },
+        "rside": {
+            "name": "Ad Soyad",
+            "email": "E-Posta",
+            "subject": "Konu",
+            "message": "Mesaj",
+            "send": "Mesaj Gönder",
+            "sending": "Mesaj Gönderiliyor…",
+            "placeholder": {
+                "name": "Adınız",
+                "email": "E-Posta Adresiniz",
+                "subject": "Mesaj Konusu",
+                "message": "Mesajınız"
+            }
+        },
+        "sent": {
+            "title": "Mesaj Gönderildi!",
+            "desc": "Bize ulaştığın için teşekkürler. En kısa sürede sana geri döneceğiz.",
+            "another": "Başka Bir Mesaj Gönder"
+        },
+        "schema": {
+            "name": "İsim en az 2 karakter olmalı.",
+            "email": "Lütfen geçerli bir e-posta adresi girin.",
+            "subject": "Konu en az 5 karakter olmalı.",
+            "message": "Mesaj en az 10 karakter olmalı."
+        }
+    },
+    "user": {
+        "title": "Profil",
+        "name": "Adınız",
+        "place": "Okulu",
+        "email": "E-Posta",
+        "phone": "Telefon Numarası",
+        "school": "Okul Numarası",
+        "department": "Bölüm",
+        "is_special": "Turuncu Tik",
+        "is_student": "Öğrenci",
+        "from_iztech": "İztech’ten mi",
+        "back": "Geri",
+        "save": "Kaydet",
+        "error": {
+            "title": "Giriş Yapılmadı",
+            "desc": "Profilinizi görüntülemek için lütfen giriş yapın."
+        },
+        "success": {
+            "title": "Başarılı",
+            "desc": "Kullanıcı bilgileri başarıyla güncellendi."
+        }
+    },
+    "error": {
+        "404": {
+            "title": "Bulunamadı",
+            "description": "İstenen kaynak bulunamadı."
+        },
+        "23514": {
+            "title": "Doğrulama Hatası",
+            "description": "Gönderilen veriler doğrulama kriterlerini karşılamıyor."
+        },
+        "23503": {
+            "title": "Gönderim Hatası",
+            "description": "Gönderim sırasında geçersiz bir referans tespit edildi."
+        },
+        "23502": {
+            "title": "Gerekli Veri Eksik",
+            "description": "Bazı zorunlu alanlar eksik veya tamamlanmamış."
+        },
+        "23505": {
+            "title": "Tekrarlanan Giriş",
+            "description": "Bu öğe zaten gönderilmiş."
+        },
+        "22001": {
+            "title": "Girdi Çok Uzun",
+            "description": "Bir veya birden fazla değer izin verilen uzunluğu aşıyor."
+        },
+        "42601": {
+            "title": "Geçersiz Girdi Formatı",
+            "description": "Gönderilen verilerin formatı geçersiz."
+        },
+        "42501": {
+            "title": "Erişim Reddedildi",
+            "description": "Bu işlemi yapma izniniz yok."
+        },
+        "08006": {
+            "title": "Bağlantı Hatası",
+            "description": "Bir ağ veya veritabanı bağlantı sorunu oluştu."
+        },
+        "08003": {
+            "title": "Bağlantı Hatası",
+            "description": "Bir ağ veya veritabanı bağlantı sorunu oluştu."
+        },
+        "08004": {
+            "title": "Bağlantı Hatası",
+            "description": "Bir ağ veya veritabanı bağlantı sorunu oluştu."
+        },
+        "default": {
+            "title": "Beklenmeyen Hata",
+            "description": "Bilinmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+        }
+    }
+}

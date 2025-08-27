@@ -7,6 +7,8 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import ScrollProgress from "@/components/scroll-progress";
 import FloatingNav from "@/components/floating-nav";
+import { NextIntlClientProvider } from "next-intl";
+import ClientProviders from "./ClientProviders";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -48,17 +50,21 @@ export default function RootLayout({
                 className={`${poppins.variable} antialiased selection:bg-bite-tongue selection:text-primary-foreground`}
                 suppressHydrationWarning
             >
-                {/* defaultTheme enableSystem */}
-                <ThemeProvider defaultTheme="system" enableSystem={true}>
-                    <ResponsiveHeader />
-                    <ScrollProgress />
-                    <FloatingNav />
-                    {/* <FloatingThemeSwitcher /> */}
+                <ClientProviders>
+                    <NextIntlClientProvider>
+                        {/* defaultTheme enableSystem */}
+                        <ThemeProvider defaultTheme="system" enableSystem={true}>
+                            <ResponsiveHeader />
+                            <ScrollProgress />
+                            <FloatingNav />
+                            {/* <FloatingThemeSwitcher /> */}
 
-                    {children}
+                            {children}
 
-                    <Toaster />
-                </ThemeProvider>
+                            <Toaster />
+                        </ThemeProvider>
+                    </NextIntlClientProvider>
+                </ClientProviders>
             </body>
         </html>
     );

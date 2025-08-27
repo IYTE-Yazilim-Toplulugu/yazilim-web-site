@@ -10,8 +10,10 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { HandleIcons } from "./handle-icons"
 import { HomeAboutUsConfig } from "@/types/types_config";
+import { useTranslations } from "next-intl"
 
 export default function AboutSection({ home_about_us }: { home_about_us?: HomeAboutUsConfig }) {
+    const t = useTranslations('home.about_us')
     return (
         <SectionContainer id="about" className="relative overflow-hidden">
             {/* Background decorative elements */}
@@ -123,7 +125,7 @@ export default function AboutSection({ home_about_us }: { home_about_us?: HomeAb
                                 <Link href="/register" >
                                     <Button variant="outline" className="gap-2 group shadow-md bg-primary border-primary text-background hover:shadow-primary/10 transition-all duration-300 cursor-pointer">
                                         <Download className="h-4 w-4 group-hover:animate-bounce" />
-                                        Join Us
+                                        {t("join_us")}
                                     </Button>
                                 </Link>
                                 <Button variant="outline" className="ml-3 gap-2 group" asChild>

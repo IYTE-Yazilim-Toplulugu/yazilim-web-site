@@ -18,22 +18,9 @@ import { getConfigurations } from "@/utils/config_client_util";
 import { ContactConfig, GeneralContactConfig } from "@/types/types_config";
 import Link from "next/link";
 import handleErrorCode from "./handle-error-code"
+import { useTranslations } from "next-intl"
 
-// Form validation schema
-const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-    subject: z.string().min(5, {
-        message: "Subject must be at least 5 characters.",
-    }),
-    message: z.string().min(10, {
-        message: "Message must be at least 10 characters.",
-    }),
-})
+
 
 export default function ContactForm() {
     const { toast } = useToast()
@@ -44,6 +31,23 @@ export default function ContactForm() {
     const [pageConfig, setPageConfig] = useState<ContactConfig>()
     const [contactConfig, setContactConfig] = useState<GeneralContactConfig>()
 
+    const t = useTranslations('contact')
+
+    // Form validation schema
+    const formSchema = z.object({
+        name: z.string().min(2, {
+            message: t('schema.name'),
+        }),
+        email: z.string().email({
+            message: t('schema.email'),
+        }),
+        subject: z.string().min(5, {
+            message: t('schema.subject'),
+        }),
+        message: z.string().min(10, {
+            message: t('schema.message'),
+        }),
+    })
     useEffect(() => {
         getConfigurations(["general_contact", "contact"]).then(a => {
             if (a.data && a.data.length > 0) {
@@ -75,8 +79,8 @@ export default function ContactForm() {
 
         if (!error) {
             toast({
-                title: "Message sent!",
-                description: "Thank you for your message. We will get back to you soon.",
+                title: t('sent.title'),
+                description: t('sent.desc'),
             });
 
             setIsSubmitted(true);
@@ -110,7 +114,7 @@ export default function ContactForm() {
                             <Mail className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                            <div className="text-sm text-muted-foreground">Email</div>
+                            <div className="text-sm text-muted-foreground">{t('lside.email')}</div>
                             <div>{contactConfig?.email}</div>
                         </div>
                     </div>
@@ -120,7 +124,7 @@ export default function ContactForm() {
                             <Phone className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                            <div className="text-sm text-muted-foreground">Phone</div>
+                            <div className="text-sm text-muted-foreground">{t('lside.phone')}</div>
                             <div>{contactConfig?.phone}</div>
                         </div>
                     </div>
@@ -130,7 +134,7 @@ export default function ContactForm() {
                             <MapPin className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                            <div className="text-sm text-muted-foreground">Location</div>
+                            <div className="text-sm text-muted-foreground">{t('lside.location')}</div>
                             <div><Link href={contactConfig?.location_url ?? ""}>{contactConfig?.location_text}</Link></div>
                         </div>
                     </div>
@@ -149,12 +153,10 @@ export default function ContactForm() {
                         <div className="h-16 w-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
                             <CheckCircle className="h-8 w-8 text-green-500" />
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Message Sent!</h3>
-                        <p className="text-muted-foreground mb-6">
-                            Thank you for reaching out. I'll get back to you as soon as possible.
-                        </p>
+                        <h3 className="text-xl font-bold mb-2">{t('sent.title')}</h3>
+                        <p className="text-muted-foreground mb-6">{t('sent.desc')}</p>
                         <Button variant="outline" onClick={() => setIsSubmitted(false)}>
-                            Send Another Message
+                            {t('sent.another')}
                         </Button>
                     </div>
                 ) : (
@@ -165,9 +167,9 @@ export default function ContactForm() {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>{t('rside.name')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Your name" {...field} />
+                                            <Input placeholder={t('rside.placeholder.name')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -179,9 +181,9 @@ export default function ContactForm() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{t('rside.email')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Your email" {...field} />
+                                            <Input placeholder={t('rside.placeholder.email')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -193,9 +195,9 @@ export default function ContactForm() {
                                 name="subject"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Subject</FormLabel>
+                                        <FormLabel>{t('rside.subject')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Message subject" {...field} />
+                                            <Input placeholder={t('rside.placeholder.subject')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -207,9 +209,9 @@ export default function ContactForm() {
                                 name="message"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Message</FormLabel>
+                                        <FormLabel>{t('rside.message')}</FormLabel>
                                         <FormControl>
-                                            <Textarea placeholder="Your message" className="min-h-[120px] resize-none" {...field} />
+                                            <Textarea placeholder={t('rside.placeholder.message')} className="min-h-[120px] resize-none" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -239,11 +241,11 @@ export default function ContactForm() {
                                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                                             ></path>
                                         </svg>
-                                        Sending...
+                                        {t('rside.sending')}
                                     </span>
                                 ) : (
                                     <span className="flex items-center gap-2">
-                                        Send Message
+                                        {t('rside.send')}
                                         <Send className="h-4 w-4" />
                                     </span>
                                 )}

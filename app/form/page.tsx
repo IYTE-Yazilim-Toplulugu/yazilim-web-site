@@ -23,6 +23,7 @@ import { User } from '@supabase/supabase-js';
 import surveysGet from './(server)/surveys_get';
 import checkHasSubmitted from './(server)/survey_check';
 import answeredSurveysGet from './(server)/answers_get';
+import { useTranslations } from 'next-intl';
 
 export default function SurveyPage() {
     const containerRef = useRef(null);
@@ -39,6 +40,8 @@ export default function SurveyPage() {
     const [errors, setErrors] = useState<Record<number, string>>({});
 
     const [userInfo, setUserInfo] = useState<any>(null);
+
+    const t = useTranslations('forms')
 
 
     useEffect(() => {
@@ -101,8 +104,8 @@ export default function SurveyPage() {
                             handleErrorCode(x.error.code);
                         } else {
                             toast({
-                                title: "Success",
-                                description: "Your form answers have been submitted successfully.",
+                                title: t('submit_success.title'),
+                                description: t('submit_success.desc'),
                                 variant: "success",
                             })
                             setFocusedId(null);
@@ -112,8 +115,8 @@ export default function SurveyPage() {
         } catch (error) {
             console.error("Unexpected Error", error);
             toast({
-                title: "Unexpected Error",
-                description: "An unexpected error occurred while submitting your form answers. Please try again later.",
+                title: t('submit_error.title'),
+                description: t('submit_error.desc'),
                 variant: "destructive",
             })
         }
@@ -140,8 +143,8 @@ export default function SurveyPage() {
         } catch (error) {
             console.error("Unexpected error while fetching answered form:", error);
             toast({
-                title: "Unexpected Error",
-                description: "Unexpected error while fetching form data",
+                title: t('fetch_error.title'),
+                description: t('fetch_error.desc'),
                 variant: "destructive",
             })
         }
@@ -615,8 +618,8 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
         if (hasError) {
             console.error("Validation errors:", newErrors);
             toast({
-                title: "Validation Error",
-                description: "Please answer all required questions before submitting.",
+                title: t('validation_error.title'),
+                description: t('validation_error.desc'),
                 variant: "destructive",
             });
         } else {
@@ -644,9 +647,9 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
     const handleQuestionType = (type: number) => {
         switch (type) {
             case 1:
-                return "(single choice)"
+                return t('single_choice')
             case 4:
-                return "(multiple choice)"
+                return t('multi_choice')
         }
     }
 
@@ -664,7 +667,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             transition={{ duration: 0.5 }}
             className='mt-16'
         >
-            <SectionHeader title='Forms' titleClassName='mt-4 bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget' decorative={false} >
+            <SectionHeader title={t('title')} titleClassName='mt-4 bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget' decorative={false} >
                 <motion.span
                     className="absolute -bottom-2 left-2 h-1 bg-primary rounded-l-full bg-gradient-to-r from-golden-nugget to-background to-99%"
                     initial={{ width: 0 }}
@@ -776,7 +779,7 @@ Are You Logged In?`}
                                 onClick={() => handleSubmit(currentSurvey)}
                                 className="mt-6 px-4 py-2 bg-bite-tongue text-white rounded hover:bg-bite-tongue/80 transition duration-200"
                             >
-                                Submit
+                                {t("submit")}
                             </Button>
                         </motion.section>
                     </motion.section>

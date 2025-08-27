@@ -6,11 +6,14 @@ import { Event } from "@/types/types";
 import Link from "next/link";
 import Loading from "@/components/loading";
 import YazilimBlankPage from "@/components/blank-page";
+import { useTranslations } from "next-intl";
 
 
 export default function Events() {
     const [events, setEvents] = useState<Event[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+
+    const t = useTranslations('events')
 
     useEffect(() => {
         setLoading(false)
@@ -20,7 +23,7 @@ export default function Events() {
 
     return (
         <div className="mt-20">
-            <YazilimBlankPage content="Events are coming soon" emoji="⏳" />
+            <YazilimBlankPage content={t("not_found")} emoji="⏳" />
             {/* <div className="m-8 flex flex-wrap gap-10 justify-evenly"> */}
             {/*     {events && events.map((event, id) => ( */}
             {/*         <Link key={id} href={`/place/${event.id}`} className="w-[90%] sm:w-[45%] md:w-[30%] lg:w-[18%] min-w-[250px]"> */}

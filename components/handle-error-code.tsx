@@ -1,68 +1,71 @@
 "use client"
 import { toast } from "@/hooks/use-toast"
+import { useTranslations } from "next-intl";
 
 
 const handleErrorCode = (code: string | null) => {
+    const t = useTranslations('error')
     switch (code) {
         case '404':
             toast({
-                title: "Not Found",
-                description: "Requested resource could not be found.",
+                title: t("error.404.title"),
+                description: t("error.404.description"),
                 variant: "destructive",
             });
             break;
 
         case "23514":
             toast({
-                title: "Validation Error",
-                description: "The submitted data does not meet validation criteria.",
+                title: t("error.23514.title"),
+                description: t("error.23514.description"),
                 variant: "destructive",
-            })
+            });
             break;
+
         case '23503': // Foreign key violation
             toast({
-                title: "Submission Error",
-                description: "Invalid reference detected during submission.",
+                title: t("error.23503.title"),
+                description: t("error.23503.description"),
                 variant: "destructive",
             });
             break;
 
         case '23502': // Not null violation
             toast({
-                title: "Missing Required Data",
-                description: "Some required fields are missing or incomplete.",
+                title: t("error.23502.title"),
+                description: t("error.23502.description"),
                 variant: "destructive",
             });
             break;
 
         case '23505': // Unique violation
             toast({
-                title: "Duplicate Entry",
-                description: "This item has already been submitted.",
+                title: t("error.23505.title"),
+                description: t("error.23505.description"),
                 variant: "default",
             });
             break;
 
         case '22001': // Value too long
             toast({
-                title: "Input Too Long",
-                description: "One or more values exceed the allowed length.",
+                title: t("error.22001.title"),
+                description: t("error.22001.description"),
                 variant: "destructive",
             });
             break;
 
         case '42601': // Syntax error
             toast({
-                title: "Invalid Input Format",
-                description: "The submitted data has an invalid format.",
+                title: t("error.42601.title"),
+                description: t("error.42601.description"),
                 variant: "destructive",
             });
             break;
 
         case '42501': // Insufficient privilege
             toast({
-                title: "Access Denied",
-                description: "You do not have permission to perform this action.",
+                title: t("error.42501.title"),
+                description: t("error.42501.description"),
                 variant: "destructive",
             });
             break;
@@ -71,16 +74,16 @@ const handleErrorCode = (code: string | null) => {
         case '08003': // Connection does not exist
         case '08004': // Operation not supported
             toast({
-                title: "Connection Error",
-                description: "A network or database connection issue occurred.",
+                title: t("error.08006.title"),
+                description: t("error.08006.description"),
                 variant: "destructive",
             });
             break;
 
         default:
             toast({
-                title: "Unexpected Error",
-                description: "An unknown error occurred. Please try again later.",
+                title: t("error.default.title"),
+                description: t("error.default.description"),
                 variant: "destructive",
             });
     }
