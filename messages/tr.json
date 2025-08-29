@@ -69,7 +69,7 @@
             "submit": "Gönder",
             "success": {
                 "title": "Blog Oluşturuldu",
-                "desc": "Blogunuz başarıyla oluşturuldu. Ekibimiz kısa süre içinde inceleyecek."
+                "desc": "Bloğunuz başarıyla oluşturuldu. Ekibimiz kısa süre içinde inceleyecek."
             },
             "error": {
                 "title": "Resim Yükleme Hatası",
@@ -82,8 +82,8 @@
         },
         "read": {
             "tags": "Etiketler",
-            "prev_blog": "Önceki Blogu Gör",
-            "next_blog": "Sonraki Blogu Gör",
+            "prev_blog": "Önceki Bloğu Gör",
+            "next_blog": "Sonraki Bloğu Gör",
             "go_back": "Geri Dön"
         }
     },

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { UserInfo } from "@/types/types_user";
 
 export async function isSignedIn() {
     const supabase = createClient();
@@ -43,11 +43,17 @@ export async function getDepartments() {
 
 }
 
-export async function updateUser(user: User) {
+export async function updateUser(user: UserInfo) {
 
     const { data, error } = await createClient()
         .from('user_infos')
-        .update({ phone: user.phone })
+        .update({
+            full_name: user.full_name,
+            place: user.place,
+            phone: user.phone,
+            school_number: user.school_number,
+            department: user.department
+        })
         .eq('id', user.id)
         .select()
         .single()

@@ -4,7 +4,7 @@ import { getUser } from "@/utils/user_client_util";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import handleErrorCode from "@/components/handle-error-code";
+import useHandleErrorCode from "@/components/handle-error-code";
 import { createBlog } from "@/utils/blog_client_util";
 import Label from "@/components/admin/form/Label";
 import { toast } from "@/hooks/use-toast";
@@ -29,6 +29,9 @@ export default function CreateBlogPage() {
     const { theme } = useTheme()
 
     const t = useTranslations('blogs.create')
+
+
+    const handleErrorCode = useHandleErrorCode()
 
     useEffect(() => {
         getUser().then((user) => {

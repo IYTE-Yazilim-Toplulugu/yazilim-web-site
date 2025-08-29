@@ -1,5 +1,4 @@
 "use client";
-import handleErrorCode from "@/components/handle-error-code";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import Input from "@/components/admin/form/input/InputField";
@@ -13,6 +12,7 @@ import { redirect } from "next/navigation";
 import { Configuration } from "@/types/types_config";
 import ConfigurationsAll from "./(server)/configurations_get";
 import ConfigurationDelete from "./[id]/(server)/configuration_delete";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 
 export default function AdminConfigrationsPage() {
@@ -30,6 +30,9 @@ export default function AdminConfigrationsPage() {
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const [loading, setLoading] = useState<boolean>(true);
+
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         fetchConfigurations(page, query);
@@ -170,7 +173,7 @@ export default function AdminConfigrationsPage() {
                 </div>
             </div>
             <div className={"mt-4 w-full flex gap-2 justify-center"}>
-                <Pagination onCreateClick={() => redirect('/admin/announcement/0')} currentPage={page} totalPages={pageCount} onRefreshClick={async () => await fetchConfigurations(page, query)} onPageChange={setPage} />
+                <Pagination onCreateClick={() => redirect('/admin/configuration/0')} currentPage={page} totalPages={pageCount} onRefreshClick={async () => await fetchConfigurations(page, query)} onPageChange={setPage} />
             </div>
         </div >
     )

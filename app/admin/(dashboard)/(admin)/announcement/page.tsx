@@ -1,5 +1,4 @@
 "use client";
-import handleErrorCode from "@/components/handle-error-code";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import Input from "@/components/admin/form/input/InputField";
@@ -15,6 +14,7 @@ import { Announcement } from "@/types/types_announcement";
 import AnnouncementsAll from "./(server)/announcements_get";
 import { getAnnouncementImagePath } from "@/utils/announcement_client_util";
 import AnnouncementDelete from "./[id]/(server)/announcement_delete";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 
 export default function AdminAnnouncementsPage() {
@@ -32,6 +32,8 @@ export default function AdminAnnouncementsPage() {
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const [loading, setLoading] = useState<boolean>(true);
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         fetchAnnouncements(page, query);

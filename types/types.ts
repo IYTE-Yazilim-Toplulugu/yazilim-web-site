@@ -15,6 +15,7 @@ export interface QuestionFill {
 export interface SurveyAnswers {
     id: number;
     user_id: number; // UUID format
+    user_name: string;
     survey_id: number;
     answered_at: string; // ISO datetime string (2025-06-15T10:00:00)
     answers: {

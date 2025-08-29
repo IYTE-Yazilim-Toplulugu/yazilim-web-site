@@ -1,7 +1,6 @@
 "use client";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import handleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Form from "@/components/admin/form/Form";
 import Label from "@/components/admin/form/Label";
@@ -15,11 +14,14 @@ import AnnouncementGet from "./(server)/announcement_get";
 import AnnouncementUpdate from "./(server)/announcement_update";
 import AnnouncementCreate from "./(server)/announcement_create";
 import AnnouncementImageUpload from "./(server)/announcement_image_upload";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 export default function AdminSurveyPage() {
     const id = Number(useParams().id);
     const [announcement, setAnnouncement] = useState<Announcement | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         id != 0 ? fetchAnnouncement() : setLoading(false);

@@ -17,8 +17,9 @@ import ContactSubmitServer from "@/app/contact/(server)/contact_submit";
 import { getConfigurations } from "@/utils/config_client_util";
 import { ContactConfig, GeneralContactConfig } from "@/types/types_config";
 import Link from "next/link";
-import handleErrorCode from "./handle-error-code"
+import useHandleErrorCode from "./handle-error-code"
 import { useTranslations } from "next-intl"
+import { useCookies } from "react-cookie"
 
 
 
@@ -31,7 +32,13 @@ export default function ContactForm() {
     const [pageConfig, setPageConfig] = useState<ContactConfig>()
     const [contactConfig, setContactConfig] = useState<GeneralContactConfig>()
 
+    const [cookies] = useCookies(["locale"]);
+    const locale = cookies.locale || "tr";
+
     const t = useTranslations('contact')
+
+
+    const handleErrorCode = useHandleErrorCode();
 
     // Form validation schema
     const formSchema = z.object({
@@ -49,13 +56,13 @@ export default function ContactForm() {
         }),
     })
     useEffect(() => {
-        getConfigurations(["general_contact", "contact"]).then(a => {
+        getConfigurations([`general_contact_${locale}`, `contact_${locale}`]).then(a => {
             if (a.data && a.data.length > 0) {
-                setContactConfig(a.data.find(x => x.key === 'general_contact')?.value);
-                setPageConfig(a.data.find(x => x.key === 'contact')?.value);
+                setContactConfig(a.data.find(x => x.key === `general_contact_${locale}`)?.value);
+                setPageConfig(a.data.find(x => x.key === `contact_${locale}`)?.value);
             }
         });
-    }, []);
+    }, [locale]);
 
     // Initialize form
     const form = useForm<z.infer<typeof formSchema>>({
@@ -71,10 +78,9 @@ export default function ContactForm() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true)
 
+        // @ts-ignore
         const error = await ContactSubmitServer({
             ...values,
-            id: undefined,
-            created_at: undefined
         });
 
         if (!error) {

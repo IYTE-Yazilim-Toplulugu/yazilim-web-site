@@ -5,7 +5,7 @@ import Loading from "@/components/loading";
 import { Blog } from "@/types/types_blog";
 import { useParams } from "next/navigation";
 import { getBlog, getBlogImagePath } from "@/utils/blog_client_util";
-import handleErrorCode from "@/components/handle-error-code";
+import useHandleErrorCode from "@/components/handle-error-code";
 import Image from "next/image";
 import { useIsMobile } from "@/components/ui/use-mobile";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,8 @@ export default function BlogPage() {
     const isMobile = useIsMobile()
 
     const t = useTranslations('blogs.read')
+
+    const handleErrorCode = useHandleErrorCode()
 
 
     useEffect(() => {

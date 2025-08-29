@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Blog } from "@/types/types_blog";
 import { getBlogImagePath, getBlogs } from "@/utils/blog_client_util";
-import handleErrorCode from "@/components/handle-error-code";
+import useHandleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Button from "@/components/admin/ui/button/Button";
 import { ExternalLink, PlusIcon } from "lucide-react";
@@ -30,6 +30,8 @@ export default function BlogsPage() {
     const [userData, setUserData] = useState<User>();
 
     const t = useTranslations('blogs')
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         getUser().then((user) => { setUserData(user); })
@@ -102,7 +104,7 @@ export default function BlogsPage() {
                                     priority
                                 />
                             </div>
-                            <Card className="relative -top-4 h-80 md:h-40 border-border w-full rounded-2xl z-20 overflow-hidden">
+                            <Card className="relative -top-4 h-fit md:h-60 2xl:h-40 border-border w-full rounded-2xl z-20 overflow-hidden">
                                 <CardHeader className="flex flex-wrap gap-2">
                                     <div className="flex justify-between flex-wrap md:justify-start gap-4 items-center w-full">
                                         <CardTitle>{firstBlog.title}</CardTitle>
@@ -113,7 +115,7 @@ export default function BlogsPage() {
                                 <CardContent >
                                     <BlogMarkdown content={firstBlog.content.length > 100 ? firstBlog.content.substring(0, 100) + "..." : firstBlog.content} />
                                 </CardContent>
-                                <CardFooter className="absolute bottom-4 right-4">
+                                <CardFooter className="justify-end md:absolute md:bottom-0 md:right-0 2xl:bottom-4 2xl:right-4">
                                     <Link href={`/blog/${firstBlog.id}`}>
                                         <Button size="sm" variant="primary" type="button"
                                             startIcon={<ExternalLink className="w-4 h-4" />}
@@ -140,7 +142,7 @@ export default function BlogsPage() {
                                     className="object-cover"
                                 />
                             </div>
-                            <Card className="relative -top-4 h-80 border-border w-full rounded-2xl z-20 overflow-hidden">
+                            <Card className="relative -top-4 h-fit md:h-80 border-border w-full rounded-2xl z-20 overflow-hidden">
                                 <CardHeader className="flex flex-wrap gap-2">
                                     <div className="flex flex-wrap gap-4 justify-between items-center w-full">
                                         <CardTitle>{blog.title.length > 32 ? blog.title.substring(0, 32) + "..." : blog.title}</CardTitle>
@@ -151,7 +153,7 @@ export default function BlogsPage() {
                                 <CardContent >
                                     <BlogMarkdown content={blog.content.length > 100 ? blog.content.substring(0, 100) + "..." : blog.content} />
                                 </CardContent>
-                                <CardFooter className="absolute bottom-0 right-0">
+                                <CardFooter className="justify-end md:absolute md:bottom-0 md:right-0">
                                     <Link href={`/blog/${blog.id}`}>
                                         <Button size="sm" variant="primary" type="button"
                                             startIcon={<ExternalLink className="w-4 h-4" />}

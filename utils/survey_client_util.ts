@@ -1,4 +1,3 @@
-import { QuestionFill } from "@/types/types";
 import { createClient } from "@/lib/supabase/client";
 
 
@@ -11,6 +10,7 @@ export function getSurveyImagePath(image_path: string) {
 
 export async function postSurveyAnswer(
     userId: string,
+    userName: string,
     surveyId: number | null,
     answers: any,
     ip: string
@@ -19,6 +19,7 @@ export async function postSurveyAnswer(
         .from("survey_answers")
         .insert({
             user_id: userId,
+            user_name: userName,
             survey_id: surveyId,
             answered_at: new Date().toISOString(),
             answers: answers,

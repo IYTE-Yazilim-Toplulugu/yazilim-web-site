@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import Loading from '@/components/loading';
 import DatePicker from '@/components/datepicker';
 import { Dropdown } from '@/components/dropdown';
-import handleErrorCode from '@/components/handle-error-code';
+import useHandleErrorCode from '@/components/handle-error-code';
 import { HandleIcon } from '@/components/handle-icons';
 import { toast } from '@/hooks/use-toast';
 import { getUser, getUserIp } from '@/utils/user_client_util';
@@ -42,6 +42,8 @@ export default function SurveyPage() {
     const [userInfo, setUserInfo] = useState<any>(null);
 
     const t = useTranslations('forms')
+
+    const handleErrorCode = useHandleErrorCode();
 
 
     useEffect(() => {
@@ -97,7 +99,7 @@ export default function SurveyPage() {
                     setFocusedId(null);
                     return;
                 }
-                postSurveyAnswer(userInfo?.id, focusedId, answers, ip)
+                postSurveyAnswer(userInfo?.id, userInfo?.user_metadata.fullName, focusedId, answers, ip)
                     .then(x => {
                         if (x.error) {
                             console.error("Error submitting form answers:", x.error);
@@ -701,7 +703,7 @@ Are You Logged In?`}
                             rounded-lg shadow-md overflow-hidden"
                         >
                             <section
-                                className="p-4 flex flex-row gap-4 items-center bg-copper-coin/50 justify-between cursor-pointer"
+                                className="p-4 flex flex-row gap-4 items-center bg-bite-tongue/70 justify-between cursor-pointer"
                                 onClick={() => setFocusedId(survey.id)}
                             >
                                 <div className="flex flex-row gap-4 items-center">

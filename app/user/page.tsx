@@ -1,6 +1,6 @@
 'use client'
 import Form from "@/components/admin/form/Form";
-import handleErrorCode from "@/components/handle-error-code";
+import useHandleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Checkbox from "@/components/admin/form/input/Checkbox";
 import { Input } from "@/components/ui/input";
@@ -14,16 +14,18 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserInfo } from "@/types/types_user";
 import { useTranslations } from "next-intl";
+import Select from "@/components/admin/form/Select";
 
 
 export default function UserPage() {
     const [user, setUser] = useState<UserInfo>()
-    const [department, setDepartment] = useState()
+    const [departments, setDepartments] = useState<Array<{ id: number, name: string }>>()
 
     const [loading, setLoading] = useState<boolean>(true);
 
     const t = useTranslations('user')
 
+    const handleErrorCode = useHandleErrorCode()
 
     useEffect(() => {
         fetchData();
@@ -45,7 +47,8 @@ export default function UserPage() {
 
             if (user.error) {
                 console.error(user.error);
-                handleErrorCode(user.error.code ?? null)
+                handleErrorCode(user.error.code ?? null);
+                return;
             }
             if (user.data)
                 setUser(user.data);
@@ -59,12 +62,10 @@ export default function UserPage() {
             if (x.error) {
                 console.error(x.error);
                 handleErrorCode(x.error.code ?? "");
+                return;
             }
 
-            const selectedDepartment = x.data?.find(
-                dept => dept.id === user.data?.department
-            );
-            setDepartment(selectedDepartment?.name);
+            setDepartments(x.data ?? []);
         } finally {
             setLoading(false);
         }
@@ -120,10 +121,10 @@ export default function UserPage() {
                     <Form onSubmit={() => onSubmit(user)}>
                         <div className={"flex flex-col gap-2"}>
                             <Label htmlFor={"full_name"}>{t('name')}</Label>
-                            <Input type={"text"} name={"full_name"} disabled defaultValue={user?.full_name} />
+                            <Input type={"text"} name={"full_name"} onChange={handleChangeEvent} defaultValue={user?.full_name} />
 
                             <Label htmlFor={"place"}>{t('place')}</Label>
-                            <Input type={"text"} name={"place"} disabled defaultValue={user?.place} placeholder={"Place"} />
+                            <Input type={"text"} name={"place"} onChange={handleChangeEvent} defaultValue={user?.place} placeholder={"Place"} />
 
 
                             <Label htmlFor={"email"}>{t('email')}</Label>
@@ -133,12 +134,16 @@ export default function UserPage() {
                             <Input type={"phone"} name={"phone"} onChange={handleChangeEvent} defaultValue={user?.phone} placeholder={"Phone Number"} />
 
                             <Label htmlFor={"school_number"}>{t('school')}</Label>
-                            <Input type={"text"} name={"school_number"} disabled defaultValue={user?.school_number} placeholder={"School Number"} />
+                            <Input type={"text"} name={"school_number"} onChange={handleChangeEvent} defaultValue={user?.school_number} placeholder={"School Number"} />
 
                             <Label htmlFor={"department"}>{t('department')}</Label>
-                            <Input defaultValue={department}
-                                disabled placeholder={"Department"} />
-
+                            <div className="">
+                                <Select className="text-red" defaultValue={user?.department?.toString()} placeholder={"Department"} options={
+                                    departments?.map(x => {
+                                        return { value: x.id.toString(), label: x.name };
+                                    }) ?? []
+                                } onChange={x => handleChange("department", parseInt(x))} />
+                            </div>
 
 
                             <div className={"flex gap-2 w-[100%] justify-center"}>

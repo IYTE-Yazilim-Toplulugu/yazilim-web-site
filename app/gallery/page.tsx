@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Loading from '@/components/loading';
 import { getGalleryImages, getImagePath } from "@/utils/gallery_client_util";
 import { GalleryImage } from "@/types/types_gallery";
-import handleErrorCode from '@/components/handle-error-code';
+import useHandleErrorCode from '@/components/handle-error-code';
 import { useTranslations } from 'next-intl';
 
 export default function GalleryPage() {
@@ -17,6 +17,8 @@ export default function GalleryPage() {
     const [page, setPage] = useState(1);
 
     const t = useTranslations('gallery')
+
+    const handleErrorCode = useHandleErrorCode();
 
     async function loadImages(page: number) {
         const a = await getGalleryImages(page);

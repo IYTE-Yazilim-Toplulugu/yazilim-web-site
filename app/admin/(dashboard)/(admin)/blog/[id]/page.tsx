@@ -2,7 +2,6 @@
 import Editor from "@uiw/react-md-editor";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import handleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Form from "@/components/admin/form/Form";
 import Label from "@/components/admin/form/Label";
@@ -20,6 +19,7 @@ import { MessageCircleQuestionIcon } from "lucide-react";
 import { getUser } from "@/utils/user_client_util";
 import { useTheme } from "next-themes";
 import Checkbox from "@/components/admin/form/input/Checkbox";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 export default function AdminBlogPage() {
     const id = Number(useParams().id);
@@ -28,6 +28,9 @@ export default function AdminBlogPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Record<string, string> | null>(null);
     const { theme } = useTheme();
+
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         id != 0 ? fetchBlog() : setLoading(false);

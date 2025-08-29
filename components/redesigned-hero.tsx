@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import dynamic from 'next/dynamic';
 
 import { useState, useEffect, useRef, useMemo } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
@@ -16,6 +17,7 @@ import { HandleIcons } from "./handle-icons"
 import { HomeHeroConfig } from "@/types/types_config";
 import { useTranslations } from "next-intl"
 
+const LogoCanvas = dynamic(() => import('@/components/logo/Logo'), { ssr: false });
 
 export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConfig }) {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -174,7 +176,7 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
 
                     <ScrollReveal delay={0.4}>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-6 md:mb-8">
-                            <Link href="/events">
+                            <Link href="/event">
                                 <Button
                                     variant="outline"
                                     size="lg"
@@ -234,7 +236,7 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
                 <div className="order-1 md:order-2 flex justify-center mb-6 md:mb-0">
                     <ScrollReveal direction="left">
                         <motion.div
-                            className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl"
+                            className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 overflow-hidden"
                             animate={
                                 isClient && isHovered
                                     ? {
@@ -246,32 +248,26 @@ export default function RedesignedHero({ home_hero }: { home_hero?: HomeHeroConf
                             transition={{ type: "spring", stiffness: 150, damping: 15 }}
                             whileHover={{ scale: 1.05 }}
                         >
-                            <Image
-                                src="/images/yazilim.png"
-                                alt="Yazilim Society"
-                                fill
-                                className="object-cover"
-                                priority
-                            />
+                            <LogoCanvas />
 
                             {/* Decorative elements */}
-                            <div className="absolute -top-6 -right-6 w-12 h-12 bg-blue-500/30 rounded-full blur-xl" />
-                            <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-purple-500/30 rounded-full blur-xl" />
+                            {/*<div className="absolute -top-6 -right-6 w-12 h-12 bg-blue-500/30 rounded-full blur-xl" />*/}
+                            {/*<div className="absolute -bottom-6 -left-6 w-12 h-12 bg-purple-500/30 rounded-full blur-xl" />*/}
 
                             {/* Add a subtle pulsing glow effect */}
-                            {isClient && (
-                                <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 mix-blend-overlay"
-                                    animate={{
-                                        opacity: [0.2, 0.4, 0.2],
-                                    }}
-                                    transition={{
-                                        duration: 3,
-                                        repeat: Number.POSITIVE_INFINITY,
-                                        ease: "easeInOut",
-                                    }}
-                                />
-                            )}
+                            {/* {isClient && ( */}
+                            {/*     <motion.div */}
+                            {/*         className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 mix-blend-overlay" */}
+                            {/*         animate={{ */}
+                            {/*             opacity: [0.2, 0.4, 0.2], */}
+                            {/*         }} */}
+                            {/*         transition={{ */}
+                            {/*             duration: 3, */}
+                            {/*             repeat: Number.POSITIVE_INFINITY, */}
+                            {/*             ease: "easeInOut", */}
+                            {/*         }} */}
+                            {/*     /> */}
+                            {/* )} */}
                         </motion.div>
                     </ScrollReveal>
                 </div>

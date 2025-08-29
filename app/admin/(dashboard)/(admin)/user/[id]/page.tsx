@@ -125,6 +125,7 @@ export default function UserDetail() {
                             <Checkbox label={"Is Admin"} onChange={x => handleChange("is_admin", x)} checked={user?.is_admin ?? false} />
                             <Checkbox label={"Is Special"} onChange={x => handleChange("is_special", x)} checked={user?.is_special ?? false} />
                             <Checkbox label={"Is Student"} onChange={x => handleChange("is_student", x)} checked={user?.is_student ?? false} />
+                            <Checkbox label={"From Iztech"} onChange={x => handleChange("from_iztech", x)} checked={user?.from_iztech ?? false} />
                         </div>
 
                         <div className={"flex w-[100%]"}>

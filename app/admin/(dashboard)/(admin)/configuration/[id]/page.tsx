@@ -1,7 +1,6 @@
 "use client";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import handleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Form from "@/components/admin/form/Form";
 import Label from "@/components/admin/form/Label";
@@ -15,12 +14,16 @@ import ConfigurationGet from "./(server)/configuration_get";
 import ConfigurationUpdate from "./(server)/configuration_update";
 import ConfigurationCreate from "./(server)/configuration_create";
 import ConfigurationDelete from "./(server)/configuration_delete";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 export default function AdminConfigurationPage() {
     const id = Number(useParams().id);
     const [configuration, setConfiguration] = useState<Configuration | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Record<string, string> | null>(null);
+
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         id != 0 ? fetchConfiguration() : setLoading(false);

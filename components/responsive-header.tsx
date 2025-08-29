@@ -156,9 +156,6 @@ export default function ResponsiveHeader() {
                 </Link>
 
             )}
-            <div>
-
-            </div>
             <div className="flex h-16 items-center justify-between px-4">
                 <Link href="/">
                     <motion.div
@@ -170,7 +167,7 @@ export default function ResponsiveHeader() {
                         <div className="relative flex items-center gap-4 z-50">
                             <div className="absolute -top-1 -left-2 bg-destructive rounded-full h-14 w-14" />
                             <Image className="font-bold text-xl bg-gradient-to-r from-happy-hearts to-golden-nugget text-transparent bg-clip-text z-20" src="/images/yazilim.png" alt="yazilim" width={40} height={40} />
-                            <div className="hidden lg:block">
+                            <div className="hidden lg:block text-nowrap">
                                 <div className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-happy-hearts to-golden-nugget">{t("lside.title")}</div>
                                 <div className="text-xs text-muted-foreground">{t("lside.sub")}</div>
                             </div>
@@ -206,8 +203,8 @@ export default function ResponsiveHeader() {
                     >
 
                         {fullName && (
-                            <Link href={"/user"}>
-                                <Label className="p-2 hover:bg-bite-tongue/80 rounded-md cursor-pointer">
+                            <Link href={"/user"} className="lg:absolute lg:top-16 lg:right-32 2xl:flex 2xl:static">
+                                <Label className="p-2 text-nowrap hover:bg-bite-tongue/80 rounded-md cursor-pointer">
                                     {fullName}
                                 </Label>
                             </Link>
@@ -216,7 +213,9 @@ export default function ResponsiveHeader() {
                             <div>
                                 {!isMobile && (
                                     <div className="flex items-center space-x-3">
-                                        {!isScrolled && <LanguageSwitcher />}
+                                        {!isScrolled && <div className="lg:absolute lg:top-16 lg:right-4 2xl:flex 2xl:static">
+                                            <LanguageSwitcher />
+                                        </div>}
                                         <Link href={fullName ? "/logout" : "/login"} >
                                             <Button
                                                 variant="outline"

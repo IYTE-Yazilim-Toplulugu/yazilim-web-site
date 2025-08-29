@@ -3,7 +3,6 @@ import { useParams } from "next/navigation"
 import { Survey } from "@/types/types";
 import { useEffect, useState } from "react";
 import SurveyGet from "./(server)/survey_get";
-import handleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Form from "@/components/admin/form/Form";
 import Label from "@/components/admin/form/Label";
@@ -18,12 +17,15 @@ import { MessageCircleQuestionIcon } from "lucide-react";
 import { HandleIcon } from "@/components/handle-icons";
 import SurveyCreate from "./(server)/survey_create";
 import imageUpload from "./(server)/survey_image_upload";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 export default function AdminSurveyPage() {
     const id = Number(useParams().id);
     const [survey, setSurvey] = useState<Survey | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Record<string, string> | null>(null);
+
+    const handleErrorCode = useHandleErrorCode();
 
     useEffect(() => {
         id != 0 ? fetchSurvey() : setLoading(false);

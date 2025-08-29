@@ -21,8 +21,9 @@ import { getConfigurations } from "@/utils/config_client_util";
 import { Configuration } from "@/types/types_config";
 import { Announcement } from '@/types/types_announcement';
 import { getAnnouncementImagePath, getAnnouncements } from '@/utils/announcement_client_util';
-import handleErrorCode from '@/components/handle-error-code';
 import { useTranslations } from 'next-intl';
+import useHandleErrorCode from '@/components/handle-error-code';
+import { useCookies } from 'react-cookie';
 
 
 // Simple loading component
@@ -42,11 +43,16 @@ export default function Home() {
     const [homeData, setHomeData] = useState<Configuration[]>(ConfigurationDefaults);
     const [announcementData, setAnnouncementData] = useState<Announcement[]>();
 
+    const [cookies] = useCookies(["locale"]);
+    const locale = cookies.locale || "tr";
+
     const t = useTranslations('home')
+
+    const handleErrorCode = useHandleErrorCode()
 
     // Data fetching
     useEffect(() => {
-        getConfigurations(["home_hero", "home_about_us", "home_footer"]).then(x => {
+        getConfigurations([`home_hero_${locale}`, `home_about_us_${locale}`, `home_footer_${locale}`]).then(x => {
             if (x.data && x.data.length > 0) {
                 setHomeData(x.data);
             }
@@ -66,7 +72,7 @@ export default function Home() {
             }
             setLoading(false);
         })
-    }, [])
+    }, [locale])
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.location.hash) {
@@ -89,7 +95,7 @@ export default function Home() {
 
             <ErrorBoundary fallback={<SectionFallback title="Hero" />}>
                 <Suspense fallback={<LoadingSection name="Hero" />}>
-                    <RedesignedHero home_hero={homeData.find(item => item.key === "home_hero")?.value} />
+                    <RedesignedHero home_hero={homeData.find(item => item.key === `home_hero_${locale}`)?.value} />
                 </Suspense>
             </ErrorBoundary>
 
@@ -158,13 +164,13 @@ export default function Home() {
 
             <ErrorBoundary fallback={<SectionFallback title="About" />}>
                 <Suspense fallback={<LoadingSection name="About" />}>
-                    <AboutSection home_about_us={homeData.find(item => item.key === "home_about_us")?.value} />
+                    <AboutSection home_about_us={homeData.find(item => item.key === `home_about_us_${locale}`)?.value} />
                 </Suspense>
             </ErrorBoundary>
 
             <ErrorBoundary fallback={<SectionFallback title="Footer" />}>
                 <Suspense fallback={<LoadingSection name="Footer" />}>
-                    <EnhancedFooter home_footer={homeData.find(item => item.key === "home_footer")?.value} />
+                    <EnhancedFooter home_footer={homeData.find(item => item.key === `home_footer_${locale}`)?.value} />
                 </Suspense>
             </ErrorBoundary>
         </div >

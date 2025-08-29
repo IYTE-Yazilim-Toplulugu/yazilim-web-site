@@ -1,5 +1,4 @@
 "use client";
-import handleErrorCode from "@/components/handle-error-code";
 import { toast } from "@/hooks/use-toast";
 import { deleteSurvey } from "@/utils/survey_server_util";
 import { useEffect, useState } from "react";
@@ -19,6 +18,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 
 export default function AdminSurveysPage() {
@@ -39,6 +39,8 @@ export default function AdminSurveysPage() {
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
     const [loading, setLoading] = useState<boolean>(true);
+
+    const handleErrorCode = useHandleErrorCode()
 
     useEffect(() => {
         fetchSurveys(page, query);
@@ -318,6 +320,7 @@ export default function AdminSurveysPage() {
                                                                         <TableRow className="font-bold text-center">
                                                                             <TableCell className="p-4">ID</TableCell>
                                                                             <TableCell className="p-4">User ID</TableCell>
+                                                                            <TableCell className="p-4">User Name</TableCell>
                                                                             <TableCell className="p-4">Survey ID</TableCell>
                                                                             <TableCell className="p-4">Answers</TableCell>
                                                                             <TableCell className="p-4">ANSWERED AT</TableCell>
@@ -328,6 +331,7 @@ export default function AdminSurveysPage() {
                                                                             <TableRow key={index} className="text-center">
                                                                                 <TableCell className="p-4">{answerData.id}</TableCell>
                                                                                 <TableCell className="p-4">{answerData.user_id}</TableCell>
+                                                                                <TableCell className="p-4">{answerData.user_name}</TableCell>
                                                                                 <TableCell className="p-4">{answerData.survey_id}</TableCell>
                                                                                 <TableCell className="flex justify-center items-center">
                                                                                     <motion.div layoutId={userAnswers?.toString()}
@@ -393,9 +397,9 @@ export default function AdminSurveysPage() {
                                                                                                                             <TableCell className="p-4">
                                                                                                                                 {answers.question_id}
                                                                                                                             </TableCell>
-                                                                                                                            <TableCell className="p-4">{answers.question}</TableCell>
+                                                                                                                            <TableCell className="p-4 text-wrap">{answers.question}</TableCell>
                                                                                                                             <TableCell className="p-4">
-                                                                                                                                {answers.answer?.toString()}
+                                                                                                                                <textarea disabled>{answers.answer?.toString()}</textarea>
                                                                                                                             </TableCell>
                                                                                                                         </TableRow>
                                                                                                                     ))}

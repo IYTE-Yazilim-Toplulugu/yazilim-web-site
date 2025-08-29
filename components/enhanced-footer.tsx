@@ -15,7 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import Link from "next/link"
 import { HandleIcons } from "@/components/handle-icons"
 import { createClient } from "@/lib/supabase/client"
-import handleErrorCode from "./handle-error-code"
+import useHandleErrorCode from "./handle-error-code"
 import { HomeFooterConfig } from "@/types/types_config";
 import { useTranslations } from "next-intl"
 
@@ -25,6 +25,8 @@ export default function EnhancedFooter({ home_footer }: { home_footer?: HomeFoot
     const supabase = createClient()
 
     const t = useTranslations('home.footer')
+
+    const handleErrorCode = useHandleErrorCode()
 
     // Form validation schema
     const subscribeSchema = z.object({

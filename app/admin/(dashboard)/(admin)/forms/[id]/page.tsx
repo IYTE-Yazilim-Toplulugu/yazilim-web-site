@@ -1,7 +1,6 @@
 "use client";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react";
-import handleErrorCode from "@/components/handle-error-code";
 import Loading from "@/components/loading";
 import Form from "@/components/admin/form/Form";
 import Label from "@/components/admin/form/Label";
@@ -14,11 +13,16 @@ import ContactGet from "./(server)/contact_get";
 import ContactUpdate from "./(server)/contact_update";
 import ContactCreate from "./(server)/contact_create";
 import ContactDelete from "./(server)/contact_delete";
+import useHandleErrorCode from "@/components/handle-error-code";
 
 export default function AdminContactPage() {
     const id = Number(useParams().id);
     const [contact, setContact] = useState<Contact | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+
+
+    const handleErrorCode = useHandleErrorCode();
+
 
     useEffect(() => {
         id != 0 ? fetchContact() : setLoading(false);
