@@ -16,6 +16,7 @@ import BlogImageUpload from "../(server)/blog_image_upload";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
+import { handleImageUpload } from "@/hooks/handle-image-upload";
 
 
 
@@ -88,8 +89,8 @@ export default function CreateBlogPage() {
 
         setImageUrl(res.filepath)
         toast({
-            title: t('image_success.title'),
             description: t('image_success.desc'),
+            title: t('image_success.title'),
             variant: "success",
         })
 
@@ -98,7 +99,7 @@ export default function CreateBlogPage() {
     if (loading) return <Loading />;
 
     return (
-        <div className="mt-20 flex justify-center">
+        <div className="mt-20 flex flex-col justify-center">
 
             <div className="relative mt-16 m-4 md:m-16 md:max-w-3xl flex flex-col gap-8">
                 <Link href="/blog">
@@ -121,21 +122,25 @@ export default function CreateBlogPage() {
                         value={tags.join(" ")}
                         className="w-full" />
                 </div>
-                <div >
-                    <Label htmlFor="blog-content" className="text-lg font-bold mb-4">{t('content')}</Label>
-                    <Editor value={content} height={512}
-                        data-color-mode={theme === "light" ? "light" : "dark"} preview="edit"
-                        onChange={(e) => setContent(e)} />
-                </div>
-
+            </div>
+            <div className="flex flex-col mx-4 md:mx-16 " >
+                <Label htmlFor="blog-content" className="text-lg font-bold mb-4">{t('content')}</Label>
+                <Editor value={content} height={512}
+                    data-color-mode={theme === "light" ? "light" : "dark"} preview="edit"
+                    onChange={(e) => setContent(e)} />
+            </div>
+            <div className="relative mt-16 m-4 md:m-16 md:max-w-3xl flex flex-col gap-8">
                 <div className="flex flex-row items-center gap-4 ">
                     <label className="relative inline-block cursor-pointer">
                         <span className="sr-only">{t('browse')}</span>
                         <input
                             type="file"
-                            accept="image/*"
+                            accept="image/*, .heic, .heif"
                             name="image_path"
-                            onChange={(e) => uploadBlogImage(e.target.files?.[0] ?? null)}
+                            onChange={async (e) => {
+                                const file = await handleImageUpload(e.target.files?.[0] ?? null);
+                                uploadBlogImage(file);
+                            }}
                             className="absolute inset-0 opacity-0 cursor-pointer"
                         />
                         <Button
@@ -147,7 +152,6 @@ export default function CreateBlogPage() {
                     </label>
                     <Label htmlFor={"image-path"}>{imageUrl ? imageUrl : t('image_path')}</Label>
                 </div>
-                {/* <MarkdownEditor /> */}
                 <Button variant="secondary" disabled={!userData}
                     onClick={() => { userData && blogCreate(userData, title, content ?? "", tags, imageUrl, true) }}
                     className="mb-4 mx-4 md:mx-12

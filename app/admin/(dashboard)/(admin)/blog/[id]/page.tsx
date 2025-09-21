@@ -20,6 +20,7 @@ import { getUser } from "@/utils/user_client_util";
 import { useTheme } from "next-themes";
 import Checkbox from "@/components/admin/form/input/Checkbox";
 import useHandleErrorCode from "@/components/handle-error-code";
+import { handleImageUpload } from "@/hooks/handle-image-upload";
 
 export default function AdminBlogPage() {
     const id = Number(useParams().id);
@@ -277,9 +278,12 @@ export default function AdminBlogPage() {
 
                         <div className="flex flex-row gap-4">
                             <Label htmlFor={"image-path"}>Image Path (e.g image.png)</Label>
-                            <input type="file" accept="image/*"
+                            <input type="file" accept="image/*, .heic, .heif"
                                 name="cover_image_url"
-                                onChange={e => uploadBlogImage(e.target.files?.[0] ?? null)}
+                                onChange={async e => {
+                                    const file = await handleImageUpload(e.target.files?.[0] ?? null);
+                                    uploadBlogImage(file)
+                                }}
                                 className="cursor-pointer file:cursor-pointer file:rounded-md file:border-0
                                 file:bg-bite-tongue file:px-4 file:py-2 file:text-sm file:font-semibold
                                 file:text-background hover:file:bg-copper-coin transition-colors duration-200

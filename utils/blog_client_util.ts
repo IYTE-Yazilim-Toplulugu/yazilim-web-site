@@ -2,11 +2,11 @@ import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 
 
-export async function getBlogs(is_published: boolean) {
+export async function getBlogs() {
     const { data, error } = await createClient()
         .from("blogs")
         .select("*")
-        .eq("is_published", is_published)
+        .eq("is_published", true)
         .order("published_at", { ascending: false });
     return {
         data: data || [],

@@ -81,19 +81,19 @@ export default function GalleryPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
                 {images.map((image) => (
-                    <div key={image.id} className="bg-[var(--color-gray-900)] rounded-lg shadow-lg overflow-hidden">
+                    <div key={image.id} className="bg-bite-tongue/70 rounded-lg shadow-lg overflow-hidden">
                         <div className="relative h-64 cursor-pointer" onClick={() => handleImageClick(image)}>
                             <Image
-                                src={`${getImagePath(image)}`}
+                                src={getImagePath(image)}
                                 alt={image.title}
                                 fill
                                 className="object-cover"
                             />
                         </div>
-                        <div className="p-4">
+                        <div className="p-4 text-background dark:text-primary">
                             <h2 className="text-xl font-semibold mb-2">{image.title}</h2>
-                            <p className="text-gray-600">{image.description}</p>
-                            <p className="text-sm text-gray-500 mt-2">
+                            <p>{image.description}</p>
+                            <p className="text-sm mt-2">
                                 {t('uploaded')}: {new Date(image.uploaded_at!).toLocaleDateString()}
                             </p>
                         </div>

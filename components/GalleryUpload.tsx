@@ -6,6 +6,7 @@ import { GalleryImage } from "@/types/types_gallery";
 import { getUser } from "@/utils/user_client_util";
 import { toast } from "@/hooks/use-toast";
 import GalleryUploadServer from "@/app/admin/(dashboard)/(admin)/gallery/(server)/gallery_upload";
+import { handleImageUpload } from '@/hooks/handle-image-upload';
 
 interface GalleryUploadProps {
     className?: string;
@@ -99,8 +100,11 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
                     <label className="block text-sm font-semibold">Image</label>
                     <input
                         type="file"
-                        accept="image/*"
-                        onChange={(e) => setFile(e.target.files?.[0] || null)}
+                        accept="image/*,.heic,.heif"
+                        onChange={async e => {
+                            const file = await handleImageUpload(e.target.files?.[0] || null);
+                            setFile(file)
+                        }}
                         className="mt-1 p-2 rounded-md block w-4/5 hover:bg-bite-tongue transition-colors duration-200"
                         required
                     />

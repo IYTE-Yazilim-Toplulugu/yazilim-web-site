@@ -49,7 +49,10 @@
     },
     "events": {
         "title": "Etkinlikler",
-        "not_found": "Etkinlikler Çok Yakında"
+        "not_found": "Etkinlikler Çok Yakında",
+        "online": "Çevrimiçi Etkinlik",
+        "apply": "Başvur",
+        "details": "Detaylar"
     },
     "blogs": {
         "title": "Bloglar",

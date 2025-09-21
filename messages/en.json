@@ -49,7 +49,10 @@
     },
     "events": {
         "title": "Events",
-        "not_found": "Events are coming soon"
+        "not_found": "Events are coming soon",
+        "online": "Online Event",
+        "apply": "Apply Now",
+        "details": "Details"
     },
     "blogs": {
         "title": "Blogs",

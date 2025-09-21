@@ -39,7 +39,7 @@ export default function BlogsPage() {
     }, []);
 
     const fetchBlogs = async () => {
-        const res = await getBlogs(true);
+        const res = await getBlogs();
 
         if (res.error) {
             console.error("Error fetching blogs:", res.error);
@@ -110,7 +110,7 @@ export default function BlogsPage() {
                                         <CardTitle>{firstBlog.title}</CardTitle>
                                         <p className="text-muted-foreground">{firstBlog.author_name}</p>
                                     </div>
-                                    <p className="text-muted-foreground">{new Date(firstBlog.published_at).toLocaleDateString('tr-TR')}</p>
+                                    <p className="text-muted-foreground">{new Date(firstBlog.created_at).toLocaleDateString('tr-TR')}</p>
                                 </CardHeader>
                                 <CardContent >
                                     <BlogMarkdown content={firstBlog.content.length > 100 ? firstBlog.content.substring(0, 100) + "..." : firstBlog.content} />
@@ -148,7 +148,7 @@ export default function BlogsPage() {
                                         <CardTitle>{blog.title.length > 32 ? blog.title.substring(0, 32) + "..." : blog.title}</CardTitle>
                                         <p className="text-muted-foreground">{blog.author_name}</p>
                                     </div>
-                                    <p className="text-muted-foreground">{new Date(blog.published_at).toLocaleDateString('tr-TR')}</p>
+                                    <p className="text-muted-foreground">{new Date(blog.created_at).toLocaleDateString('tr-TR')}</p>
                                 </CardHeader>
                                 <CardContent >
                                     <BlogMarkdown content={blog.content.length > 100 ? blog.content.substring(0, 100) + "..." : blog.content} />

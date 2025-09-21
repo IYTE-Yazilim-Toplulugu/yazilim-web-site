@@ -33,16 +33,7 @@ export type AnswerHandlerProps = {
     answer: string | number | boolean
 }
 
-export type Event = {
-    id: number;
-    title: string; // max 255 karakter
-    description: string;
-    event_date: string; // ISO datetime string (ör: 2025-06-15T10:00:00)
-    location: [number, number]; // [latitude, longitude]
-    capacity_limit: number;
-    is_online: boolean;
-    registration_url?: string | null;
-};
+
 
 
 export interface Survey {

@@ -18,6 +18,7 @@ import { HandleIcon } from "@/components/handle-icons";
 import SurveyCreate from "./(server)/survey_create";
 import imageUpload from "./(server)/survey_image_upload";
 import useHandleErrorCode from "@/components/handle-error-code";
+import { handleImageUpload } from "@/hooks/handle-image-upload";
 
 export default function AdminSurveyPage() {
     const id = Number(useParams().id);
@@ -244,9 +245,12 @@ export default function AdminSurveyPage() {
 
                         <div className="flex flex-row gap-4">
                             <Label htmlFor={"image-path"}>Image Path (e.g image.png)</Label>
-                            <input type="file" accept="image/*"
+                            <input type="file" accept="image/*, .heic, .heif"
                                 name="image_path"
-                                onChange={e => uploadSurveyImage(e.target.files?.[0] ?? null)}
+                                onChange={async e => {
+                                    const file = await handleImageUpload(e.target.files?.[0] ?? null);
+                                    uploadSurveyImage(file)
+                                }}
                                 className="cursor-pointer file:cursor-pointer file:rounded-md file:border-0
                                 file:bg-bite-tongue file:px-4 file:py-2 file:text-sm file:font-semibold
                                 file:text-background hover:file:bg-copper-coin transition-colors duration-200

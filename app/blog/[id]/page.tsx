@@ -103,11 +103,10 @@ export default function BlogPage() {
                     {isMobile && <h1 className="text-xl mb-4 font-bold z-20">
                         {blogData?.title}
                     </h1>}
-                    <p className="flex flex-wrap w-full justify-between text-muted-foreground">
-                        {/* @ts-ignore */}
-                        <div className="">{new Date(blogData?.published_at).toLocaleDateString('tr-TR')}</div>
+                    <div className="flex flex-wrap w-full justify-between text-muted-foreground">
+                        <p className="">{new Date(blogData?.published_at).toLocaleDateString('tr-TR')}</p>
                         {!isMobile && <p className="text-nowrap">{blogData?.author_name}</p>}
-                    </p>
+                    </div>
                 </div>
                 <BlogMarkdown content={blogData?.content || ""} />
 
