@@ -15,38 +15,16 @@ export async function getEvents() {
 }
 
 export async function getEvent(id: number) {
-    const client = createClient();
-
-    const [current, prev, next] = await Promise.all([
-        client.from("blogs")
-            .select("*")
-            .eq("id", id)
-            .eq("is_published", true)
-            .maybeSingle(),
-
-        client.from("blogs")
-            .select("*")
-            .lt("id", id)
-            .eq("is_published", true)
-            .order("id", { ascending: false })
-            .limit(1)
-            .maybeSingle(),
-
-        client.from("blogs")
-            .select("*")
-            .gt("id", id)
-            .eq("is_published", true)
-            .order("id", { ascending: true })
-            .limit(1)
-            .maybeSingle(),
-    ]);
+    const { data, error } = await createClient()
+        .from("events")
+        .select("*")
+        .eq("id", id)
+        .single();
 
     return {
-        current: current.data,
-        prev: prev.data,
-        next: next.data,
-        error: current.error || prev.error || next.error,
-    };
+        data: data || null,
+        error: error
+    }
 }
 
 export function getEventImagePath(image_path: string | null) {

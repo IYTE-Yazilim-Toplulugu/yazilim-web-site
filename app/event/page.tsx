@@ -11,13 +11,12 @@ import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import BlogMarkdown from "@/components/blog-markdown";
 import Button from "@/components/admin/ui/button/Button";
-import { BookCheckIcon, ExternalLink } from "lucide-react";
+import { BookCheckIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 
-export default function Events() {
+export default function EventsPage() {
     const [events, setEvents] = useState<Event[] | null>(null);
-    const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -93,9 +92,9 @@ export default function Events() {
                             </CardContent>
                             <CardFooter className="justify-end gap-4 md:absolute md:bottom-0 md:right-0">
                                 <Link href={`/form`}>
-                                    <Button size="sm" variant="default" type="button"
+                                    <Button size="md" variant="default" type="button"
                                         startIcon={<BookCheckIcon className="w-4 h-4" />}
-                                        className="text-xs cursor-pointer border-2 border-muted-foreground">
+                                        className="text-xs cursor-pointer border-2 border-muted-foreground hover:border-bite-tongue hover:bg-bite-tongue hover:text-white">
                                         {t("apply")}
                                     </Button>
                                 </Link>
@@ -110,10 +109,6 @@ export default function Events() {
                     </div>
                 ))}
             </div>
-            {selectedEvent && (
-                <div>
-                </div>
-            )}
         </div >
     )
 }

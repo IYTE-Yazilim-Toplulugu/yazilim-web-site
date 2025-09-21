@@ -13,3 +13,8 @@ export type Event = {
     created_at: string;
     image_url?: string | null;
 };
+
+export type Location = {
+    latitude: number;
+    longitude: number;
+}
