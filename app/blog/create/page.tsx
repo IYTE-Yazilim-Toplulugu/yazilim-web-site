@@ -17,11 +17,14 @@ import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { handleImageUpload } from "@/hooks/handle-image-upload";
+import { LoadingProgress } from "@/components/loading-progress";
+import Loader from "@/components/loader";
 
 
 
 export default function CreateBlogPage() {
     const [loading, setLoading] = useState<boolean>(true);
+    const [imageLoading, setImageLoading] = useState<boolean>(false);
     const [userData, setUserData] = useState<User>();
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string | undefined>("");
@@ -93,7 +96,6 @@ export default function CreateBlogPage() {
             title: t('image_success.title'),
             variant: "success",
         })
-
     }
 
     if (loading) return <Loading />;
@@ -138,8 +140,11 @@ export default function CreateBlogPage() {
                             accept="image/*, .heic, .heif"
                             name="image_path"
                             onChange={async (e) => {
+                                setImageLoading(true);
                                 const file = await handleImageUpload(e.target.files?.[0] ?? null);
-                                uploadBlogImage(file);
+                                uploadBlogImage(file).then(() => {
+                                    setImageLoading(false);
+                                })
                             }}
                             className="absolute inset-0 opacity-0 cursor-pointer"
                         />
@@ -151,6 +156,8 @@ export default function CreateBlogPage() {
                         </Button>
                     </label>
                     <Label htmlFor={"image-path"}>{imageUrl ? imageUrl : t('image_path')}</Label>
+                    {imageLoading && <Loader />}
+
                 </div>
                 <Button variant="secondary" disabled={!userData}
                     onClick={() => { userData && blogCreate(userData, title, content ?? "", tags, imageUrl, true) }}

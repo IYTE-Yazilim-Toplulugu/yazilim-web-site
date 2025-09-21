@@ -11,12 +11,14 @@ import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import BlogMarkdown from "@/components/blog-markdown";
 import Button from "@/components/admin/ui/button/Button";
-import { ExternalLink } from "lucide-react";
+import { BookCheckIcon, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 
 export default function Events() {
     const [events, setEvents] = useState<Event[] | null>(null);
+    const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
+
     const [loading, setLoading] = useState<boolean>(true);
 
     const t = useTranslations('events')
@@ -63,20 +65,24 @@ export default function Events() {
                             <CardHeader className="flex flex-wrap gap-2">
                                 <div className="flex flex-wrap gap-4 justify-between items-center w-full">
                                     <div className="flex flex-wrap gap-2 items-center">
-                                        <CardTitle className="text-nowrap">{event.title.length > 32 ? event.title.substring(0, 32) + "..." : event.title}</CardTitle>
-                                        <Badge
-                                            variant="outline"
-                                            key={id}
-                                            className={`px-2 py-1 sm:px-3 sm:py-1.5 
+                                        <CardTitle className="text-nowrap">
+                                            {event.title.length > 32 ? event.title.substring(0, 32) + "..." : event.title}
+                                        </CardTitle>
+                                        {event.is_online && (
+                                            <Badge
+                                                variant="outline"
+                                                key={id}
+                                                className={`px-2 py-1 sm:px-3 sm:py-1.5 
                                     bg-success-500 backdrop-blur-sm border-estragon/30
                                     transition-colors text-nowrap`}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.backgroundColor = "#039855";
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.backgroundColor = "#12b76a";
-                                            }}
-                                        >{t('online')}</Badge>
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.backgroundColor = "#039855";
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.backgroundColor = "#12b76a";
+                                                }}
+                                            >{t('online')}</Badge>
+                                        )}
                                     </div>
                                     <p className="text-muted-foreground">{event.location_name}</p>
                                 </div>
@@ -87,15 +93,14 @@ export default function Events() {
                             </CardContent>
                             <CardFooter className="justify-end gap-4 md:absolute md:bottom-0 md:right-0">
                                 <Link href={`/form`}>
-                                    <Button size="sm" variant="outline" type="button"
-                                        startIcon={<ExternalLink className="w-4 h-4" />}
-                                        className="text-xs cursor-pointer border border-muted-foreground">
+                                    <Button size="sm" variant="default" type="button"
+                                        startIcon={<BookCheckIcon className="w-4 h-4" />}
+                                        className="text-xs cursor-pointer border-2 border-muted-foreground">
                                         {t("apply")}
                                     </Button>
                                 </Link>
                                 <Link href={`/event/${event.id}`}>
                                     <Button size="sm" variant="primary" type="button"
-                                        startIcon={<ExternalLink className="w-4 h-4" />}
                                         className="text-xs bg-bite-tongue cursor-pointer">
                                         {t("details")}
                                     </Button>
@@ -105,6 +110,10 @@ export default function Events() {
                     </div>
                 ))}
             </div>
+            {selectedEvent && (
+                <div>
+                </div>
+            )}
         </div >
     )
 }
