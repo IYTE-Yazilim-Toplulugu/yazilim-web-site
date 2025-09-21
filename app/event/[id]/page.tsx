@@ -179,7 +179,8 @@ export default function EventPage() {
                                     <Users className="h-8 w-8" />
                                     <div>
                                         <p className="font-semibold">Kapasite</p>
-                                        <p className="text-sm">{event?.capacity} kişi</p>
+                                        {event && event.capacity > 0 ? <p className="text-sm">{event?.capacity} kişi</p> : <p className="text-sm">Kapımız herkese açık</p>}
+
                                     </div>
                                 </div>
 
@@ -303,7 +304,7 @@ export default function EventPage() {
                                 </div>
                                 <div className="flex justify-between items-center py-2">
                                     <span >Kapasite:</span>
-                                    <span className="font-medium">{event?.capacity} kişi</span>
+                                    {event && event.capacity > 0 ? <span className="font-medium">{event?.capacity} kişi</span> : <span className="font-medium">Kapımız herkese açık</span>}
                                 </div>
                             </div>
                         </div>
