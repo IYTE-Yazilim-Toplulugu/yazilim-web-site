@@ -42,7 +42,7 @@ export default function EventsPage() {
     if (loading) return (<Loading />)
 
     if (!events || events.length === 0) return <div className="mt-20"><YazilimBlankPage content={t("not_found")} emoji="⏳" /></div>
-    return <div className="mt-20"><YazilimBlankPage content={t("not_found")} emoji="⏳" /></div>
+    // return <div className="mt-20"><YazilimBlankPage content={t("not_found")} emoji="⏳" /></div>
 
     return (
         <div className="mt-20">
