@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import BlogMarkdown from '@/components/blog-markdown';
+import Image from 'next/image';
 
 
 export default function EventPage() {
@@ -84,7 +85,6 @@ export default function EventPage() {
     const calculateTimeLeft = () => {
         if (!event?.event_date) {
             setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-            setEventPassed(true);
             return;
         }
 
@@ -101,13 +101,14 @@ export default function EventPage() {
             setTimeLeft({ days, hours, minutes, seconds });
             setEventPassed(false);
         } else {
-            // Event passed → zero out timer
             setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
             setEventPassed(true);
         }
     };
 
     const formatDate = (dateString: string) => {
+        if (!dateString) return "Daha sonra açıklanacak";
+
         return new Date(dateString).toLocaleDateString('tr-TR', {
             year: 'numeric',
             weekday: 'long',
@@ -146,11 +147,13 @@ export default function EventPage() {
                         <ArrowLeft />
                     </Button>
                 </Link>}
-                {event && (
-                    <div className="relative mx-4 lg:mx-auto lg:max-w-2/3 aspect-video bg-cover bg-center rounded-2xl overflow-hidden" style={{ backgroundImage: `url(${getEventImagePath(event.image_url ?? null) || "/images/yazilim.png"})` }}>
-                        <div className="absolute inset-0 bg-bite-tongue bg-opacity-40"></div>
-                    </div>
-                )}
+                {event && <div className='mx-4'><Image
+                    src={getEventImagePath(event.image_url ?? null) || "/images/yazilim.png"}
+                    alt={event?.title || "Etkinlik Görseli"}
+                    width={1920}
+                    height={1080}
+                    className="relative mx-auto lg:max-w-2/3 aspect-video rounded-2xl"
+                /></div>}
 
                 <div className="relative -mt-7 mx-auto max-w-6xl px-4">
                     {!isMobile && <Link href="/event">
@@ -201,7 +204,7 @@ export default function EventPage() {
                                 </div>
                             </div>
 
-                            {!eventPassed && Object.keys(timeLeft).length > 0 && (
+                            {event?.event_date && !eventPassed && Object.keys(timeLeft).length > 0 && (
                                 <div className="mb-8">
                                     <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
                                         <Clock className="h-6 w-6" />
@@ -239,7 +242,8 @@ export default function EventPage() {
                                 <BlogMarkdown content={event?.description || ""} />
                             </div>
 
-                            {event?.registration_url && (
+                            {/* temp solution */}
+                            {event && (event.event_date ? !(new Date(event.event_date) < new Date()) : true) && event?.registration_url && (
                                 <div className="absolute left-8 bottom-8 mt-8">
                                     <Link
                                         href={event.registration_url}
