@@ -104,7 +104,7 @@ export default function BlogPage() {
                         {blogData?.title}
                     </h1>}
                     <div className="flex flex-wrap w-full justify-between text-muted-foreground">
-                        <p className="">{new Date(blogData?.published_at).toLocaleDateString('tr-TR')}</p>
+                        <p className="">{new Date(blogData?.created_at).toLocaleDateString('tr-TR')}</p>
                         {!isMobile && <p className="text-nowrap">{blogData?.author_name}</p>}
                     </div>
                 </div>
