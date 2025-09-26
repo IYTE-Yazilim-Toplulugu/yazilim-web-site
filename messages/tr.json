@@ -52,7 +52,29 @@
         "not_found": "Etkinlikler Çok Yakında",
         "online": "Çevrimiçi Etkinlik",
         "apply": "Başvur",
-        "details": "Detaylar"
+        "details": "Detaylar",
+        "event": {
+            "datetime": "Tarih & Saat",
+            "later": "Etkinlik tarihi daha sonra duyurulacak",
+            "capacity": "Kapasite",
+            "person": "Kişi",
+            "open_everyone": "Kapımız herkese açık",
+            "location": "Konum",
+            "about": "Etkinlik Hakkında",
+            "online": "Çevrim Içi Etkinlik",
+            "remaining": "Kalan Süre",
+            "days": "Gün",
+            "hours": "Saat",
+            "minutes": "Dakika",
+            "seconds": "Saniye",
+            "passed": "Etkinlik sona erdi",
+            "apply": "Kayıt Ol",
+            "away": "km mesafede",
+            "quick": "Hızlı Bilgi",
+            "state": "Etkinlik Durumu",
+            "active": "Aktif",
+            "face2face": "Yüz Yüze"
+        }
     },
     "blogs": {
         "title": "Bloglar",
