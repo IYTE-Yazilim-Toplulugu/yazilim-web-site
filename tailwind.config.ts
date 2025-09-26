@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss"
 import plugin from "tailwindcss/plugin"
+import typography from "@tailwindcss/typography"
 
 const config = {
     darkMode: "class",
@@ -257,9 +258,9 @@ const config = {
         },
     },
     plugins: [
+        typography,
         require("tailwindcss-animate"),
         require("tailwind-scrollbar"),
-        require('@tailwindcss/typography'),
 
         // ADMIN PANEL PLUGIN
         plugin(function ({ addUtilities, addComponents, addBase, theme }) {
