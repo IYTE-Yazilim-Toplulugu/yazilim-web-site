@@ -85,19 +85,19 @@ export default function EventsPage() {
                                     </div>
                                     <p className="text-muted-foreground">{event.location_name}</p>
                                 </div>
-                                <p className="text-muted-foreground">{new Date(event.event_date).toLocaleDateString('tr-TR')}</p>
+                                <p className="text-muted-foreground">{event.event_date ? (new Date(event.event_date).toLocaleDateString('tr-TR')) : ""}</p>
                             </CardHeader>
                             <CardContent >
                                 <BlogMarkdown content={event.description.length > 100 ? event.description.substring(0, 100) + "..." : event.description} />
                             </CardContent>
                             <CardFooter className="justify-end gap-4 md:absolute md:bottom-0 md:right-0">
-                                <Link href={`/form`}>
+                                {event.registration_url && (<Link href={`/form`}>
                                     <Button size="md" variant="default" type="button"
                                         startIcon={<BookCheckIcon className="w-4 h-4" />}
                                         className="text-xs cursor-pointer border-2 border-muted-foreground hover:border-bite-tongue hover:bg-bite-tongue hover:text-white">
                                         {t("apply")}
                                     </Button>
-                                </Link>
+                                </Link>)}
                                 <Link href={`/event/${event.id}`}>
                                     <Button size="sm" variant="primary" type="button"
                                         className="text-xs bg-bite-tongue cursor-pointer">
