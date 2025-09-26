@@ -36,7 +36,7 @@ export default function EventPage() {
 
     const [loading, setLoading] = useState<boolean>(true);
 
-    // const t = useTranslations('events.event')
+    const t = useTranslations('events.event')
 
     const handleErrorCode = useHandleErrorCode();
 
@@ -107,7 +107,7 @@ export default function EventPage() {
     };
 
     const formatDate = (dateString: string) => {
-        if (!dateString) return "Daha sonra açıklanacak";
+        if (!dateString) return t('later');
 
         return new Date(dateString).toLocaleDateString('tr-TR', {
             year: 'numeric',
@@ -173,7 +173,7 @@ export default function EventPage() {
                                 <div className="flex items-center gap-3 p-4 bg-muted rounded-xl">
                                     <Calendar className="h-8 w-8" />
                                     <div>
-                                        <p className="font-semibold">Tarih & Saat</p>
+                                        <p className="font-semibold">{t('datetime')}</p>
                                         <p className="text-sm">{formatDate(event?.event_date ?? "")}</p>
                                     </div>
                                 </div>
@@ -181,9 +181,8 @@ export default function EventPage() {
                                 <div className="flex items-center gap-3 p-4 bg-muted rounded-xl">
                                     <Users className="h-8 w-8" />
                                     <div>
-                                        <p className="font-semibold">Kapasite</p>
-                                        {event && event.capacity > 0 ? <p className="text-sm">{event?.capacity} kişi</p> : <p className="text-sm">Kapımız herkese açık</p>}
-
+                                        <p className="font-semibold">{t("capacity")}</p>
+                                        {event && event.capacity > 0 ? <p className="text-sm">{event?.capacity} {t('person')}</p> : <p className="text-sm">{t('open_everyone')}</p>}
                                     </div>
                                 </div>
 
@@ -195,10 +194,10 @@ export default function EventPage() {
                                     )}
                                     <div>
                                         <p className="font-semibold">
-                                            {event?.is_online ? 'Online' : 'Konum'}
+                                            {event?.is_online ? 'Online' : t('location')}
                                         </p>
                                         <p className="text-sm">
-                                            {event?.is_online ? 'Çevrimiçi Etkinlik' : event?.location_name}
+                                            {event?.is_online ? t('online') : event?.location_name}
                                         </p>
                                     </div>
                                 </div>
@@ -208,14 +207,14 @@ export default function EventPage() {
                                 <div className="mb-8">
                                     <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
                                         <Clock className="h-6 w-6" />
-                                        Etkinliğe Kalan Süre
+                                        {t('remaining')}
                                     </h3>
                                     <div className="grid grid-cols-4 gap-4 max-w-lg">
                                         {Object.entries(timeLeft).map(([unit, value]) => (
                                             <div key={unit} className="text-center p-4 bg-bite-tongue text-white rounded-xl shadow-lg">
                                                 <div className="text-3xl font-bold">{value as string}</div>
                                                 <div className="text-sm opacity-80 capitalize">
-                                                    {unit === 'days' ? 'Gün' : unit === 'hours' ? 'Saat' : unit === 'minutes' ? 'Dakika' : 'Saniye'}
+                                                    {unit === 'days' ? t('days') : unit === 'hours' ? t('hours') : unit === 'minutes' ? t('minutes') : t('seconds')}
                                                 </div>
                                             </div>
                                         ))}
@@ -225,7 +224,7 @@ export default function EventPage() {
 
                             {eventPassed && (
                                 <div className="mb-8 p-4 bg-destructive/90 text-background dark:text-primary rounded-xl">
-                                    <p className="font-semibold">Bu etkinlik sona ermiştir.</p>
+                                    <p className="font-semibold">{t('passed')}</p>
                                 </div>
                             )}
                         </div>
@@ -237,7 +236,7 @@ export default function EventPage() {
                 <div className="grid lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
                         <div className="relative bg-card rounded-2xl shadow-lg p-8">
-                            <h2 className="text-3xl font-bold mb-6">Etkinlik Hakkında</h2>
+                            <h2 className="text-3xl font-bold mb-6">{t('about')}</h2>
                             <div className="mb-20 prose prose-lg leading-relaxed">
                                 <BlogMarkdown content={event?.description || ""} />
                             </div>
@@ -255,7 +254,7 @@ export default function EventPage() {
                                         hover:border-hidden"
                                     >
                                         <span className="relative z-10 inline-flex items-center gap-2">
-                                            Kayıt Ol
+                                            {t('apply')}
                                             <ExternalLink className="h-5 w-5" />
                                         </span>
 
@@ -272,7 +271,7 @@ export default function EventPage() {
                             <div className="bg-card rounded-2xl shadow-lg p-6">
                                 <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
                                     <MapPin className="h-6 w-6" />
-                                    Konum
+                                    {t('location')}
                                 </h3>
                                 {event && <Map location={event.location} />}
 
@@ -281,7 +280,7 @@ export default function EventPage() {
                                     {userLocation && getDistance() && (
                                         <p className="mt-2 flex items-center gap-1">
                                             <MapPin className="h-4 w-4" />
-                                            {getDistance()} km mesafede
+                                            {getDistance()} {t('away')}
                                         </p>
                                     )}
                                 </div>
@@ -289,26 +288,26 @@ export default function EventPage() {
                         )}
 
                         <div className="bg-card rounded-2xl shadow-lg p-6">
-                            <h3 className="text-2xl font-bold mb-4">Hızlı Bilgi</h3>
+                            <h3 className="text-2xl font-bold mb-4">{t('quick')}</h3>
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center py-2 border-b border-border">
-                                    <span>Durum:</span>
+                                    <span>{t('state')}:</span>
                                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${eventPassed
                                         ? 'bg-red-100 text-red-800'
                                         : 'bg-success-300 text-green-800'
                                         }`}>
-                                        {eventPassed ? 'Sona Erdi' : 'Aktif'}
+                                        {eventPassed ? t('passed') : t('active')}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center py-2 border-b border-border">
                                     <span className="">Tür:</span>
                                     <span className="font-medium">
-                                        {event?.is_online ? 'Online' : 'Yüz Yüze'}
+                                        {event?.is_online ? 'Online' : t('face2face')}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center py-2">
-                                    <span >Kapasite:</span>
-                                    {event && event.capacity > 0 ? <span className="font-medium">{event?.capacity} kişi</span> : <span className="font-medium">Kapımız herkese açık</span>}
+                                    <span >{t('capacity')}:</span>
+                                    {event && event.capacity > 0 ? <span className="font-medium">{event?.capacity} kişi</span> : <span className="font-medium">{t('open_everyone')}</span>}
                                 </div>
                             </div>
                         </div>

@@ -52,7 +52,29 @@
         "not_found": "Events are coming soon",
         "online": "Online Event",
         "apply": "Apply Now",
-        "details": "Details"
+        "details": "Details",
+        "event": {
+            "datetime": "Date & Time",
+            "later": "Event date will be announced later",
+            "capacity": "Capacity",
+            "person": "Person",
+            "open_everyone": "Open to Everyone",
+            "location": "Location",
+            "about": "About the Event",
+            "online": "This is an online event",
+            "remaining": "Time Remaining",
+            "days": "Days",
+            "hours": "Hours",
+            "minutes": "Minutes",
+            "seconds": "Seconds",
+            "passed": "Event has passed",
+            "apply": "Apply for Event",
+            "away": "km away",
+            "quick": "Quick Info",
+            "state": "Event State",
+            "active": "Active",
+            "face2face": "Face to Face"
+        }
     },
     "blogs": {
         "title": "Blogs",
