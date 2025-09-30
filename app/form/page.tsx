@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, Circle, X } from 'lucide-react';
-
 import { SurveyData } from '@/lib/pseudo';
 import { SectionHeader } from '@/components/ui/section-container';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -34,6 +33,7 @@ export default function SurveyPage() {
 
     // Handler variables
     const [focusedId, setFocusedId] = useState<number | null>(null);
+    const [pendingId, setPendingId] = useState<number | null>(null);
     const [answeredSurveys, setAnsweredSurveys] = useState<QuestionFill[] | null>();
     const currentSurvey = surveyData.find((s) => s.id === focusedId);
     const [loading, setLoading] = useState(true);
@@ -70,6 +70,60 @@ export default function SurveyPage() {
                 handleErrorCode(error.code);
             });
     }, [focusedId]);
+
+
+    useEffect(() => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash) {
+            const id = parseInt(hash, 10);
+            if (!isNaN(id)) {
+                setPendingId(id);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!loading && surveyData.length > 0 && pendingId !== null) {
+            if (surveyData.some(s => s.id === pendingId)) {
+                const timer = setTimeout(() => {
+                    setFocusedId(pendingId);
+                    setPendingId(null);
+                }, 500);
+
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [loading, surveyData, pendingId]);
+
+    useEffect(() => {
+        const referrer = document.referrer;
+        if (referrer && !referrer.includes('/form')) {
+            sessionStorage.setItem('previousPage', referrer);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (focusedId) {
+            window.history.pushState(null, '', `#${focusedId}`);
+        } else {
+            window.history.pushState(null, '', window.location.pathname);
+        }
+    }, [focusedId]);
+
+    useEffect(() => {
+        const handlePopState = () => {
+            const previousPage = sessionStorage.getItem('previousPage');
+            if (previousPage) {
+                window.location.href = previousPage;
+            } else {
+                window.history.back();
+            }
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
+
 
     const fetchSurveyData = async (result: { user: User | null, data: QuestionFill[] | null }) => {
         try {
