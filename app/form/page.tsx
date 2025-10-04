@@ -159,6 +159,7 @@ export default function SurveyPage() {
 
             checkHasSubmitted(focusedId, ip).then((hasSubmitted) => {
                 if (hasSubmitted.error) {
+                    console.error("Error while checking is submitted", hasSubmitted.error);
                     handleErrorCode(hasSubmitted.error)
                     setFocusedId(null);
                     return;
@@ -207,8 +208,8 @@ export default function SurveyPage() {
                     }
                     if (x.error) {
                         console.error("Error fetching form answers:", x.error);
+                        handleErrorCode(x.error.code ?? null);
                     }
-                    handleErrorCode(x.error?.code ?? null);
                     return null;
                 })
         } catch (error) {
