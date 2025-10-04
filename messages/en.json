@@ -132,6 +132,12 @@
         "fetch_error": {
             "title": "Unexpected Error",
             "desc": "Unexpected error while fetching form data"
+        },
+        "wp": {
+            "title": "Join Our WhatsApp Group",
+            "desc": "Join our WhatsApp group to stay updated with the latest news and events from IZTECH Software Society.",
+            "button": "Join WhatsApp Group",
+            "decline": "Maybe Later"
         }
     },
     "gallery": {

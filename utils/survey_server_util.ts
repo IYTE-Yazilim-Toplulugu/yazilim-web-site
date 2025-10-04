@@ -218,11 +218,18 @@ export async function hasSubmittedCheck(surveyId: number | null, ip: string) {
     return { error: null }
 }
 
-export async function getAnsweredSurveys(userId: string, ip: string) {
-    const { data, error } = await supabase
+export async function getAnsweredSurveys(userId: string | null, ip: string) {
+    let query = supabase
         .from("survey_answers")
-        .select("*")
-        .or(`user_id.eq.${userId},user_ip.eq.${ip}`);
+        .select("*");
+
+    if (userId) {
+        query = query.or(`user_id.eq.${userId},user_ip.eq.${ip}`);
+    } else {
+        query = query.eq('user_ip', ip);
+    }
+
+    const { data, error } = await query;
 
     return {
         data: data || [],

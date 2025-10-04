@@ -132,6 +132,12 @@
         "fetch_error": {
             "title": "Beklenmeyen Hata",
             "desc": "Form verilerini alırken beklenmeyen bir hata oluştu."
+        },
+        "wp": {
+            "title": "WhatsApp Grubumuza Katıl",
+            "desc": "İYTE Yazılım Topluluğu’nun en güncel haber ve etkinliklerinden haberdar olmak için WhatsApp grubumuza katıl.",
+            "button": "WhatsApp Grubuna Katıl",
+            "decline": "Daha Sonra"
         }
     },
     "gallery": {

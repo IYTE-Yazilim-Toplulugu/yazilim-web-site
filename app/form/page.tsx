@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, Circle, X } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { SurveyData } from '@/lib/pseudo';
 import { SectionHeader } from '@/components/ui/section-container';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -40,6 +41,7 @@ export default function SurveyPage() {
     const [errors, setErrors] = useState<Record<number, string>>({});
 
     const [userInfo, setUserInfo] = useState<any>(null);
+    const [showWhatsappPopup, setShowWhatsappPopup] = useState<boolean>(false);
 
     const t = useTranslations('forms')
 
@@ -54,10 +56,13 @@ export default function SurveyPage() {
             })
             .then((user): Promise<{ user: User | null; data: QuestionFill[] | null }> => {
                 if (!user) {
-                    return Promise.resolve({ user: null, data: null });
+                    return getAnsweredSurveyData(null).then((data) => ({
+                        user: null,
+                        data: data ?? null
+                    }));
                 }
 
-                return getAnsweredSurveyData(user.id).then((data) => ({
+                return getAnsweredSurveyData(user.id ?? null).then((data) => ({
                     user,
                     data: data ?? null
                 }));
@@ -126,21 +131,26 @@ export default function SurveyPage() {
 
 
     const fetchSurveyData = async (result: { user: User | null, data: QuestionFill[] | null }) => {
+
         try {
-            surveysGet(result?.data, true, result?.user)
-                .then(x => {
-                    if (x.data) {
-                        setSurveyData(x.data);
-                    } else {
-                        console.error("Error fetching forms data:", x.error);
-                        handleErrorCode(x.error?.code || "");
-                    }
-                })
-                .then(() => setLoading(false))
+            const surveyResponse = await surveysGet(result?.data, true, result?.user);
+
+            if (surveyResponse.data && surveyResponse.data.length > 0) {
+                setSurveyData(surveyResponse.data);
+            } else {
+                if (surveyResponse.error) {
+                    console.error("Error fetching forms data:", surveyResponse.error);
+                    handleErrorCode(surveyResponse.error?.code || "");
+                }
+                setSurveyData([]);
+            }
         } catch (error) {
             console.error("Unexpected error while fetching forms data:", error);
+            setSurveyData([]);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     const postSurveyData = async () => {
         try {
@@ -165,6 +175,11 @@ export default function SurveyPage() {
                                 variant: "success",
                             })
                             setFocusedId(null);
+
+                            if (focusedId === 14) {
+                                setShowWhatsappPopup(true);
+                                setAnsweredSurveys(prev => prev ? [...prev, { survey_id: 14, question_id: 0, question: "", type: 0, answer: null }] : [{ survey_id: 14, question_id: 0, question: "", type: 0, answer: null }]);
+                            }
                         }
                     })
             })
@@ -181,7 +196,7 @@ export default function SurveyPage() {
     // Not working properly
     const getAnsweredSurveyData = async (userId: string | null) => {
         try {
-            if (!userId) return null;
+            // if (!userId) return null;
             const ip: string = await getUserIp();
 
             return answeredSurveysGet(userId, ip)
@@ -192,8 +207,8 @@ export default function SurveyPage() {
                     }
                     if (x.error) {
                         console.error("Error fetching form answers:", x.error);
-                        handleErrorCode(x.error.code);
                     }
+                    handleErrorCode(x.error?.code ?? null);
                     return null;
                 })
         } catch (error) {
@@ -732,6 +747,16 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                 />
             </SectionHeader>
 
+            {/* Temporary: Only for survey with ID 14 */}
+            {!loading && !surveyData.find(s => s.id === 14) && (
+                <Button variant={'default'}
+                    className="fixed bottom-4 right-4 lg:bottom-8 lg:left-8 w-12 h-12 bg-success-400 rounded-full z-50 cursor-pointer"
+                    onClick={() => setShowWhatsappPopup(true)}
+                >
+                    <FaWhatsapp />
+                </Button>
+            )}
+
             <section ref={containerRef} className={`flex flex-wrap justify-center items-center ${focusedId ? "blur-sm pointer-events-none" : ""}`}>
                 {surveyData.length === 0 ? (
                     !userInfo ? (
@@ -752,7 +777,7 @@ Are You Logged In?`}
                             key={survey.id}
                             layoutId={`survey-${survey.id}`}
                             onClick={() => setFocusedId(survey.id)}
-                            className="container m-4 w-2/5 min-w-96
+                            className="container m-4 w-2/5 min-w-92
                             items-center justify-center border border-border
                             rounded-lg shadow-md overflow-hidden"
                         >
@@ -841,7 +866,63 @@ Are You Logged In?`}
                     </motion.section>
                 )}
             </AnimatePresence>
+            {/* WhatsApp Group Popup */}
+            <AnimatePresence>
+                {showWhatsappPopup && (
+                    <motion.section
+                        key="whatsapp-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50"
+                        onClick={() => setShowWhatsappPopup(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="relative bg-muted p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => setShowWhatsappPopup(false)}
+                                aria-label="Close popup"
+                                className="group absolute -top-2 -right-2 text-muted-foreground hover:text-primary hover:bg-bite-tongue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-bite-tongue rounded-full"
+                            >
+                                <X className="transition-transform duration-800 group-hover:rotate-[180deg]" />
+                            </Button>
 
+                            <div className="text-center">
+                                <h3 className="text-2xl font-bold text-bite-tongue mb-4">
+                                    {t('wp.title')}
+                                </h3>
+                                <p className="text-muted-foreground mb-6">
+                                    {t('wp.desc')}
+                                </p>
+                                <Button
+                                    onClick={() => {
+                                        window.open(process.env.NEXT_PUBLIC_WHATSAPP_URL, '_blank');
+                                    }}
+                                    className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <FaWhatsapp />
+                                    {t('wp.button')}
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => setShowWhatsappPopup(false)}
+                                    className="mt-3 w-full"
+                                >
+                                    {t('wp.decline')}
+                                </Button>
+                            </div>
+                        </motion.div>
+                    </motion.section>
+                )}
+            </AnimatePresence>
         </motion.div >
     )
 }
