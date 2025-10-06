@@ -912,13 +912,13 @@ Are You Logged In?`}
                                     <FaWhatsapp />
                                     {t('wp.button')}
                                 </Button>
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setShowWhatsappPopup(false)}
-                                    className="mt-3 w-full"
-                                >
-                                    {t('wp.decline')}
-                                </Button>
+                                {/* <Button */}
+                                {/*     variant="ghost" */}
+                                {/*     onClick={() => setShowWhatsappPopup(false)} */}
+                                {/*     className="mt-3 w-full" */}
+                                {/* > */}
+                                {/*     {t('wp.decline')} */}
+                                {/* </Button> */}
                             </div>
                         </motion.div>
                     </motion.section>
