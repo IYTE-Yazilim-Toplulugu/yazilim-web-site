@@ -215,8 +215,8 @@
             "desc": "Orange Tick üyesi olarak kayıtlı değilsiniz. Daha fazla bilgi için lütfen toplulukla iletişime geçin."
         },
         "btn": {
-            "use": "Turuncu Tik’i Kullan",
-            "get": "Turuncu Tik Al"
+            "use": "Turuncu Tik’i Kullanın",
+            "get": "Turuncu Tik’li Olun"
         },
         "popup": {
             "desc": {
@@ -224,8 +224,8 @@
                 "login": "Turuncu Tik almak için lütfen giriş yapın."
             },
             "btn": {
-                "contact": "İletişime Geç",
-                "login": "Giriş Yap"
+                "contact": "İletişime Geçin",
+                "login": "Giriş Yapın"
             },
             "contact": {
                 "subject": "Turuncu Tik Üyeliği Hakkında",
