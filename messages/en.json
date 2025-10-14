@@ -2,7 +2,8 @@
     "header": {
         "lside": {
             "title": "IZTECH Software Society",
-            "sub": "Software for everyone"
+            "sub": "Software for everyone",
+            "orangetick": "Orange Tick"
         },
         "tabs": {
             "home": "Home",
@@ -34,7 +35,8 @@
         },
         "orangetick": {
             "title": "Orange Tick",
-            "desc": "The Orange Tick is the special membership program of the IZTECH Software Society. It offers members discounts of up to 20% at partner venues in Urla, Gülbahçe, and İzmir. It also provides 20% off on society merchandise and priority access to limited-seat events such as entertainment activities. With a 1-year membership guarantee, the Orange Tick offers protection against loss or damage through the Digital Card System developed by the society. Click to explore the perks!"
+            "desc": "The Orange Tick is the special membership program of the IZTECH Software Society. It offers members discounts of up to 20% at partner venues in Urla, Gülbahçe, and İzmir. It also provides 20% off on society merchandise and priority access to limited-seat events such as entertainment activities. With a 1-year membership guarantee, the Orange Tick offers protection against loss or damage through the Digital Card System developed by the society. Click to explore the perks!",
+            "btn": "Explore Orange Tick"
         },
         "footer": {
             "quick_links": "Quick Links",
@@ -203,7 +205,7 @@
         }
     },
     "orangetick": {
-        "title": "Orange Tick",
+        "title": "Orange Tick Opportunities",
         "login": {
             "title": "Orange Tick Login",
             "desc": "Please log in to access Orange Tick features."
@@ -211,6 +213,24 @@
         "not": {
             "title": "Not an Orange Tick Member",
             "desc": "You are not registered as an Orange Tick member. Please contact the society for more information."
+        },
+        "btn": {
+            "use": "Use Orange Tick",
+            "get": "Get Orange Tick"
+        },
+        "popup": {
+            "desc": {
+                "contact": "For more information, please contact the society.",
+                "login": "Please log in to get Orange Tick."
+            },
+            "btn": {
+                "contact": "Contact Us",
+                "login": "Log In"
+            },
+            "contact": {
+                "subject": "Inquiry about Orange Tick Membership",
+                "message": "Hello,\n\nI am {name} and my email is {email}. My phone number for my account is {phone} and I wanna get Orange Tick for this account.\n\nThank you."
+            }
         },
         "published": "Published",
         "draft": "Draft",

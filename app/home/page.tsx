@@ -176,7 +176,13 @@ export default function Home() {
                                         className="rounded-lg aspect-square"
                                     />
                                 </div>
-                                <p className='m-8 md:m-24 min-w-4/5 text-lg font-semibold text-center'>{t("orangetick.desc")}</p>
+                                <div>
+                                    <p className='m-8 md:m-24 min-w-4/5 text-lg font-semibold'>{t("orangetick.desc")}</p>
+                                    <Link href="/orangetick">
+                                        <Button variant="default" size="lg" className='flex mt-4 mx-auto bg-bite-tongue hover:bg-happy-hearts justify-center cursor-pointer' >{t('orangetick.btn')}</Button>
+                                    </Link>
+                                </div>
+
                             </div>
                         </ScrollReveal>
                     </SectionContainer>

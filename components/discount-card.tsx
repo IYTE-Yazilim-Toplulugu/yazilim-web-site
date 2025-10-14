@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, CheckCircle, Clock } from "lucide-react";
 import { Discount } from "@/types/types_orangetick";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { getDiscountImage } from "@/utils/orangetick_client_utils";
 
 interface DiscountCardProps {
     discount: Discount;
@@ -28,16 +30,19 @@ export function DiscountCard({ discount }: DiscountCardProps) {
         <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-bite-tongue/20">
             <div className="relative">
                 <div className="h-32 bg-gradient-to-r from-bite-tongue to-happy-hearts flex items-center justify-center">
-                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
-                        <span className="text-4xl">🍊</span>
-                    </div>
+                    <Image src={getDiscountImage(discount.image_url) || '/images/yazilim.png'}
+                        alt="Orange Tick Logo"
+                        width={1000}
+                        height={500}
+                        className="object-cover h-32 w-full"
+                    />
                 </div>
-                <Badge
-                    className="absolute top-4 right-4"
-                    variant={isPublished ? "default" : "secondary"}
-                >
-                    {isPublished ? t('published') : t('draft')}
-                </Badge>
+                {/* <Badge */}
+                {/*     className="absolute top-4 right-4" */}
+                {/*     variant={isPublished ? "default" : "secondary"} */}
+                {/* > */}
+                {/*     {isPublished ? t('published') : t('draft')} */}
+                {/* </Badge> */}
             </div>
 
             <CardHeader className="flex-grow">
@@ -47,19 +52,19 @@ export function DiscountCard({ discount }: DiscountCardProps) {
                 </CardDescription>
             </CardHeader>
 
-            <CardContent>
-                <div className="flex items-center text-sm text-muted-foreground mb-1">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    {t('created_at')} {formatDate(discount.created_at)}
-                </div>
-
-                {discount.published_at && (
-                    <div className="flex items-center text-sm text-muted-foreground">
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        {t('published_at')} {formatDate(discount.published_at)}
-                    </div>
-                )}
-            </CardContent>
+            {/* <CardContent> */}
+            {/*     <div className="flex items-center text-sm text-muted-foreground mb-1"> */}
+            {/*         <Calendar className="mr-2 h-4 w-4" /> */}
+            {/*         {t('created_at')} {formatDate(discount.created_at)} */}
+            {/*     </div> */}
+            {/**/}
+            {/*     {discount.published_at && ( */}
+            {/*         <div className="flex items-center text-sm text-muted-foreground"> */}
+            {/*             <CheckCircle className="mr-2 h-4 w-4" /> */}
+            {/*             {t('published_at')} {formatDate(discount.published_at)} */}
+            {/*         </div> */}
+            {/*     )} */}
+            {/* </CardContent> */}
 
             {/* <CardFooter className="flex justify-between items-center"> */}
             {/*     <Badge variant="outline" className="flex items-center gap-1"> */}

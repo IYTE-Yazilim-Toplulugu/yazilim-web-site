@@ -23,7 +23,7 @@ import { useCookies } from "react-cookie"
 
 
 
-export default function ContactForm() {
+export default function ContactForm({ initialData }: { initialData?: { name?: string; email?: string; subject?: string; message?: string } }) {
     const { toast } = useToast()
     const isMobile = useIsMobile()
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -68,10 +68,10 @@ export default function ContactForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            email: "",
-            subject: "",
-            message: "",
+            name: initialData?.name || "",
+            email: initialData?.email || "",
+            subject: initialData?.subject || "",
+            message: initialData?.message || "",
         },
     })
 
@@ -90,6 +90,7 @@ export default function ContactForm() {
             });
 
             setIsSubmitted(true);
+            form.reset({ name: "", email: "", subject: "", message: "" });
         }
         else {
             console.log(error);

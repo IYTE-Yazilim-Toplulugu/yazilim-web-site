@@ -11,3 +11,11 @@ export async function getDiscounts() {
         error: error
     }
 }
+
+export function getDiscountImage(image_path: string | null) {
+    if (!image_path) return "";
+    return createClient().storage
+        .from('discount-images')
+        .getPublicUrl(image_path)
+        .data.publicUrl;
+}

@@ -2,7 +2,8 @@
     "header": {
         "lside": {
             "title": "İYTE Yazılım Topluluğu",
-            "sub": "Software for everyone"
+            "sub": "Software for everyone",
+            "orangetick": "Turuncu Tik"
         },
         "tabs": {
             "home": "Ana Sayfa",
@@ -34,7 +35,8 @@
         },
         "orangetick": {
             "title": "Turuncu Tik",
-            "desc": "İYTE Yazılım Topluluğu'nun özel üyelik programıdır. Üyelerine, Urla, Gülbahçe ve İzmir'deki anlaşmalı mekanlarda %20'ye varan indirimler sunar. Ayrıca topluluğun ürünlerinde %20 indirim ve eğlence etkinlikleri gibi kontenjanlı organizasyonlardan öncelikli haberdar olma avantajları sağlar. 1 yıllık üyelik garantisiyle gelen Turuncu Tik, topluluğun geliştirdiği Dijital Kart Sistemi ile kayıp ya da hasar gibi durumlara karşı güvence sunar. Fırsatlar için tıklayın!"
+            "desc": "İYTE Yazılım Topluluğu'nun özel üyelik programıdır. Üyelerine, Urla, Gülbahçe ve İzmir'deki anlaşmalı mekanlarda %20'ye varan indirimler sunar. Ayrıca topluluğun ürünlerinde %20 indirim ve eğlence etkinlikleri gibi kontenjanlı organizasyonlardan öncelikli haberdar olma avantajları sağlar. 1 yıllık üyelik garantisiyle gelen Turuncu Tik, topluluğun geliştirdiği Dijital Kart Sistemi ile kayıp ya da hasar gibi durumlara karşı güvence sunar. Fırsatlar için tıklayın!",
+            "btn": "Turuncu Tik Fırsatlarını Gör"
         },
         "footer": {
             "quick_links": "Hızlı Linkler",
@@ -203,7 +205,7 @@
         }
     },
     "orangetick": {
-        "title": "Turuncu Tik",
+        "title": "Turuncu Tik Fırsatları",
         "login": {
             "title": "Orange Tick Girişi",
             "desc": "Orange Tick özelliklerine erişmek için lütfen giriş yapın."
@@ -211,6 +213,24 @@
         "not": {
             "title": "Orange Tick Üyesi Değilsiniz",
             "desc": "Orange Tick üyesi olarak kayıtlı değilsiniz. Daha fazla bilgi için lütfen toplulukla iletişime geçin."
+        },
+        "btn": {
+            "use": "Turuncu Tik’i Kullan",
+            "get": "Turuncu Tik Al"
+        },
+        "popup": {
+            "desc": {
+                "contact": "Daha fazla bilgi için lütfen toplulukla iletişime geçin.",
+                "login": "Turuncu Tik almak için lütfen giriş yapın."
+            },
+            "btn": {
+                "contact": "İletişime Geç",
+                "login": "Giriş Yap"
+            },
+            "contact": {
+                "subject": "Turuncu Tik Üyeliği Hakkında",
+                "message": "Merhaba,\n\nBen {name}, e-posta adresim {email}. Hesabımda kayıtlı telefon numaram {phone} ve bu hesabım için Turuncu Tik almak istiyorum.\n\nTeşekkür ederim."
+            }
         },
         "published": "Yayınlandı",
         "draft": "Taslak",

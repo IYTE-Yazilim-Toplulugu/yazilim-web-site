@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
-import { getUser } from "@/utils/user_client_util";
+import { getSessionUser, getUser, getUserInfo } from "@/utils/user_client_util";
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
@@ -25,6 +25,7 @@ export default function ResponsiveHeader() {
     const pathname = usePathname()
     const isMobile = useIsMobile()
     const [isAdmin, setIsAdmin] = useState(false)
+    const [iseSpecial, setIsSpecial] = useState(false)
     const [fullName, setFullName] = useState("")
 
     const t = useTranslations("header");
@@ -35,6 +36,15 @@ export default function ResponsiveHeader() {
         getUser().then((user) => {
             setIsAdmin(user?.user_metadata.isAdmin || false)
             setFullName(user?.user_metadata.fullName || null)
+            return user?.id
+        }).then((id) => {
+            if (!id) return
+            const res = getUserInfo(id)
+            console.log(res)
+            return res
+        }).then((res) => {
+            if (!res) return
+            setIsSpecial(res.data.is_special || false)
         })
     }, [pathname])
 
@@ -154,8 +164,14 @@ export default function ResponsiveHeader() {
                 <Link href="/admin/">
                     <Button variant="outline" className="m-4 absolute top-16 right-0 z-50 cursor-pointer">{t("rside.dashboard")}</Button>
                 </Link>
-
             )}
+
+            {!isMobile && !pathname.startsWith('/orange') && (
+                <Link href="/orangetick/">
+                    <Button variant="default" className="m-4 absolute top-16 left-0 text-white bg-bite-tongue hover:bg-happy-hearts rounded-full z-50 cursor-pointer ring-3 ring-offset-2 ring-happy-hearts">{t("lside.orangetick")}</Button>
+                </Link>
+            )}
+
             <div className="flex h-16 items-center justify-between px-4">
                 <Link href="/">
                     <motion.div

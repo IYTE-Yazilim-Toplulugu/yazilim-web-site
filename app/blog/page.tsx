@@ -72,7 +72,7 @@ export default function BlogsPage() {
             <div className="px-4 overflow-x-hidden">
                 <Link href={userData ? "/blog/create" : "/login"}>
                     <button
-                        className="md:absolute md:top-20 md:left-4
+                        className="md:absolute md:top-32 md:left-4
         w-full md:w-fit
         gap-2 flex items-center h-10 justify-center 
         rounded-lg border border-gray-300 bg-white 

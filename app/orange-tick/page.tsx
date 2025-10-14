@@ -1,13 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { getSessionUser, getUserInfo } from "@/utils/user_client_util";
 import { useTranslations } from "next-intl";
 import Loading from "@/components/loading";
+import { motion } from "framer-motion";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { SectionFallback } from "@/components/section-fallback";
+import OrangeTickSection from "@/components/orange-tick-section";
+import { Loader2 } from "lucide-react";
+
+// Simple loading component
+function LoadingSection({ name }: { name: string }) {
+    return (
+        <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+            <p className="text-muted-foreground">Loading {name} section...</p>
+        </div>
+    )
+}
 
 export default function OrangeTickAppPage() {
     const [loading, setLoading] = useState<boolean>(true);
+    const [user, setUser] = useState<any>(null);
 
     const t = useTranslations('orangetick')
 
@@ -33,14 +49,13 @@ export default function OrangeTickAppPage() {
             // @ts-ignore
             const { data, error } = await getUserInfo(userSession.id)
 
-            console.log(data);
-
             if (error || !data) {
                 console.error("Error fetching user info:", error);
                 router.push("/login");
             }
 
             if (data.is_special) {
+                setUser(data);
                 setLoading(false);
                 return
             }
@@ -59,12 +74,18 @@ export default function OrangeTickAppPage() {
 
     if (loading) return <Loading />
 
-    // If user is special, render the page content
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">Special User Content</h1>
-            <p className="text-lg">Welcome to the special OrangeTick page!</p>
-            {/* Add your special content here */}
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mt-24"
+        >
+            <ErrorBoundary fallback={<SectionFallback title="OrangeTick" />}>
+                <Suspense fallback={<LoadingSection name="OrangeTick" />}>
+                    <OrangeTickSection user={user} />
+                </Suspense>
+            </ErrorBoundary>
+        </motion.div>
     );
 }

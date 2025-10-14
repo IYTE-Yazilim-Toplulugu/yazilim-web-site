@@ -5,4 +5,5 @@ export type Discount = {
     created_at: string,
     is_published: boolean,
     published_at: string | null,
+    image_url: string | null,
 }
