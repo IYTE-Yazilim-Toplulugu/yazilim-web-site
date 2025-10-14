@@ -162,6 +162,27 @@ export default function Home() {
                 </Suspense>
             </ErrorBoundary>
 
+            <ErrorBoundary fallback={<SectionFallback title="OrangeTick" />}>
+                <Suspense fallback={<LoadingSection name="OrangeTick" />}>
+                    <SectionContainer id="orangeTick" className="">
+                        <ScrollReveal delay={0.2} >
+                            <h1 className='m-12 text-2xl text-primary w-fit font-bold border-b-4 border-bite-tongue'>{t("orangetick.title")}</h1>
+                            <div className="container mx-auto px-4 py-16 lg:py-24 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                                <div className="p-8 lg:p-0 flex justify-center">
+                                    <Image
+                                        src="/images/orangetick.png"
+                                        alt="OrangeTick"
+                                        width={512} height={512}
+                                        className="rounded-lg aspect-square"
+                                    />
+                                </div>
+                                <p className='m-8 md:m-24 min-w-4/5 text-lg font-semibold text-center'>{t("orangetick.desc")}</p>
+                            </div>
+                        </ScrollReveal>
+                    </SectionContainer>
+                </Suspense>
+            </ErrorBoundary>
+
             <ErrorBoundary fallback={<SectionFallback title="About" />}>
                 <Suspense fallback={<LoadingSection name="About" />}>
                     <AboutSection home_about_us={homeData.find(item => item.key === `home_about_us_${locale}`)?.value} />

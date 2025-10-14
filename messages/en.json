@@ -32,6 +32,10 @@
         "about_us": {
             "join_us": "Join Us"
         },
+        "orangetick": {
+            "title": "Orange Tick",
+            "desc": "The Orange Tick is the special membership program of the IZTECH Software Society. It offers members discounts of up to 20% at partner venues in Urla, Gülbahçe, and İzmir. It also provides 20% off on society merchandise and priority access to limited-seat events such as entertainment activities. With a 1-year membership guarantee, the Orange Tick offers protection against loss or damage through the Digital Card System developed by the society. Click to explore the perks!"
+        },
         "footer": {
             "quick_links": "Quick Links",
             "contact_info": "Contact Info",
@@ -197,6 +201,25 @@
             "title": "Success",
             "desc": "User updated successfully."
         }
+    },
+    "orangetick": {
+        "title": "Orange Tick",
+        "login": {
+            "title": "Orange Tick Login",
+            "desc": "Please log in to access Orange Tick features."
+        },
+        "not": {
+            "title": "Not an Orange Tick Member",
+            "desc": "You are not registered as an Orange Tick member. Please contact the society for more information."
+        },
+        "published": "Published",
+        "draft": "Draft",
+        "created_at": "Created At:",
+        "published_at": "Published At:",
+        "not_published": "Not yet published",
+        "expired": "Expired",
+        "active": "Active",
+        "pending": "Pending"
     },
     "error": {
         "404": {

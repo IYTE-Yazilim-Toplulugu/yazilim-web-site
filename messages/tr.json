@@ -24,18 +24,22 @@
     "home": {
         "hero": {
             "view_events": "Etkinlikleri Gör",
-            "contact_us": "Bize Ulaş"
+            "contact_us": "Bize Ulaşın"
         },
         "announcements": {
             "title": "Duyurular"
         },
         "about_us": {
-            "join_us": "Bize Katıl"
+            "join_us": "Bize Katılın"
+        },
+        "orangetick": {
+            "title": "Turuncu Tik",
+            "desc": "İYTE Yazılım Topluluğu'nun özel üyelik programıdır. Üyelerine, Urla, Gülbahçe ve İzmir'deki anlaşmalı mekanlarda %20'ye varan indirimler sunar. Ayrıca topluluğun ürünlerinde %20 indirim ve eğlence etkinlikleri gibi kontenjanlı organizasyonlardan öncelikli haberdar olma avantajları sağlar. 1 yıllık üyelik garantisiyle gelen Turuncu Tik, topluluğun geliştirdiği Dijital Kart Sistemi ile kayıp ya da hasar gibi durumlara karşı güvence sunar. Fırsatlar için tıklayın!"
         },
         "footer": {
             "quick_links": "Hızlı Linkler",
             "contact_info": "İletişim Bilgileri",
-            "newsletter": "Bültene Katıl",
+            "newsletter": "Bültene Katılın",
             "validate": "Lütfen geçerli bir e-posta adresi girin.",
             "success": {
                 "title": "Abone Oldunuz!",
@@ -197,6 +201,25 @@
             "title": "Başarılı",
             "desc": "Kullanıcı bilgileri başarıyla güncellendi."
         }
+    },
+    "orangetick": {
+        "title": "Turuncu Tik",
+        "login": {
+            "title": "Orange Tick Girişi",
+            "desc": "Orange Tick özelliklerine erişmek için lütfen giriş yapın."
+        },
+        "not": {
+            "title": "Orange Tick Üyesi Değilsiniz",
+            "desc": "Orange Tick üyesi olarak kayıtlı değilsiniz. Daha fazla bilgi için lütfen toplulukla iletişime geçin."
+        },
+        "published": "Yayınlandı",
+        "draft": "Taslak",
+        "created_at": "Oluşturulma Tarihi:",
+        "published_at": "Yayınlanma Tarihi:",
+        "not_published": "Henüz yayınlanmadı",
+        "expired": "Süresi Dolmuş",
+        "active": "Aktif",
+        "pending": "Beklemede"
     },
     "error": {
         "404": {
