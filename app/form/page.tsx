@@ -14,7 +14,7 @@ import { Dropdown } from '@/components/dropdown';
 import useHandleErrorCode from '@/components/handle-error-code';
 import { HandleIcon } from '@/components/handle-icons';
 import { toast } from '@/hooks/use-toast';
-import { getUser, getUserIp } from '@/utils/user_client_util';
+import { getUser } from '@/utils/user_client_util';
 import { QuestionFill, AnswerHandlerProps, Question, Survey } from '@/types/types';
 import { postSurveyAnswer, getSurveyImagePath } from '@/utils/survey_client_util';
 import YazilimBlankPage from '@/components/blank-page';
@@ -155,16 +155,23 @@ export default function SurveyPage() {
     const postSurveyData = async () => {
         try {
             const answers = surveyFill.map(({ survey_id, type, ...rest }) => rest);
-            const ip: string = await getUserIp();
 
-            checkHasSubmitted(focusedId, ip).then((hasSubmitted) => {
+            // Generate a unique cookie ID for this user/survey combination
+            // Using a more persistent approach with localStorage if available
+            let cookieId = localStorage.getItem(`survey-cookieId`);
+            if (!cookieId) {
+                cookieId = `survey-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                localStorage.setItem(`survey-cookieId`, cookieId);
+            }
+
+            checkHasSubmitted(focusedId, cookieId).then((hasSubmitted) => {
                 if (hasSubmitted.error) {
                     console.error("Error while checking is submitted", hasSubmitted.error);
                     handleErrorCode(hasSubmitted.error)
                     setFocusedId(null);
                     return;
                 }
-                postSurveyAnswer(userInfo?.id, userInfo?.user_metadata.fullName, focusedId, answers, ip)
+                postSurveyAnswer(userInfo?.id, userInfo?.user_metadata.fullName, focusedId, answers, cookieId)
                     .then(x => {
                         if (x.error) {
                             console.error("Error submitting form answers:", x.error);
@@ -194,14 +201,22 @@ export default function SurveyPage() {
         }
     }
 
-    // Not working properly
     const getAnsweredSurveyData = async (userId: string | null) => {
         try {
-            // if (!userId) return null;
-            const ip: string = await getUserIp();
 
-            return answeredSurveysGet(userId, ip)
+            // Get cookie ID for answered surveys check
+            let cookieId = null;
+            if (typeof window !== 'undefined') {
+                cookieId = localStorage.getItem('survey-cookieId');
+                if (!cookieId) {
+                    cookieId = `survey-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    localStorage.setItem('survey-cookieId', cookieId);
+                }
+            }
+
+            return answeredSurveysGet(userId, cookieId)
                 .then(x => {
+                    console.log("Answered Surveys:", x);
                     if (x.data && x.data.length > 0) {
                         setAnsweredSurveys(x.data);
                         return x.data;

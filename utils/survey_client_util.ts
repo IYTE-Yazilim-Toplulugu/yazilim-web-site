@@ -13,7 +13,7 @@ export async function postSurveyAnswer(
     userName: string,
     surveyId: number | null,
     answers: any,
-    ip: string
+    cookieId: string
 ) {
     const { error } = await createClient()
         .from("survey_answers")
@@ -23,7 +23,7 @@ export async function postSurveyAnswer(
             survey_id: surveyId,
             answered_at: new Date().toISOString(),
             answers: answers,
-            user_ip: ip
+            cookie_id: cookieId
         })
     return { error };
 }

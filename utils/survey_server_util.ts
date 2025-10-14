@@ -204,12 +204,12 @@ export async function uploadImage(file: File) {
 }
 
 
-export async function hasSubmittedCheck(surveyId: number | null, ip: string) {
+export async function hasSubmittedCheck(surveyId: number | null, cookieId: string) {
     const hasSubmitted = await supabase
         .from("survey_answers")
-        .select("user_ip")
+        .select("cookie_id")
         .eq("survey_id", surveyId)
-        .eq("user_ip", ip)
+        .eq("cookie_id", cookieId)
 
     // @ts-ignore
     if (hasSubmitted.data.length > 0) {
@@ -218,15 +218,19 @@ export async function hasSubmittedCheck(surveyId: number | null, ip: string) {
     return { error: null }
 }
 
-export async function getAnsweredSurveys(userId: string | null, ip: string) {
+export async function getAnsweredSurveys(userId: string | null, cookieId: string | null = null) {
     let query = supabase
         .from("survey_answers")
         .select("*");
 
     if (userId) {
-        query = query.or(`user_id.eq.${userId},user_ip.eq.${ip}`);
+        if (cookieId) {
+            query = query.or(`user_id.eq.${userId},cookie_id.eq.${cookieId}`);
+        } else {
+            query = query.eq('user_id', userId);
+        }
     } else {
-        query = query.eq('user_ip', ip);
+        query = query.eq('cookie_id', cookieId);
     }
 
     const { data, error } = await query;
