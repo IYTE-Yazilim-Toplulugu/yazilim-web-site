@@ -120,15 +120,15 @@ export default function OrangeTickPage() {
                             >
                                 <X className="transition-transform duration-800 group-hover:rotate-[180deg]" />
                             </Button>
-                            <div className="p-4 font-bold text-2xl text-center">{user.name ? t('popup.desc.contact') : t('popup.desc.login')}</div>
+                            <div className="p-4 font-bold text-2xl text-center">{t('popup.desc.contact')}</div>
 
                             <Button
                                 onClick={() => {
-                                    router.push(user.name ? `/contact?name=${user.name}&email=${user.email}&subject=${t('popup.contact.subject')}&message=${t('popup.contact.message', { "name": `${user.name}`, "email": `${user.email}`, "phone": `${user.phone}` })}` : '/login');
+                                    router.push(user.name ? `/contact?name=${user.name}&email=${user.email}&subject=${t('popup.contact.subject')}&message=${t('popup.contact.message', { "name": `${user.name}`, "email": `${user.email}`, "phone": `${user.phone}` })}` : `/contact?subject=${t('popup.contact.subject')}&message=${t('popup.contact.message', { "name": `(isminiz)`, "email": `(emailiniz)`, "phone": `(telefon numaraniz)` })}`);
                                 }}
                                 className="w-full bg-bite-tongue hover:bg-happy-hearts text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer"
                             >
-                                {user.name ? t('popup.btn.contact') : t('popup.btn.login')}
+                                {t('popup.btn.contact')}
                             </Button>
                         </motion.div>
                     </motion.section>
