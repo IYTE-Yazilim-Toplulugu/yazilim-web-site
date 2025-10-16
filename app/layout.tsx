@@ -53,7 +53,7 @@ export default function RootLayout({
                 <ClientProviders>
                     <NextIntlClientProvider>
                         {/* defaultTheme enableSystem */}
-                        <ThemeProvider defaultTheme="system" enableSystem={true}>
+                        <ThemeProvider defaultTheme="light" enableSystem={false}>
                             <ResponsiveHeader />
                             <ScrollProgress />
                             <FloatingNav />
