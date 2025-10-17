@@ -24,10 +24,10 @@ import surveysGet from './(server)/surveys_get';
 import checkHasSubmitted from './(server)/survey_check';
 import answeredSurveysGet from './(server)/answers_get';
 import { useTranslations } from 'next-intl';
+import Loader from '@/components/loader';
 
 export default function SurveyPage() {
     const containerRef = useRef(null);
-    // const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
     const [surveyData, setSurveyData] = useState<Survey[]>(SurveyData); // Survey GET Response
     const [surveyFill, setSurveyFill] = useState<QuestionFill[]>([]); // Survey Request array
@@ -37,6 +37,8 @@ export default function SurveyPage() {
     const [pendingId, setPendingId] = useState<number | null>(null);
     const [answeredSurveys, setAnsweredSurveys] = useState<QuestionFill[] | null>();
     const currentSurvey = surveyData.find((s) => s.id === focusedId);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
     const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState<Record<number, string>>({});
 
@@ -198,6 +200,8 @@ export default function SurveyPage() {
                 description: t('submit_error.desc'),
                 variant: "destructive",
             })
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -609,9 +613,9 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
                         className={`pt-4 flex flex-row gap-4 w-fit items-center rounded-md transition-colors cursor-pointer`}
                     >
                         <Checkbox checked={isSelected} className={`transition-all duration-300`} />
-                        <Button variant="outline" className='cursor-pointer '>
-                            {placeholder || "Select"}
-                        </Button>
+                        {placeholder && <Button variant="outline" className='cursor-pointer '>
+                            {placeholder}
+                        </Button>}
                     </section>
                 )
             case 7: // date
@@ -679,10 +683,8 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
 
 
 
-    const handleSubmit = async (survey_content: any) => {
-        setLoading(true);
-        validateSurvey(survey_content);
-        setLoading(false);
+    const handleSubmit = (survey_content: any) => {
+        return validateSurvey(survey_content);
     }
 
 
@@ -871,13 +873,20 @@ Are You Logged In?`}
                                 </div>
                             ))}
 
-                            <Button
-                                variant="outline"
-                                onClick={() => handleSubmit(currentSurvey)}
-                                className="mt-6 px-4 py-2 bg-bite-tongue text-white rounded hover:bg-bite-tongue/80 transition duration-200"
-                            >
-                                {t("submit")}
-                            </Button>
+                            <div className='flex flex-row gap-1 items-center justify-start'>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        setIsSubmitting(true);
+                                        handleSubmit(currentSurvey);
+                                    }}
+                                    disabled={isSubmitting}
+                                    className="mt-6 px-4 py-2 bg-bite-tongue text-white rounded hover:bg-bite-tongue/80 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {t("submit")}
+                                </Button>
+                                {isSubmitting && <div className='w-4 h-4'><Loader /></div>}
+                            </div>
                         </motion.section>
                     </motion.section>
                 )}
