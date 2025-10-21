@@ -168,7 +168,7 @@ export default function ResponsiveHeader() {
 
             {!pathname.startsWith('/orange') && (
                 <Link href="/orangetick/">
-                    <Button variant="default" className="m-4 absolute top-16 left-0 text-white bg-bite-tongue hover:bg-happy-hearts rounded-full z-50 cursor-pointer ring-3 ring-offset-2 ring-happy-hearts">
+                    <Button variant="default" className="mt-2 md:m-4 absolute top-0 left-1/2 -translate-x-1/2 md:translate-0 md:top-16 md:left-0 text-white bg-bite-tongue hover:bg-happy-hearts rounded-full z-50 cursor-pointer ring-3 ring-offset-2 ring-happy-hearts">
                         <Image src={"/images/orangetick.png"} alt={'orangetick'} width={80} height={80} className="w-4 h-4" />
                         {t("lside.orangetick")}
                     </Button>
