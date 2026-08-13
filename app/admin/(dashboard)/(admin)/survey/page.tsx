@@ -195,7 +195,7 @@ export default function AdminSurveysPage() {
                                         <span className="peer">
                                             {u.description && u.description.length > 50 ? u.description.substring(0, 50) + "..." : u.description}
                                         </span>
-                                        {u.description.length > 50 && (
+                                        {u.description && u.description.length > 50 && (
                                             <div className="p-2 mt-1 absolute left-1/2 -translate-x-1/2 hidden group-hover:block
                                             peer-hover:delay-500
                                             w-full top-full rounded-lg text-wrap
