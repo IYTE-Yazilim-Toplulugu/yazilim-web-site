@@ -185,11 +185,7 @@ export default function SurveyPage() {
                                 variant: "success",
                             })
                             setFocusedId(null);
-
-                            if (focusedId === 14) {
-                                setShowWhatsappPopup(true);
-                                setAnsweredSurveys(prev => prev ? [...prev, { survey_id: 14, question_id: 0, question: "", type: 0, answer: null }] : [{ survey_id: 14, question_id: 0, question: "", type: 0, answer: null }]);
-                            }
+                            setShowWhatsappPopup(true);
                         }
                     })
             })
