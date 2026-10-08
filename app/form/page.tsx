@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, Circle, X } from 'lucide-react';
+import { Check, Circle, Gamepad2, X } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { SurveyData } from '@/lib/pseudo';
 import { SectionHeader } from '@/components/ui/section-container';
@@ -26,6 +26,8 @@ import answeredSurveysGet from './(server)/answers_get';
 import { useTranslations } from 'next-intl';
 import Loader from '@/components/loader';
 
+const GAME_URL = 'https://iztech-run.vercel.app';
+
 export default function SurveyPage() {
     const containerRef = useRef(null);
 
@@ -44,6 +46,7 @@ export default function SurveyPage() {
 
     const [userInfo, setUserInfo] = useState<any>(null);
     const [showWhatsappPopup, setShowWhatsappPopup] = useState<boolean>(false);
+    const [showWhatsappGamePopup, setShowWhatsappGamePopup] = useState<boolean>(false);
 
     const t = useTranslations('forms')
 
@@ -185,7 +188,7 @@ export default function SurveyPage() {
                                 variant: "success",
                             })
                             setFocusedId(null);
-                            setShowWhatsappPopup(true);
+                            setShowWhatsappGamePopup(true);
                         }
                     })
             })
@@ -765,7 +768,7 @@ ${isAnswered(question_id, true) ? "text-background dark:text-primary" : ""}`} />
             {!loading && !surveyData.find(s => s.id === 14) && (
                 <Button variant={'default'}
                     className="fixed bottom-4 right-4 lg:bottom-8 lg:left-8 w-12 h-12 bg-success-400 rounded-full z-50 cursor-pointer"
-                    onClick={() => setShowWhatsappPopup(true)}
+                    onClick={() => setShowWhatsappGamePopup(true)}
                 >
                     <FaWhatsapp />
                 </Button>
@@ -938,6 +941,72 @@ Are You Logged In?`}
                                 {/*     className="mt-3 w-full" */}
                                 {/* > */}
                                 {/*     {t('wp.decline')} */}
+                                {/* </Button> */}
+                            </div>
+                        </motion.div>
+                    </motion.section>
+                )}
+            </AnimatePresence>
+            {/* WhatsApp + Game Popup */}
+            <AnimatePresence>
+                {showWhatsappGamePopup && (
+                    <motion.section
+                        key="whatsapp-game-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50"
+                        onClick={() => setShowWhatsappGamePopup(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="relative bg-muted p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => setShowWhatsappGamePopup(false)}
+                                aria-label="Close popup"
+                                className="group absolute -top-2 -right-2 text-muted-foreground hover:text-primary hover:bg-bite-tongue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-bite-tongue rounded-full"
+                            >
+                                <X className="transition-transform duration-800 group-hover:rotate-[180deg]" />
+                            </Button>
+
+                            <div className="text-center">
+                                <h3 className="text-2xl font-bold text-bite-tongue mb-4">
+                                    {t('wp_game.title')}
+                                </h3>
+                                <p className="text-muted-foreground mb-6">
+                                    {t('wp_game.desc')}
+                                </p>
+                                <Button
+                                    onClick={() => {
+                                        window.open(process.env.NEXT_PUBLIC_WHATSAPP_URL, '_blank');
+                                    }}
+                                    className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <FaWhatsapp />
+                                    {t('wp_game.button')}
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        window.open(GAME_URL, '_blank');
+                                    }}
+                                    className="w-full mt-3 bg-bite-tongue hover:bg-bite-tongue/80 text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                                >
+                                    <Gamepad2 />
+                                    {t('wp_game.game_button')}
+                                </Button>
+                                {/* <Button */}
+                                {/*     variant="ghost" */}
+                                {/*     onClick={() => setShowWhatsappGamePopup(false)} */}
+                                {/*     className="mt-3 w-full" */}
+                                {/* > */}
+                                {/*     {t('wp_game.decline')} */}
                                 {/* </Button> */}
                             </div>
                         </motion.div>
