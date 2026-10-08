@@ -11,6 +11,7 @@ import { getSessionUser, getUser, getUserInfo } from "@/utils/user_client_util";
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button"
+import PixelIcon from "@/components/pixel-icon"
 import ThemeChanger from "@/components/themeChanger"
 import LanguageSwitcher from "@/components/language-switcher"
 import { NavbarProps } from "@/types/types"
@@ -245,11 +246,31 @@ export default function ResponsiveHeader() {
                                                 {fullName ? t("rside.logout") : t("rside.login")}
                                             </Button>
                                         </Link>
+                                        <a
+                                            href="https://iztech-run.vercel.app"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label="Play the community game"
+                                            title="IZTECH Run"
+                                            className="inline-flex items-center justify-center h-9 w-9 rounded-md border bg-background hover:bg-accent hover:text-bite-tongue transition-colors"
+                                        >
+                                            <PixelIcon />
+                                        </a>
                                         <ThemeChanger />
                                     </div>
                                 )}
                                 {isMobile && (
                                     <div className="flex items-center space-x-2">
+                                        <a
+                                            href="https://iztech-run.vercel.app"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label="Play the community game"
+                                            title="IZTECH Run"
+                                            className="inline-flex items-center justify-center h-9 w-9 rounded-md border bg-background hover:bg-accent hover:text-bite-tongue transition-colors"
+                                        >
+                                            <PixelIcon />
+                                        </a>
                                         <ThemeChanger />
                                     </div>
                                 )}
