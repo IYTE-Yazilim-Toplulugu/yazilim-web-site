@@ -144,6 +144,12 @@
             "desc": "İYTE Yazılım Topluluğu’nun en güncel haber ve etkinliklerinden haberdar olmak için WhatsApp grubumuza katıl.",
             "button": "WhatsApp Grubuna Katıl",
             "decline": "Daha Sonra"
+        },
+        "wp_game": {
+            "title": "WhatsApp Grubumuza Katıl ve Oyunumuzu Oyna",
+            "desc": "İYTE Yazılım Topluluğu’nun en güncel haber ve etkinliklerinden haberdar olmak için WhatsApp grubumuza katıl, ayrıca topluluğumuzun oyununu oyna!",
+            "button": "WhatsApp Grubuna Katıl",
+            "game_button": "Topluluğumuzun Oyununu Oyna"
         }
     },
     "gallery": {

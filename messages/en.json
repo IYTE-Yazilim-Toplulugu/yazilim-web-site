@@ -144,6 +144,12 @@
             "desc": "Join our WhatsApp group to stay updated with the latest news and events from IZTECH Software Society.",
             "button": "Join WhatsApp Group",
             "decline": "Maybe Later"
+        },
+        "wp_game": {
+            "title": "Join Our WhatsApp Group and Play Our Game",
+            "desc": "Join our WhatsApp group to stay updated with the latest news and events from IZTECH Software Society, and play our community's game!",
+            "button": "Join WhatsApp Group",
+            "game_button": "Play Our Community's Game"
         }
     },
     "gallery": {
